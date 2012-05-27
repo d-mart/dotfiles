@@ -1,0 +1,22 @@
+#### default args to run with 'ack'
+#    (In debianese, it installs as ack-grep)
+
+# Always sort the files
+--sort-files
+
+# follow symlinks
+--follow
+
+# Only turn on case sensitivity if arg is mixed case
+--smart-case
+
+# set color for filenames and matching text
+--color-filename=bold red
+--color-match=bold cyan
+
+# Use "less" to page screenfulls of results
+#--pager=less --long-prompt --raw-control-chars
+#--quit-if-one-screen <--- this arg to less seems to not work as I expected.
+
+# --type-add=blah=.txt,.bak
+

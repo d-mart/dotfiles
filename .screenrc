@@ -1,0 +1,61 @@
+# get a good shell on new window
+shell -$SHELL
+
+# having some problems with byobu in cygwin - disable
+#source $HOME/.byobu/profile
+
+# turn off flow control - not helpful and takes up Ctrl-S and Ctrl-Q
+defflow off
+
+# basic settings
+#defscrollback 50000
+#shelltitle '' # causing byobu to hang up... 
+startup_message off
+#hardstatus on
+#hardstatus alwayslastline
+
+#status line
+#hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< %=%D %M %d %c"
+#hardstatus string '%{= kK}%-Lw%{= KW}%50>%n%f %t%{= kK}%+Lw%< %{=kG}%-= %d%M %c:%s%{-}'
+
+# The scroll buffer of GNU Screen can be accessed with C-a [ 
+# However, this is very inconvenient. To use the scroll bar of e.g. 
+# xterm or konsole add the following line to ~/.screenrc
+termcapinfo xterm* ti@:te@
+termcapinfo rxvt-unicode ti@:te@
+
+
+# use 256 colors
+term screen-256color
+terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+
+## key bindings
+# Window sizes
+bind = resize =
+bind + resize +1
+bind - resize -1
+bind _ resize max
+# bind 's' to split instead of freeze
+bind s split
+# Select windows 10+
+# 10-19 with Shift-0 thru Shift-9
+bind  ! select 11
+bind  @ select 12
+bind \# select 13
+bind  $ select 14
+bind  % select 15
+bind \^ select 16
+bind  & select 17
+bind  * select 18
+bind  ( select 19
+bind  ) select 10
+
+# Ctrl left/right for prev/next (from Terminator anyway)
+# use 'cat > /dev/null' to see what keycodes are produced in desired terminal emulator
+bindkey ^[[1;5C next
+bindkey ^[[1;5D prev
+
+# initial screens
+source .screenrc.local
+
+

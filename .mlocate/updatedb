@@ -1,0 +1,50 @@
+#! /bin/bash
+# 2011-02-17 tyler@tolaris.com - per-user updatedb
+# http://www.tolaris.com/2011/02/17/secure-locate-with-ecryptfs-part-2
+
+[ -x /usr/bin/updatedb.mlocate ] || exit 0
+
+if which on_ac_power >/dev/null 2>&1; then
+    ON_BATTERY=0
+    on_ac_power >/dev/null 2>&1 || ON_BATTERY=$?
+    if [ "$ON_BATTERY" -eq 1 ]; then
+	exit 0
+    fi
+fi
+
+##
+
+LOCATE_ROOT="$HOME/.mlocate/"
+LOCATE_PATH="$LOCATE_ROOT/mlocate.db"
+LOCKFILE="$LOCATE_ROOT/updatedb.lock"
+umask 077
+
+trap "rm -f $LOCKFILE" EXIT
+
+if [ -e "$LOCKFILE" ]; then
+    echo >&2 "Warning: $LOCKFILE present, not running updatedb."
+    exit 1
+else
+    touch "$LOCKFILE"
+fi
+
+##
+
+# See ionice(1)
+if [ -x /usr/bin/ionice ] &&
+    /usr/bin/ionice -c3 true 2>/dev/null; then
+    IONICE="/usr/bin/ionice -c3"
+fi
+
+$IONICE /usr/bin/updatedb.mlocate -l 0 -o "$LOCATE_PATH" -U "$HOME"
+
+# DM ->
+# to make locate use the new db, do something like
+# export LOCATE_PATH="$HOME/.mlocate/mlocate.db"
+# - OR -
+# locate --database ~/.mlocate/mlocate.dbl
+
+# Also make a cron entry to run automatically,
+# Here is every other hour at minute 42
+# $ crontab -e 
+# 42 */2 * * *  ~/.mlocate/updatedb

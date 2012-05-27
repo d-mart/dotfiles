@@ -1,0 +1,34 @@
+# include all .c and .h files
++ *.[ch]
+
+# excule revision control directory
+- .git/
+- .git*
+
+# exclude dependency, object, and other intermediate files 
+- *.[dao]
+- *.obj
+- *.h8[ca]
+- *.lst
+- *.lbk
+- *.abs
+- *.hex
+- *.map
+
+# exclude various Hitachi Embedded Workspace detritus
+- *.BK[SWP]
+- *.h8g
+- *.hlk
+- *.sni
+- *.ARF
+- *.mot
+- *.nav
+
+# exclude TAGS files and other working files
+- TAGS
+- GTAGS
+- *#
+- *~
+
+# can make bucket rule here with what to do with the rest
+#- *

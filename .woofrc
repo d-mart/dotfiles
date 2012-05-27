@@ -1,0 +1,7 @@
+[main]
+port = 8008
+count = 1
+# listen only on a particular interface
+#ip = 
+# compress using "off", "gz", "bz2" or "zip"
+compressed = zip

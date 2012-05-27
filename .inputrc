@@ -1,0 +1,4 @@
+
+# If you have this in your /etc/inputrc or ~/.inputrc, you will no longer have to hit the <Tab> key twice to produce a list of all possible completions. A single <Tab> will suffice. This setting is highly recommended.
+set show-all-if-ambiguous on
+
