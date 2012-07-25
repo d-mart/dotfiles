@@ -1,0 +1,79 @@
+[user]
+    name = d-mart
+    email = dave.h.martinez@gmail.com
+
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    ui = auto
+    pager = true
+
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+
+[core]
+    autocrlf = input
+    #autocrlf = false
+    #autocrlf = true
+    editor = "emacsclient --tty --alternate-editor=" # start emacs daemon if it's not already
+    excludesfile = "~/.gitexcludes"
+
+[alias]
+    ci = commit
+    pu = push origin master
+    st = status
+    undo = reset --soft HEAD^
+    up = pull origin master
+    co = checkout
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%cr)' --abbrev-commit --date=relative
+    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    incoming = '!git remote update -p; git log ..@{u}'
+    outgoing = 'log @{u}..'
+    diffall =
+    #diffall = '!echo ~/proj/stuff/scripts/bash/git-diffall.sh $@'
+
+[diff]
+    tool = meld
+
+[difftool]
+    prompt = false
+
+[difftool "diffmerge"]
+    cmd = "~/diffmerge.sh \"$LOCAL\" \"$REMOTE\""
+    prompt = false
+    trustExitCode = false
+
+[merge]
+    #tool = diffmerge
+    tool = meld
+
+[mergetool]
+    prompt = false
+
+[mergetool "diffmerge"]
+    cmd = "/cygdrive/c/'Program Files'/SourceGear/DiffMerge/DiffMerge.exe" --merge --result=$MERGED $LOCAL $BASE $REMOTE
+    trustExitCode = false
+
+[apply]
+    whitespace = nowarn
+
+[branch]
+    autosetupmerge = true
+
+[push]
+	default = current

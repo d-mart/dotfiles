@@ -16,7 +16,7 @@ export HISTCONTROL=ignoreboth
 # CDPATH - like PATH but for CD command.  When
 # typing 'cd mydir' look in all these directories,
 # not just pwd
-#export CDPATH='/mnt:/media:~:~/proj:~/proj/GAEng'
+#export CDPATH='~/proj:~/.emacs.d'
 
 # HISTIGNORE - keep uninteresting (or sensitive)
 # commands out of bash history
@@ -66,14 +66,15 @@ case "$TERM" in
     xterm-color) color_prompt=yes;;
 esac
 
-color_prompt=yes
-if [ "$color_prompt" = yes ]; then
-    #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    source ~/prompt.sh
+
+
+if [ `whoami` == "root" ]; then 
+    # prompt for root
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    # user prompt - git/rails/etc
+    source ~/prompt.sh
 fi
-unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -88,28 +89,9 @@ esac
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    eval "`dircolors -b`"
-    alias ls='ls --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# some more ls aliases
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -CF'
-alias ld='ls -d'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -130,7 +112,9 @@ export VISUAL=emacsclient
 # Source highlighting in the 'less' command
 # this path points to default debian location of
 # the source-highlight script - adjust as nec.
-export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+SRC_HILITE=/usr/share/source-highlight/src-hilite-lesspipe.sh
+[ -f $SRC_HILITE ] && export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+
 # -R   raw control chars (allows source highlighting a la above)
 # -S   chop long lines instead of wrapping
 # -N   always show line numbers
@@ -148,13 +132,10 @@ if [ ! -f "${SSH_AUTH_SOCK}" ] ; then
 fi
 
 # if ssh auth forwarding is enabled, use it and dont start keychain
+KEY_LIST="$( find ~/.ssh -name "id_*sa" -print )"
 if [ "${SSH_AUTH_SOCK}x" == "x" ] && [ "$UID" != "0" ] ; then
     if [ -x /usr/bin/keychain ] ; then
-       /usr/bin/keychain -q -Q --lockwait 1 \
-           ~/.ssh/id_rsa \
-           ~/.ssh/comverge_git/id_rsa \
-           ~/.ssh/bitbucket/id_rsa \
-           ~/.ssh/github/id_rsa
+       /usr/bin/keychain -q -Q --lockwait 1 $KEY_LIST
        if [ -f ~/.keychain/$HOSTNAME-sh ] ; then
           source ~/.keychain/$HOSTNAME-sh
        fi

@@ -38,7 +38,7 @@ txtrst='\[\033[0m\]'    # Text Reset
 # Set some default colors
 uidColor=$bldred
 punctColor=$bldblu
-textColor=$bldcyn
+textColor=$bldwht
 gitColor=$bldylw
 
 # change colors per-host 
@@ -46,26 +46,6 @@ case `hostname` in
     engels)
         textColor=$txtwht
         punctColor=$txtred
-        ;;
-
-    debs)
-        textColor=$bldpur
-        punctColor=$bldblu
-        ;;
-
-    cletus)
-        textColor=$bldylw
-        punctColor=$bldblu
-        ;;
-
-    sabot)
-        textColor=$bldylw
-        punctColor=$txtred
-        ;;
-
-    comfortablynumb)
-        textColor=$bldblu
-        punctColor=$txtblk
         ;;
 
     vera)
