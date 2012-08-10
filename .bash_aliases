@@ -62,6 +62,14 @@ alias adb='/usr/local/android-sdk-linux_86/platform-tools/adb'
 alias ff='find . -name'
 alias ffx='firefox -no-remote -p quick'      # open 'quick' profile of firefox
 
+# use emacs for quick su editing (via emacs-fu)
+alias sue="SUDO_EDITOR=\"emacsclient -c -a emacs\" sudoedit"
+function E()
+{
+    emacsclient -c -a emacs "sudo:root@localhost:$1"
+}
+
+
 # Ember ota image builder
 alias imagebuilder="~/proj/Ember/ECC-4.3.5/image-builder-ecc-linux"
 alias em3='wine ~/.wine/drive_c/Program\ Files/Ember/ISA3\ Utilities/bin/em3xx_load.exe'
