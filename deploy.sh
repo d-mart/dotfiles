@@ -1,11 +1,16 @@
 #!/bin/bash
 # Install / copy repository dotFiles etc
 
+# deploy these files and dirs.
+fileList=".bashrc .bash_aliases .bash_profile prompt.sh .gitconfig .gitexcludes .screenrc .screenrc.infotainment .inputrc .ackrc .Xdefaults .calcrc .gdbinit "
+dirList=".gdb .mlocate .bash.d"
 
-fileList=".bashrc .bash_aliases .bash_profile prompt.sh .gitconfig .gitexcludes .screenrc .screenrc.infotainment .inputrc .ackrc .Xdefaults .calcrc"
-dirList=""
-targetDir="/tmp/test"
-srcDir=`pwd`
+# Set up "from" and "to" variables
+srcDir=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
+targetDir="$HOME"
+
+# for testing
+#targetDir="/tmp/test"; mkdir -p $targetDir &> /dev/null
 
 for file in $fileList
 do
@@ -15,22 +20,24 @@ do
         mv $targetDir/$file $targetDir/$file.bak
     fi
 
-    pushd $targetDir
+    pushd $targetDir > /dev/null
     ln -s $srcDir/$file $file
-    popd
+    popd > /dev/null
 done
 
-if [ -f .screenrc.local.`hostname` ]
-then
+# files that are per-host
+if [ -f .screenrc.local.`hostname` ]; then
     ln -s $srcDir/.screenrc.local.`hostname` $targetDir/.screenrc.local
 fi
 
-for dir in $dirList
-do
+if [ -f .bash_aliases.local.`hostname` ]; then
+    ln -s $srcDir/.bash_aliases.local.`hostname` $targetDir/.bash_aliases.local
+fi
+
+# directories
+for dir in $dirList; do
     # TODO: make backup of existing folders?
-    pushd $targetDir
+    pushd $targetDir > /dev/null
     ln -s $srcDir/$dir $dir
-    popd
+    popd > /dev/null
 done
-
-

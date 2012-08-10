@@ -15,6 +15,18 @@ alias grb="git rebase master"
 alias gda="~/proj/stuff/scripts/bash/git-diffall.sh"
 alias gsu="git submodule update"
 
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    eval "`dircolors -b`"
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
 # Wine
 alias win="env WINEPREFIX=\"~/.wine\" wine"
 
@@ -23,8 +35,8 @@ alias rbash=". ~/.bashrc"
 alias ral=". ~/.bash_aliases"
 
 # Me likey color!
-alias gcc=colorgcc
-alias diff=colordiff
+which colorgcc &> /dev/null  && alias gcc=colorgcc
+which colordiff &> /dev/null && alias diff=colordiff
 alias ccat=/usr/share/source-highlight/src-hilite-lesspipe.sh
 
 # enable color support of ls and also add handy aliases
@@ -40,6 +52,14 @@ if [ -x /usr/bin/dircolors ]; then
 
     #alias less='less -R'  # enable ansi color escapes
 fi
+# some more ls aliases
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+alias ld='ls -d'
+alias ls='ls -h --color=tty'
+function cdl { cd $1; ls; }
+
 
 # launching aliases
 alias g='gedit 2>/dev/null'
@@ -70,15 +90,6 @@ function E()
 }
 
 
-# Ember ota image builder
-alias imagebuilder="~/proj/Ember/ECC-4.3.5/image-builder-ecc-linux"
-alias em3='wine ~/.wine/drive_c/Program\ Files/Ember/ISA3\ Utilities/bin/em3xx_load.exe'
-alias fc='java -jar ~/proj/gatools/Tools/Common/JavaLibs/ChassisFirmwareCooker.jar'
-alias f1='bin/f1runner.rb default'         # must be used from CucumberTests dir
-# note: intended for use inside a screen session
-alias imodcomm='screen -t "imod:tra" -h 0 minicom --noinit --baudrate 460800 --device /dev/ftdi_C; \
-                screen -t "imod:cli" -h 0 minicom --noinit --baudrate 115200 --device /dev/ftdi_D'
-
 # CLI tools aliases
 alias pg="ps aux | grep -v grep | grep"
 alias myip="ifconfig | grep \"inet addr\" | awk -F\: '{ print \$2 }' | awk '{ print \$1 }' "
@@ -97,14 +108,6 @@ alias search='apt-cache search'
 alias purge='sudo apt-get purge'
 alias pkginfo='apt-cache show'      # show description of package
 alias whichpkg='apt-file search'    # needs apt-file update to be run to update db
-
-# some more ls aliases
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -CF'
-alias ld='ls -d'
-alias ls='ls -h --color=tty'
-function cdl { cd $1; ls; }
 
 # workflow shortcuts
 alias tag="find . -name \*.[ch] -print | etags --filter=yes > TAGS"
@@ -128,7 +131,7 @@ alias dumpfunc="declare -f"
 
 # a script wrapper to 'bc' command line calculator
 # note: collides with /usr/bin/cal - display calendar
-alias cal="~/proj/stuff/scripts/solve.sh"
+alias cal="solve.sh"
 
 
 pause() { read -p "Press Enter to continue..." ; }
@@ -149,9 +152,9 @@ ftch() { egrep -rIHn --include="*\.[ch]" --exclude="TAGS" "$@" * ; }
 ftr()  { egrep -rIHn --include="*\.rb" --include="\*.feature" --exclude="TAGS" "$@" * ; }
 ft()   { egrep -Rn "$@" * ; }
 
-
-if [ -f ~/.bash_aliases_local ]; then
-    . ~/.bash_aliases_local
+# See if there is a local bash_aliases and source it
+if [ -f ~/.bash_aliases.local ]; then
+    source ~/.bash_aliases.local
 fi
 
 # Go up directory tree X number of directories
@@ -209,7 +212,7 @@ function repeat()
 # These funcs call the screen-helper script, which if
 # called from inside a screen session, will launch
 # them in a new screen window
-SCREEN_HELPER=~/proj/stuff/scripts/screen-helper.sh
+SCREEN_HELPER=screen-helper.sh
 vim()   { $SCREEN_HELPER vim $* ; }
 vi()    { $SCREEN_HELPER vi $* ; }
 man()   { $SCREEN_HELPER man $* ; }
