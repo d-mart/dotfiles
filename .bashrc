@@ -100,6 +100,11 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
+# Ruby Version Manager
+if [ - f /etc/profile.d/rvm.sh ]; then
+    . /etc/profile.d/rvm.sh
+fi
+
 # rsense - ruby completion for emacs and vim
 export RSENSE_HOME="~/proj/stuff/utils/rsense/"
 
@@ -122,6 +127,10 @@ SRC_HILITE=/usr/share/source-highlight/src-hilite-lesspipe.sh
 # -~   empty lines at end of doc are blank, not ~
 # -i   searches ignore case unless search term contains caps
 export LESS=' -RSN#4~i '
+
+# Add some personal dirs to the path
+export PATH=$PATH:~/.bash.d:~/bin:~/app
+
 
 #################
 ####### KEYCHAIN

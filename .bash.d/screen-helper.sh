@@ -114,7 +114,7 @@ else
         #screen -X screen -t "$title" cat <&0 | $cmd
         true  # dummy command for now
     else
+        echo "running screen -X screen -t \"$title\" $cmd $*"
         screen -X screen -t "$title" $cmd $*
     fi
-
 fi
