@@ -101,7 +101,7 @@ if [ -f /etc/bash_completion ]; then
 fi
 
 # Ruby Version Manager
-if [ - f /etc/profile.d/rvm.sh ]; then
+if [ -f /etc/profile.d/rvm.sh ]; then
     . /etc/profile.d/rvm.sh
 fi
 

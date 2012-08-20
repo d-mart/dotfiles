@@ -57,6 +57,11 @@ else
     # * also can't count on there being an '@'
     case $cmd in
         "ssh")
+            # force term. xterm-256color is a safe base for everthing i've used
+            # but sometimes an inherited term such as screen-bce-256color causes
+            # complaints on lighter systems
+            cmd="TERM=xterm-256color $cmd"
+            # attempt to determine hostname for screen window title
             for arg in $*
             do
                 if [[ $arg != \-* ]]  # if arg doesn't start with a dash
@@ -114,7 +119,7 @@ else
         #screen -X screen -t "$title" cat <&0 | $cmd
         true  # dummy command for now
     else
-        echo "running screen -X screen -t \"$title\" $cmd $*"
+        screen -X echo "running screen -X screen -t \"$title\" $cmd $*"
         screen -X screen -t "$title" $cmd $*
     fi
 fi
