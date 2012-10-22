@@ -6,52 +6,13 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-# don't put duplicate lines in the history. See bash(1) for more options
-# don't overwrite GNU Midnight Commander's setting of `ignorespace'.
-export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-# ... or force ignoredups and ignorespace
-export HISTCONTROL=ignoreboth
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 
-# CDPATH - like PATH but for CD command.  When
-# typing 'cd mydir' look in all these directories,
-# not just pwd
-#export CDPATH='~/proj:~/.emacs.d'
+MY_SCRIPT_DIR="$HOME/.bash.d"
 
-# HISTIGNORE - keep uninteresting (or sensitive)
-# commands out of bash history
-export HISTIGNORE="[bf]g:exit:ls:pwd:top:w:history"     #"[bf]g:exit:ls:ls *:cd *:top:w"
+# Get simplified OS type
+source "$MY_SCRIPT_DIR/get-os.sh"
+OS=$(get_os)
 
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# correct minor misspellings (transpositions etc) in CD commands
-shopt -s cdspell
-
-# extended glob
-#This will give you ksh-88 egrep-style extended pattern matching or, in other words, turbo-charged pattern matching within bash. The available operators are:
-#    ?(pattern-list)
-#Matches zero or one occurrence of the given patterns
-#    *(pattern-list)
-#Matches zero or more occurrences of the given patterns
-#    +(pattern-list)
-#Matches one or more occurrences of the given patterns
-#    @(pattern-list)
-#Matches exactly one of the given patterns
-#    !(pattern-list)
-#Matches anything except one of the given patterns
-#Here's an example. Say, you wanted to install all RPMs in a given directory, except those built for the noarch architecture. You might use something like this:
-#    rpm -Uvh /usr/src/RPMS/!(*noarch*)
-#These expressions can be nested, too, so if you wanted a directory listing of all non PDF and PostScript files in the current directory, you might do this:
-#    ls -lad !(*.p@(df|s))
-shopt -s extglob
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
-# automatically cd into a directory if the command entered doesn't exists
-shopt -s autocd
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -85,28 +46,43 @@ xterm*|rxvt*)
     ;;
 esac
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+# shell related setup
+if [ -f "$MY_SCRIPT_DIR/bash-setup.sh" ]; then
+    source "$MY_SCRIPT_DIR/bash-setup.sh"
+fi
+
+# git related setup
+if [ -f "$MY_SCRIPT_DIR/git-setup.sh" ]; then
+    source "$MY_SCRIPT_DIR/git-setup.sh"
+fi
+
+# ruby related setup
+if [ -f "$MY_SCRIPT_DIR/ruby-setup.sh" ]; then
+    source "$MY_SCRIPT_DIR/ruby-setup.sh"
+fi
+
+# emacs related setup
+if [ -f "$MY_SCRIPT_DIR/emacs-setup.sh" ]; then
+    source "$MY_SCRIPT_DIR/emacs-setup.sh"
+fi
+
+# mac-specific stuff
+if [ $OS == "mac" && -f "$MY_SCRIPT_DIR/bashrc-mac.sh" ]; then
+    source "$MY_SCRIPT_DIR/bashrc-mac.sh"
 fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+    source /etc/bash_completion
 fi
 
-# Ruby Version Manager
-if [ -f /etc/profile.d/rvm.sh ]; then
-    . /etc/profile.d/rvm.sh
+# general alias definitions
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
 fi
-
-# rsense - ruby completion for emacs and vim
-export RSENSE_HOME="~/proj/stuff/utils/rsense/"
 
 # Setup default system editor.  In this case,
 # launch emacsclient, or failing that, emacs
@@ -129,7 +105,7 @@ SRC_HILITE=/usr/share/source-highlight/src-hilite-lesspipe.sh
 export LESS=' -RSN#4~i '
 
 # Add some personal dirs to the path
-export PATH=$PATH:~/.bash.d:~/bin:~/app
+export PATH=/usr/local/sbin:$PATH:~/.bash.d:~/bin:~/app
 
 
 #################

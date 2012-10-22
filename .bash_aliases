@@ -1,21 +1,7 @@
 #!/bin/bash
 
-# Aliases for Git
-alias gb="git branch"
-alias gba="git branch -a"
-alias gca="git commit -a -v"
-alias gc="git commit -v"
-alias gd="git difftool"
-alias gl="git pull"
-alias gp="git push"
-alias gst="git status"
-alias gco="git checkout"
-alias gly="git log --since="yesterday""
-alias grb="git rebase master"
-alias gda="~/proj/stuff/scripts/bash/git-diffall.sh"
-alias gsu="git submodule update"
-
 # enable color support of ls and also add handy aliases
+# @todo make this dependent on linux
 if [ -x /usr/bin/dircolors ]; then
     eval "`dircolors -b`"
     alias ls='ls --color=auto'
@@ -30,35 +16,10 @@ fi
 # Wine
 alias win="env WINEPREFIX=\"~/.wine\" wine"
 
-# Reloads the .bashrc or .bash_aliases file
-alias rbash=". ~/.bashrc"
-alias ral=". ~/.bash_aliases"
-
 # Me likey color!
 which colorgcc &> /dev/null  && alias gcc=colorgcc
 which colordiff &> /dev/null && alias diff=colordiff
 alias ccat=/usr/share/source-highlight/src-hilite-lesspipe.sh
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    eval "`dircolors -b`"
-    alias ls='ls --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-
-    #alias less='less -R'  # enable ansi color escapes
-fi
-# some more ls aliases
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -CF'
-alias ld='ls -d'
-alias ls='ls -h --color=tty'
-function cdl { cd $1; ls; }
 
 
 # launching aliases
@@ -81,6 +42,8 @@ alias ejd='sudo ejabberdctl'
 alias adb='/usr/local/android-sdk-linux_86/platform-tools/adb'
 alias ff='find . -name'
 alias ffx='firefox -no-remote -p quick'      # open 'quick' profile of firefox
+# @todo make more smarterer
+alias ffx='/Applications/Firefox.app/Contents/MacOS/firefox-bin -no-remote -P'
 
 # use emacs for quick su editing (via emacs-fu)
 alias sue="SUDO_EDITOR=\"emacsclient -c -a emacs\" sudoedit"
