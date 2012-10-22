@@ -30,7 +30,7 @@
     autocrlf = input
     #autocrlf = false
     #autocrlf = true
-    editor = "emacsclient --tty --alternate-editor=" # start emacs daemon if it's not already
+	editor = /Applications/Emacs.app/Contents/MacOS/bin/emacsclient
     excludesfile = "~/.gitexcludes"
 
 [alias]
@@ -57,6 +57,12 @@
     cmd = "~/diffmerge.sh \"$LOCAL\" \"$REMOTE\""
     prompt = false
     trustExitCode = false
+
+[difftool "ediff"]
+    cmd = emacs --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+
+[difftool "ediffclient"]
+    cmd = emacsclient --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 [merge]
     #tool = diffmerge
