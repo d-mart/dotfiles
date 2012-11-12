@@ -55,8 +55,21 @@ case `hostname` in
         gitColor=$txtpur
         ;;
     
+    wenshu)
+        #textColor='\[\033[$(let "i=($RANDOM % 7) + 30"; echo $i)m\]'
+        punctColor=$bldblk
+        textColor=$txtgrn
+        gitColor=$txtgrn
+        ;;
+
+    guanyin)
+        #textColor='\[\033[$(let "i=($RANDOM % 7) + 30"; echo $i)m\]'
+        punctColor=$txtcyn
+        textColor=$bldblu
+        gitColor=$txtpur
+        ;;
+
     *)
-        
         ;;
 esac
 
