@@ -91,10 +91,18 @@ export EDITOR=emacsclient
 export VISUAL=emacsclient
 
 # Source highlighting in the 'less' command
-# this path points to default debian location of
-# the source-highlight script - adjust as nec.
-SRC_HILITE=/usr/share/source-highlight/src-hilite-lesspipe.sh
-[ -f $SRC_HILITE ] && export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+# A couple of locations - for debian or osx/brew
+SRC_HILITES[0]=/usr/share/source-highlight/src-hilite-lesspipe.sh
+SRC_HILITES[1]=/usr/local/bin/src-hilite-lesspipe.sh
+
+for hl in "${SRC_HILITES[@]}"
+do
+    if [ -f $hl ]
+    then
+        export LESSOPEN="| $hl %s"
+        break
+    fi
+done
 
 # -R   raw control chars (allows source highlighting a la above)
 # -S   chop long lines instead of wrapping
@@ -126,6 +134,11 @@ if [ "${SSH_AUTH_SOCK}x" == "x" ] && [ "$UID" != "0" ] ; then
        fi
     fi
 fi
+
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
+
 
 # Remove the garbage characters with the Unix tr command
 # tr -cd '\11\12\15\40-\176' < file-with-binary-chars > clean-file
