@@ -3,3 +3,4 @@ SyncToy*.dat
 *.sql
 TAGS
 *#
+.DS_Store
