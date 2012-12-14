@@ -4,7 +4,7 @@
 # @todo make this dependent on linux
 if [ -x /usr/bin/dircolors ]; then
     eval "`dircolors -b`"
-    alias ls='ls --color=auto'
+    alias ls='ls --color=auto -h'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
 
@@ -150,9 +150,9 @@ function up()
 function recompile_el()
 {
     find ~/.emacs.d/ -type f -name "*.elc" | xargs rm;
-    find ~/.emacs.d/ -type f -name "*.el" | awk '{print "(byte-compile-file \"" $1 "\")";}' > /tmp/runme.el 
+    find ~/.emacs.d/ -type f -name "*.el" | awk '{print "(byte-compile-file \"" $1 "\")";}' > /tmp/runme.el
     emacs -batch -l /tmp/runme.el -kill
-    rm /tmp/runme.el 
+    rm /tmp/runme.el
 }
 
 # run the given command <n> times

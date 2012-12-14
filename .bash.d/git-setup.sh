@@ -14,7 +14,7 @@ alias gly="git log --since="yesterday""
 alias grb="git rebase master"
 alias gsu="git submodule update"
 alias gg="git grep"
-alias gfetch="git checkout master; git fetch upstream; git merge upstream/master"
+alias gfetch="git checkout master; git fetch origin; git merge origin/master"
 
 # @todo
 # alias gda="~/proj/stuff/scripts/bash/git-diffall.sh"

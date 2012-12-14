@@ -29,7 +29,7 @@ esac
 
 
 
-if [ `whoami` == "root" ]; then 
+if [ `whoami` == "root" ]; then
     # prompt for root
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
@@ -67,7 +67,7 @@ if [ -f "$MY_SCRIPT_DIR/emacs-setup.sh" ]; then
 fi
 
 # mac-specific stuff
-if [ $OS == "mac" && -f "$MY_SCRIPT_DIR/bashrc-mac.sh" ]; then
+if [[ $OS == "mac" && -f "$MY_SCRIPT_DIR/bashrc-mac.sh" ]]; then
     source "$MY_SCRIPT_DIR/bashrc-mac.sh"
 fi
 
@@ -78,8 +78,8 @@ if [ -f /etc/bash_completion ]; then
     source /etc/bash_completion
 fi
 
-# general alias definitions
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+## general alias definitions
+## See /usr/share/doc/bash-doc/examples in the bash-doc package.
 if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
 fi
@@ -111,6 +111,7 @@ done
 # -~   empty lines at end of doc are blank, not ~
 # -i   searches ignore case unless search term contains caps
 export LESS=' -RSN#4~i '
+export LESS=' -RN~i '
 
 # Add some personal dirs to the path
 export PATH=/usr/local/sbin:$PATH:~/.bash.d:~/bin:~/app

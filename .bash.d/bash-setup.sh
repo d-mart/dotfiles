@@ -53,9 +53,9 @@ export LS_COLORS
 export CLICOLOR=true
 
 # ls aliases
-alias ll='ls -l'
+alias ll='ls -lh'
 alias la='ls -A'
-alias l='ls -CF'
+alias l='ls -hCF'
 alias ld='ls -d'
 alias ls='ls -h --color=tty'
 function cdl { cd $1; ls; }
@@ -63,4 +63,3 @@ function cdl { cd $1; ls; }
 # Reloads the .bashrc or .bash_aliases file
 alias rbash=". ~/.bashrc"
 alias ral=". ~/.bash_aliases"
-

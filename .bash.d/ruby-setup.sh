@@ -21,7 +21,7 @@ alias dtstart='bundle exec rake daemons:test:start'
 alias dtstop='bundle exec rake daemons:test:stop'
 alias dtrestart='dtstop; dtstart'
 alias tbounce='dtrestart'
-# resque 
+# resque
 alias rstop='bundle exec rake daemons:resque:stop'
 alias rstart='bundle exec rake daemons:resque:start'
 # thingling
@@ -46,3 +46,5 @@ if [ -f ~/.rvm/scripts/rvm ]; then
     source ~/.rvm/scripts/rvm
 fi
 
+## Disable IS extras by default
+export NO_EXTRAS=1
