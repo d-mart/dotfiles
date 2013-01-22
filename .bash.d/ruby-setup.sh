@@ -48,3 +48,5 @@ fi
 
 ## Disable IS extras by default
 export NO_EXTRAS=1
+## Don't erase test database after test runs
+export KEEP_DB=true

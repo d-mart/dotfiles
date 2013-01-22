@@ -125,11 +125,16 @@ if [ ! -f "${SSH_AUTH_SOCK}" ] ; then
   export SSH_AUTH_SOCK=""
 fi
 
+# @todo make this smarter - path may not be set
+KEYCHAIN=`which keychain`
+
+# make a list of keyfiles
+KEY_LIST="$( find ~/.ssh -name \"*id_?sa\" -print | tr '\n' ' ' )"
+
 # if ssh auth forwarding is enabled, use it and dont start keychain
-KEY_LIST="$( find ~/.ssh -name "id_*sa" -print )"
 if [ "${SSH_AUTH_SOCK}x" == "x" ] && [ "$UID" != "0" ] ; then
-    if [ -x /usr/bin/keychain ] ; then
-       /usr/bin/keychain -q -Q --lockwait 1 $KEY_LIST
+    if [ -x $KEYCHAIN ] ; then
+       $KEYCHAIN -q -Q --lockwait 1 $KEY_LIST
        if [ -f ~/.keychain/$HOSTNAME-sh ] ; then
           source ~/.keychain/$HOSTNAME-sh
        fi
