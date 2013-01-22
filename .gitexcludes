@@ -4,3 +4,4 @@ SyncToy*.dat
 TAGS
 *#
 .DS_Store
+.powrc
