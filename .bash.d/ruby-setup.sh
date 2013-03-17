@@ -3,7 +3,7 @@
 ## general aliases for ruby
 alias be='bundle exec'
 alias ber='bundle exec rake'
-alias rsp='bundle exec rspec -d'
+alias rsp='bundle exec rspec -d -f doc'
 alias cu='bundle exec cucumber -x'
 alias cuke='cu'
 alias rs='rails server'
@@ -17,16 +17,16 @@ alias dstop='bundle exec rake daemons:stop'
 alias dstart='bundle exec rake daemons:start'
 alias drestart='dstop; dstart'
 # test mode
-alias dtstart='bundle exec rake daemons:test:start'
-alias dtstop='bundle exec rake daemons:test:stop'
-alias dtrestart='dtstop; dtstart'
+alias tstart='bundle exec rake daemons:test:start'
+alias tstop='bundle exec rake daemons:test:stop'
+alias trestart='tstop; tstart'
 alias tbounce='dtrestart'
 # resque
 alias rstop='bundle exec rake daemons:resque:stop'
 alias rstart='bundle exec rake daemons:resque:start'
 # thingling
-alias tstop='bundle exec rake daemons:thingling:stop'
-alias tstart='bundle exec rake daemons:thingling:start'
+alias thingstop='bundle exec rake daemons:thingling:stop'
+alias thingstart='bundle exec rake daemons:thingling:start'
 
 ## database
 # edit last migration file
@@ -45,8 +45,3 @@ export RUBY_GC_MALLOC_LIMIT=79000000
 if [ -f ~/.rvm/scripts/rvm ]; then
     source ~/.rvm/scripts/rvm
 fi
-
-## Disable IS extras by default
-export NO_EXTRAS=1
-## Don't erase test database after test runs
-export KEEP_DB=true

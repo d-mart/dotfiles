@@ -1,7 +1,4 @@
-#!/bin/bash
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# .bashrc
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -90,6 +87,10 @@ export ALTERNATE_EDITOR=emacs
 export EDITOR=emacsclient
 export VISUAL=emacsclient
 
+if [ -f ~/.bashrc.local ]; then
+    source ~/.bashrc.local
+fi
+
 # Source highlighting in the 'less' command
 # A couple of locations - for debian or osx/brew
 SRC_HILITES[0]=/usr/share/source-highlight/src-hilite-lesspipe.sh
@@ -125,7 +126,7 @@ if [ ! -f "${SSH_AUTH_SOCK}" ] ; then
   export SSH_AUTH_SOCK=""
 fi
 
-# @todo make this smarter - path may not be set
+# @todo make this smarterer or dependent on os-setup above
 KEYCHAIN=`which keychain`
 
 # make a list of keyfiles
@@ -140,7 +141,6 @@ if [ "${SSH_AUTH_SOCK}x" == "x" ] && [ "$UID" != "0" ] ; then
        fi
     fi
 fi
-
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig

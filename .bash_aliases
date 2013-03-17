@@ -31,6 +31,8 @@ alias g='gedit 2>/dev/null'
 # -a   specify alternate editor
 alias ecl='emacsclient -n -a ""'
 alias eclw='emacsclient -n -c -a ""'
+alias eq='emacs -q -nw --eval="(setq make-backup-files nil)"'
+
 # changed to use screen helper func below alias eclt='emacsclient -n -t -a ""'
 # changed to use screen helper func below alias e='emacs --quick -nw'
 alias mcom='minicom --noinit --baudrate=115200 --device'
