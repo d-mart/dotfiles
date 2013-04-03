@@ -41,7 +41,7 @@ punctColor=$bldblu
 textColor=$bldwht
 gitColor=$bldylw
 
-# change colors per-host 
+# change colors per-host
 case `hostname` in
     engels)
         textColor=$txtwht
@@ -54,22 +54,16 @@ case `hostname` in
         textColor=$bldwht
         gitColor=$txtpur
         ;;
-    
-    wenshu)
-        #textColor='\[\033[$(let "i=($RANDOM % 7) + 30"; echo $i)m\]'
-        punctColor=$bldblk
-        textColor=$txtgrn
-        gitColor=$txtgrn
-        ;;
-
-    guanyin)
-        #textColor='\[\033[$(let "i=($RANDOM % 7) + 30"; echo $i)m\]'
-        punctColor=$txtcyn
-        textColor=$bldblu
-        gitColor=$txtpur
-        ;;
 
     *)
+        ## Choose colors based on hostnames
+        # 'md5sum' on linux, 'md5' on osx
+        command -v md5sum > /dev/null && MD5=md5sum || MD5=md5
+        DIGITS=$(echo $(hostname) | $MD5 | tr -d 89abcdef\ -)
+        textColor='\[\033[3${DIGITS:1:1};1m\]'
+        punctColor='\[\033[3${DIGITS:2:1};1m\]'
+        gitColor='\[\033[3${DIGITS:3:1};1m\]'
+        uidColor='\[\033[3${DIGITS:4:1};1m\]'
         ;;
 esac
 
@@ -126,8 +120,7 @@ function makePrompt {
     local TEXT=$textColor
     local NO_COLOR=$txtrst
     local GIT_COLOR=$gitColor
-    
-    
+
     case $TERM in
         xterm*|rxvt*)
             TITLEBAR='\[\033]0;\u@\h:\w\007\]'
@@ -136,7 +129,7 @@ function makePrompt {
             TITLEBAR=""
             ;;
     esac
-    
+
     export PS1="$TITLEBAR\
 $TEXT-$PUNCT-(\
 $TEXT\$(date +%0H\:%0M)$PUNCT-$TEXT\$(date \"+%d%b%y\")\
