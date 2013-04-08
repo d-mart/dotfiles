@@ -2,7 +2,7 @@
 # Install / copy repository dotFiles etc
 
 # deploy these files and dirs.
-fileList=".bashrc .bash_aliases .bash_profile prompt.sh .gitconfig .gitexcludes .screenrc .screenrc.infotainment .inputrc .ackrc .Xdefaults .calcrc .gdbinit .irbrc .rbrc .pryrc"
+fileList=".bashrc .bash_aliases .bash_profile prompt.sh .gitconfig .gitexcludes .screenrc .screenrc.infotainment .inputrc .ackrc .Xdefaults .calcrc .gdbinit .irbrc .rbrc .pryrc .tmux.conf"
 dirList=".gdb .mlocate .bash.d"
 
 # Set up "from" and "to" variables
