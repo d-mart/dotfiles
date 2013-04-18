@@ -81,6 +81,11 @@ if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
 fi
 
+# tmuxinator - tmux session/project management
+if [ -s $HOME/.tmuxinator/scripts/tmuxinator ]; then
+    source $HOME/.tmuxinator/scripts/tmuxinator
+fi
+
 # Setup default system editor.  In this case,
 # launch emacsclient, or failing that, emacs
 export ALTERNATE_EDITOR=emacs
@@ -130,7 +135,7 @@ fi
 KEYCHAIN=`which keychain`
 
 # make a list of keyfiles
-KEY_LIST="$( find ~/.ssh -name \"*id_?sa\" -print | tr '\n' ' ' )"
+KEY_LIST="$( find ~/.ssh -name *id_?sa -print | tr '\n' ' ' )"
 
 # if ssh auth forwarding is enabled, use it and dont start keychain
 if [ "${SSH_AUTH_SOCK}x" == "x" ] && [ "$UID" != "0" ] ; then

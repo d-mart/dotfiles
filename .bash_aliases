@@ -7,11 +7,11 @@ if [ -x /usr/bin/dircolors ]; then
     alias ls='ls --color=auto -h'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
 fi
+
+alias grep='grep --extended-regexp --color=auto --line-number --with-filename'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
 # Wine
 alias win="env WINEPREFIX=\"~/.wine\" wine"
@@ -186,7 +186,7 @@ less()  { $SCREEN_HELPER less $* ; }
 watch() { $SCREEN_HELPER watch $* ; }
 ssh()   { $SCREEN_HELPER ssh $*  ; }
 eclt()  { $SCREEN_HELPER emacsclient -a "emacs -nw" --tty $* ; }
-e()     { $SCREEN_HELPER emacs --quick -nw $* ; }
+#e()     { $SCREEN_HELPER emacs --quick -nw $* ; }
 ack()   { $SCREEN_HELPER ack-grep --pager="less -R" $* ; }
 hex()   { $SCREEN_HELPER vbindiff $* ; }
 w3m()   { $SCREEN_HELPER w3m $* ; }
