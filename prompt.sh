@@ -64,6 +64,7 @@ case `hostname` in
         punctColor='\[\033[3${DIGITS:2:1};1m\]'
         gitColor='\[\033[3${DIGITS:3:1};1m\]'
         uidColor='\[\033[3${DIGITS:4:1};1m\]'
+        rvmColor='\[\033[3${DIGITS:5:1};1m\]'
         ;;
 esac
 
@@ -72,6 +73,24 @@ if [ "`/usr/bin/whoami`" == "root" ]
 then
     uidColor=$bakwht$bldred
 fi
+
+circled_digits=$(printf %s \${$'\xEA',\`,{a..s}} | iconv -f UTF-16BE)
+# circled_digits='⓪①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
+
+function tmux_winidx_circled() {
+    local winidx=$(tmux display-message -p '#I')
+    if (( winidx > 20 )); then
+        echo "($winidx)"
+    else
+        echo "${circled_digits:$winidx:1}"
+    fi
+}
+
+function rvm_current() {
+    if [ -f ~/.rvm/bin/rvm-prompt ]; then
+        echo " → $(~/.rvm/bin/rvm-prompt v g)"
+    fi
+}
 
 # Get the name of the branch we are on
 function git_prompt_info() {
@@ -109,8 +128,7 @@ function trimmed_path {
 
 # WIP - probably not useful
 function term_info {
-    echo "$WINDOW"
-
+    echo $(tmux_winidx_circled)
 }
 
 function makePrompt {
@@ -120,6 +138,7 @@ function makePrompt {
     local TEXT=$textColor
     local NO_COLOR=$txtrst
     local GIT_COLOR=$gitColor
+    local RVM_COLOR=$rvmColor
 
     case $TERM in
         xterm*|rxvt*)
@@ -137,6 +156,7 @@ $PUNCT)-(\
 $TEXT$(term_info)$PUNCT/$TEXT\!$PUNCT)-(\
 $TEXT\$(trimmed_path)\
 $PUNCT)-$TEXT- $GIT_COLOR\$(git_prompt_info)\
+$RVM_COLOR\$(rvm_current)\
 \n\
 $TEXT-$PUNCT-(\
 $TEXT\u$PUNCT@$TEXT\h\
