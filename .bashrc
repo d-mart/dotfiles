@@ -132,7 +132,7 @@ if [ ! -f "${SSH_AUTH_SOCK}" ] ; then
 fi
 
 # @todo make this smarterer or dependent on os-setup above
-KEYCHAIN=`which keychain`
+KEYCHAIN=`which keychain 2>/dev/null`
 
 # make a list of keyfiles
 KEY_LIST="$( find ~/.ssh -name *id_?sa -print | tr '\n' ' ' )"
