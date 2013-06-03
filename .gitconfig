@@ -1,6 +1,7 @@
 [user]
 	name = David Martinez
 	email = dmartinez@comverge.com
+	initials = DM
 
 [color]
     diff = auto
@@ -44,8 +45,10 @@
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     incoming = '!git remote update -p; git log ..@{u}'
     outgoing = 'log @{u}..'
-    diffall =
-    #diffall = '!echo ~/proj/stuff/scripts/bash/git-diffall.sh $@'
+    diffall  =
+	snapshot = "!__f() { git stash save \"snapshot: $@ $(date)\" && git stash apply \"stash@{0}\"; }; __f"
+	ours     = "!__f() { git checkout --ours $@ && git add $@; }; __f"
+	theirs   = "!__f() { git checkout --theirs $@ && git add $@; }; __f"
 
 [diff]
     tool = meld
