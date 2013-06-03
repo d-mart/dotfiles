@@ -21,6 +21,14 @@ which colorgcc &> /dev/null  && alias gcc=colorgcc
 which colordiff &> /dev/null && alias diff=colordiff
 alias ccat=/usr/share/source-highlight/src-hilite-lesspipe.sh
 
+# vagrant
+__vagrant="vagrant"
+alias v="${__vagrant}"
+alias vp="${__vagrant} provision"
+alias vnp="${__vagrant} up --no-provision"
+
+# knife
+alias kci="knife cookbook github install"
 
 # launching aliases
 alias g='gedit 2>/dev/null'
