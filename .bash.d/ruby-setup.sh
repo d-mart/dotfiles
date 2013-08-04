@@ -16,11 +16,12 @@ alias dstat='bundle exec rake daemons:status'
 alias dstop='bundle exec rake daemons:stop'
 alias dstart='bundle exec rake daemons:start'
 alias drestart='dstop; dstart'
+alias dbounce='drestart'
 # test mode
 alias tstart='bundle exec rake daemons:test:start'
 alias tstop='bundle exec rake daemons:test:stop'
 alias trestart='tstop; tstart'
-alias tbounce='dtrestart'
+alias tbounce='trestart'
 # resque
 alias rstop='bundle exec rake daemons:resque:stop'
 alias rstart='bundle exec rake daemons:resque:start'
