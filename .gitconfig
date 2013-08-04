@@ -21,6 +21,7 @@
     frag = magenta bold
     old = red bold
     new = green bold
+    whitespace = red reverse
 
 [color "status"]
     added = yellow
@@ -31,7 +32,6 @@
     autocrlf = input
     #autocrlf = false
     #autocrlf = true
-	editor = /Applications/Emacs.app/Contents/MacOS/bin/emacsclient
     excludesfile = "~/.gitexcludes"
 
 [alias]
