@@ -9,6 +9,9 @@ if [ -x /usr/bin/dircolors ]; then
     alias vdir='vdir --color=auto'
 fi
 
+alias lf="ls -l | egrep -v '^d'"   # list non-directories
+alias ldir="ls -l | egrep '^d'"    # list directories
+
 alias grep='grep --extended-regexp --color=auto --line-number --with-filename'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
@@ -37,8 +40,10 @@ alias g='gedit 2>/dev/null'
 # -c   run a new graphical emacs client (frame)
 # -t   run a console emacs client
 # -a   specify alternate editor
-alias ecl='emacsclient -n -a ""'
-alias eclw='emacsclient -n -c -a ""'
+export EMACSCLIENT="emacsclient"
+alias ec="$EMACSCLIENT"
+alias ecl="$EMACSCLIENT -n -a ''"
+alias eclw="$EMACSCLIENT -n -c -a ''"
 alias eq='emacs -q -nw --eval="(setq make-backup-files nil)"'
 
 # changed to use screen helper func below alias eclt='emacsclient -n -t -a ""'
