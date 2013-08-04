@@ -6,6 +6,9 @@
 
 MY_SCRIPT_DIR="$HOME/.bash.d"
 
+# Load some utility functions
+source "$MY_SCRIPT_DIR/utils.sh"
+
 # Get simplified OS type
 source "$MY_SCRIPT_DIR/get-os.sh"
 OS=$(get_os)
