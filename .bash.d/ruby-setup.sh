@@ -42,7 +42,10 @@ export RUBY_HEAP_SLOTS_INCREMENT=300000
 export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 export RUBY_GC_MALLOC_LIMIT=79000000
 
-## Ruby Version Manager
-if [ -f ~/.rvm/scripts/rvm ]; then
+## Ruby Version Manager - source first from ~, then if
+## not present, look for system-wide RVM
+if [[ -s ~/.rvm/scripts/rvm ]]; then
     source ~/.rvm/scripts/rvm
+elif [[ -s /usr/local/rvm/scripts/rvm ]]; then
+    source /usr/local/rvm/scripts/rvm
 fi
