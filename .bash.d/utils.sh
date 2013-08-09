@@ -1,6 +1,10 @@
 #!/usr/bin/env BASH
 ## Little papercut functions
 
+on_mac()
+{
+    return $(uname -a | grep -iq darwin)
+}
 
 ## quickly create a tarball of a dir and place it in /tmp
 # TODO: Check for correct path
@@ -79,7 +83,7 @@ pghash()
 {
     # the openssl installed on mac does not prepend openssl's output with anything, whereas
     # on linux there is something like '(stdin=) ' before the hash
-    if $(uname -a | grep -iq darwin);
+    if on_mac
     then
         SED_PATTERN='^'      # to just prepend output with 'md5'
     else
