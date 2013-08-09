@@ -93,8 +93,36 @@ pghash()
     echo "$1$2" | openssl md5 | sed -e "s/$SED_PATTERN/md5/g"
 }
 
+# find an available port
+#
+avail_port()
+{
+    local port=$1
+    : ${port:=25678}
 
+    # BSD netstat shows IP.PORT instead of IP:PORT
+    if on_mac; then
+        port=$(avail_port_bsd $port)
+    else
+	    while netstat -tuna | egrep -q "^\w+\s+\w+\s+\w+\s+(\w+\.){3}\w+:${port}"
+	    do
+	        port=$(( $port + 1))
+	    done
+    fi
 
+    echo $port
+}
+
+avail_port_bsd()
+{
+    local port=$1
+    while netstat -p tcp -p udp -n | grep -q"^(tcp|udp)\w*\s+\w+\s+\w+\s+\S+.${port}"
+    do
+	    port=$(( $port + 1))
+    done
+
+    echo $port
+}
 ###########
 # Helpers #
 ###########
