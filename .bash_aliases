@@ -184,27 +184,3 @@ function repeat()
         $@
     done
 }
-
-
-###
-# These funcs call the screen-helper script, which if
-# called from inside a screen session, will launch
-# them in a new screen window
-SCREEN_HELPER=screen-helper.sh
-vim()   { $SCREEN_HELPER vim $* ; }
-vi()    { $SCREEN_HELPER vi $* ; }
-man()   { $SCREEN_HELPER man $* ; }
-info()  { $SCREEN_HELPER info $* ; }
-less()  { $SCREEN_HELPER less $* ; }
-watch() { $SCREEN_HELPER watch $* ; }
-ssh()   { $SCREEN_HELPER ssh $*  ; }
-eclt()  { $SCREEN_HELPER emacsclient -a "emacs -nw" --tty $* ; }
-#e()     { $SCREEN_HELPER emacs --quick -nw $* ; }
-ack()   { $SCREEN_HELPER ack-grep --pager="less -R" $* ; }
-hex()   { $SCREEN_HELPER vbindiff $* ; }
-w3m()   { $SCREEN_HELPER w3m $* ; }
-com()   { $SCREEN_HELPER minicom --noinit --baudrate 115200 --device $* ; }
-comA()  { $SCREEN_HELPER minicom --noinit --baudrate 115200 --device /dev/ftdi_A $* ; }
-comB()  { $SCREEN_HELPER minicom --noinit --baudrate 115200 --device /dev/ftdi_B $* ; }
-comC()  { $SCREEN_HELPER minicom --noinit --baudrate 115200 --device /dev/ftdi_C $* ; }
-comD()  { $SCREEN_HELPER minicom --noinit --baudrate 115200 --device /dev/ftdi_D $* ; }
