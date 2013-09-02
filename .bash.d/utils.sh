@@ -1,6 +1,10 @@
 #!/usr/bin/env BASH
 ## Little papercut functions
 
+on_mac()
+{
+    return $(uname -a | grep -iq darwin)
+}
 
 ## quickly create a tarball of a dir and place it in /tmp
 # TODO: Check for correct path
@@ -79,7 +83,7 @@ pghash()
 {
     # the openssl installed on mac does not prepend openssl's output with anything, whereas
     # on linux there is something like '(stdin=) ' before the hash
-    if $(uname -a | grep -iq darwin);
+    if on_mac
     then
         SED_PATTERN='^'      # to just prepend output with 'md5'
     else
@@ -89,16 +93,12 @@ pghash()
     echo "$1$2" | openssl md5 | sed -e "s/$SED_PATTERN/md5/g"
 }
 
-
-on_mac()
-{
-    return $(uname -a | grep -iq darwin)
-}
-
+# find an available port
+#
 avail_port()
 {
     local port=$1
-    : ${port:=5222}
+    : ${port:=25678}
 
     # BSD netstat shows IP.PORT instead of IP:PORT
     if on_mac; then
@@ -123,7 +123,6 @@ avail_port_bsd()
 
     echo $port
 }
-
 
 ###########
 # Helpers #
