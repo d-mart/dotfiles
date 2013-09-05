@@ -6,6 +6,21 @@ on_mac()
     return $(uname -a | grep -iq darwin)
 }
 
+# Return the first argument, or stdin if first arg is missing or '-'
+first_or_stdin()
+{
+    local result
+    if [[ $1 == "" ]] || [[ $1 == "-" ]]; then
+        read
+        result="$REPLY"
+    else
+        echo "Using arg1"
+        result="$1"
+    fi
+
+    echo "$result"
+}
+
 ## quickly create a tarball of a dir and place it in /tmp
 # TODO: Check for correct path
 # TODO: Make it work for current directory
@@ -122,6 +137,56 @@ avail_port_bsd()
     done
 
     echo $port
+}
+
+# Go up directory tree X number of directories
+# from http://orangesplotch.com/bash-going-up/
+function up()
+{
+    COUNTER="$@";
+    # default $COUNTER to 1 if it isn't already set
+    if [[ -z $COUNTER ]]; then
+        COUNTER=1
+    fi
+    # make sure $COUNTER is a number
+    if [ $COUNTER -eq $COUNTER 2> /dev/null ]; then
+        nwd=`pwd` # Set new working directory (nwd) to current directory
+        # Loop $nwd up directory tree one at a time
+        until [[ $COUNTER -lt 1 ]]; do
+            nwd=`dirname $nwd`
+            let COUNTER-=1
+        done
+        cd $nwd # change directories to the new working directory
+    else
+        # print usage and return error
+        echo "usage: up [NUMBER]"
+        return 1
+    fi
+}
+
+# remove all compiled emacs files and then recompile them
+# from article+comments at http://linuxcommando.blogspot.com/2008/06/run-emacs-in-batch-mode-to-byte-compile.html
+function recompile_el()
+{
+    find ~/.emacs.d/ -type f -name "*.elc" | xargs rm;
+    find ~/.emacs.d/ -type f -name "*.el" | awk '{print "(byte-compile-file \"" $1 "\")";}' > /tmp/runme.el
+    emacs -batch -l /tmp/runme.el -kill
+    rm /tmp/runme.el
+}
+
+# run the given command <n> times
+# e.g.
+# $ repeat 35 echo "hello"
+function repeat()
+{
+    local __i=0
+    local __count=$1
+    shift
+    for ((__i=1; __i <= __count; __i++))
+    do
+        echo "Iteration: $__i"
+        $@
+    done
 }
 
 ###########
