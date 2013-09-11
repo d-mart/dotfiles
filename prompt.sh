@@ -162,8 +162,10 @@ $TEXT-$PUNCT-(\
 $TEXT\u$PUNCT@$TEXT\h\
 $PUNCT:$UID_COLOR\$$PUNCT)-$TEXT- $NO_COLOR"
 
-#export PS2="$PUNCT-$TEXT-$PUNCT- $NO_COLOR"
+    #export PS2="$PUNCT-$TEXT-$PUNCT- $NO_COLOR"
 
+    # dumb-down the prompt for emacs/tramp
+    [ $TERM = "dumb" ] && PS1='$ ' # zsh only --> && unsetopt zle
 }
 
 makePrompt
