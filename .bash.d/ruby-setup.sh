@@ -3,11 +3,11 @@
 ## general aliases for ruby
 alias be='bundle exec'
 alias ber='bundle exec rake'
-alias rsp='bundle exec rspec -d -f doc'
+alias rsp='LOG_LEVEL=DEBUG bundle exec rspec -d -f doc'
 alias cu='bundle exec cucumber -x'
 alias cuke='cu'
-alias rs='rails server'
-alias rc='rails console'
+alias rs='bundle exec rails server'
+alias rc='bundle exec rails console'
 
 ## daemon control
 # daemon status
