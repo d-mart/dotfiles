@@ -40,11 +40,19 @@ alias g='gedit 2>/dev/null'
 # -c   run a new graphical emacs client (frame)
 # -t   run a console emacs client
 # -a   specify alternate editor
-export EMACSCLIENT="emacsclient"
+if on_mac; then
+    export EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
+    export EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+else
+    export EMACS="emacs"
+    export EMACSCLIENT="emacsclient"
+fi
+
 alias ec="$EMACSCLIENT"
 alias ecl="$EMACSCLIENT -n -a ''"
 alias eclw="$EMACSCLIENT -n -c -a ''"
-alias eq='emacs -q -nw --eval="(setq make-backup-files nil)"'
+alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
+export VISUAL="$EMACSCLIENT -a ''"
 
 # changed to use screen helper func below alias eclt='emacsclient -n -t -a ""'
 # changed to use screen helper func below alias e='emacs --quick -nw'
