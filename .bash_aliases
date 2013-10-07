@@ -11,6 +11,7 @@ fi
 
 alias lf="ls -l | egrep -v '^d'"   # list non-directories
 alias ldir="ls -l | egrep '^d'"    # list directories
+alias lsd='ls -ld */ .*/'          # list directories
 
 alias grep='grep --extended-regexp --color=auto --line-number --with-filename'
 alias fgrep='fgrep --color=auto'
@@ -52,10 +53,12 @@ alias ec="$EMACSCLIENT"
 alias ecl="$EMACSCLIENT -n -a ''"
 alias eclw="$EMACSCLIENT -n -c -a ''"
 alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
-export VISUAL="$EMACSCLIENT -a ''"
 
-# changed to use screen helper func below alias eclt='emacsclient -n -t -a ""'
-# changed to use screen helper func below alias e='emacs --quick -nw'
+# launch emacsclient, or failing that, emacs
+export EDITOR="$EMACSCLIENT"
+export VISUAL="$EMACSCLIENT -a ''"
+export ALTERNATE_EDITOR="$EMACS"
+
 alias mcom='minicom --noinit --baudrate=115200 --device'
 alias mcom4='minicom --noinit --baudrate=4800 --device'
 alias ta='textadept'
@@ -69,10 +72,10 @@ alias ffx='firefox -no-remote -p quick'      # open 'quick' profile of firefox
 alias ffx='/Applications/Firefox.app/Contents/MacOS/firefox-bin -no-remote -P'
 
 # use emacs for quick su editing (via emacs-fu)
-alias sue="SUDO_EDITOR=\"emacsclient -c -a emacs\" sudoedit"
+alias sue="SUDO_EDITOR=\"$EMACSCLIENT -c -a emacs\" sudoedit"
 function E()
 {
-    emacsclient -c -a emacs "sudo:root@localhost:$1"
+    "$EMACSCLIENT" -c -a "$EMACS" "sudo:root@localhost:$1"
 }
 
 

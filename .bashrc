@@ -89,12 +89,6 @@ if [ -s $HOME/.tmuxinator/scripts/tmuxinator ]; then
     source $HOME/.tmuxinator/scripts/tmuxinator
 fi
 
-# Setup default system editor.  In this case,
-# launch emacsclient, or failing that, emacs
-export ALTERNATE_EDITOR=emacs
-export EDITOR=emacsclient
-export VISUAL=emacsclient
-
 if [ -f ~/.bashrc.local ]; then
     source ~/.bashrc.local
 fi
