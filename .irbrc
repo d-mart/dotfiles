@@ -1,83 +1,45 @@
-require 'irb/completion'
-require 'irb/ext/save-history' unless IRB.version.include? "DietRB"
-                               # Don't load if using MacRuby
+# directory from which irb was started
+start_dir = Dir.pwd
 
-IRB.conf[:AUTO_INDENT] = true
-IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
-IRB.conf[:SAVE_HISTORY] = 1000
-IRB.conf[:PROMPT][:CUSTOM] = {
-  :PROMPT_I => "%02n >> ",
-  :PROMPT_N => "%02n >> ",
-  :PROMPT_S => nil,
-  :PROMPT_C => "%02n ?> ",
-  :RETURN => "=> %s\n"
-}
-IRB.conf[:PROMPT_MODE] = :CUSTOM
+# Directory for irb config files
+base_conf_dir = File.join(ENV['HOME'], ".rb.d")
+irb_conf_dir  = File.join(base_conf_dir, "irb")
+# load debundle - allow loading of unbundled gems while running under bundler
+load File.join(base_conf_dir, "debundle.rb")
 
+# load rubygems for older rubies
 begin
   require 'rubygems' if RUBY_VERSION < '1.9'
 rescue LoadError
 end
 
-load "~/.rbrc"
+## General irb / rails console customization
+# Get a list of irb init files, ignorning those starting with '_'
+Dir.chdir(irb_conf_dir)
+startup_files = Dir.glob("[^_]*.rb")
 
-irbrc_unavailable = []
-
-begin
-  Unbundler.require_external_gem 'wirble'
-  Wirble.init
-  Wirble.colorize
-rescue LoadError => err
-  irbrc_unavailable << "wirble"
-end
-
-begin
-  Unbundler.require_external_gem 'hirb'
-  Hirb.enable
-rescue LoadError => err
-  irbrc_unavailable << "hirb"
-end
-
-%w{awesome_print looksee}.each do |gem|
+startup_files.each do |f|
   begin
-    Unbundler.require_external_gem gem
-  rescue LoadError => err
-    irbrc_unavailable << gem
+    load f
+  rescue Exception => e
+    puts e.backtrace
+    puts e.message
+    puts "Error loading #{f}"
   end
 end
 
-if irbrc_unavailable.length > 0
-  warn "\e[33m#{irbrc_unavailable.join(', ')} unavailable\e[0m"
-end
+## Project-specific settings
+# For every directory ~/.rb.d/projects/XYZ, if XYZ in in the pwd when irb is started,
+# load all the files therein.
+projects_dir = File.join(base_conf_dir, "projects")
+Dir.chdir(projects_dir)
+projects = Dir.glob("[^.]*")
 
-class Object
-  # List methods which aren't in superclass
-  def local_methods
-    if [Class, Module].include? self.class
-      self.methods - self.superclass.methods
-    else
-      self.methods - self.class.superclass.instance_methods
-    end.sort
-  end
-
-  def pure_local_methods
-    if [Class, Module].include? self.class
-      self.methods - (self.ancestors - [self]).map(&:methods).flatten
-    else
-      self.methods - (self.class.ancestors - [self.class]).map(&:instance_methods).flatten
-    end.sort
-  end
-
-  # print documentation
-  # ri 'Array#pop'
-  # Array.ri
-  # Array.ri :pop
-  # arr.ri :pop
-  def ri(method = nil)
-    unless method && method =~ /^[A-Z]/ # if class isn't specified
-      klass = self.kind_of?(Class) ? name : self.class.name
-      method = [klass, method].compact.join('#')
+projects.each do |project|
+  if start_dir.include?(project)
+    Dir.chdir(File.join(projects_dir, project))
+    Dir.glob("[^_]*.rb") do |project_file|
+      load project_file
     end
-    system 'ri', method.to_s
   end
 end
