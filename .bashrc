@@ -27,8 +27,6 @@ case "$TERM" in
     xterm-color) color_prompt=yes;;
 esac
 
-
-
 if [ `whoami` == "root" ]; then
     # prompt for root
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
@@ -49,6 +47,11 @@ esac
 # shell related setup
 if [ -f "$MY_SCRIPT_DIR/bash-setup.sh" ]; then
     source "$MY_SCRIPT_DIR/bash-setup.sh"
+fi
+
+# environment variables etc
+if [ -f "$MY_SCRIPT_DIR/env-setup.sh" ]; then
+    source "$MY_SCRIPT_DIR/env-setup.sh"
 fi
 
 # git related setup
@@ -107,46 +110,30 @@ do
     fi
 done
 
-# -R   raw control chars (allows source highlighting a la above)
-# -S   chop long lines instead of wrapping
-# -N   always show line numbers
-# -#4  horiz scroll is by 4 chars
-# -~   empty lines at end of doc are blank, not ~
-# -i   searches ignore case unless search term contains caps
-export LESS=' -RSN#4~i '
-export LESS=' -RN~i '
-
-# Add some personal dirs to the path
-export PATH=/usr/local/sbin:$PATH:~/.bash.d:~/bin:~/app
-
-
 #################
 ####### KEYCHAIN
 # Clear existing broken ssh-agent environment
-#
-if [ ! -f "${SSH_AUTH_SOCK}" ] ; then
+if [ ! -f "${SSH_AUTH_SOCK}" ]; then
   export SSH_AUTH_SOCK=""
 fi
 
 # @todo make this smarterer or dependent on os-setup above
 KEYCHAIN=`which keychain 2>/dev/null`
 
-# make a list of keyfiles
-KEY_LIST="$( find ~/.ssh -name *id_?sa -print | tr '\n' ' ' )"
+if [ -n "${KEYCHAIN:+X}" ]; then
+    # make a list of keyfiles
+    KEY_LIST="$( find ~/.ssh -name *id_?sa -print | tr '\n' ' ' )"
 
-# if ssh auth forwarding is enabled, use it and dont start keychain
-if [ "${SSH_AUTH_SOCK}x" == "x" ] && [ "$UID" != "0" ] ; then
-    if [ -x $KEYCHAIN ] ; then
-       $KEYCHAIN -q -Q --lockwait 1 $KEY_LIST
-       if [ -f ~/.keychain/$HOSTNAME-sh ] ; then
-          source ~/.keychain/$HOSTNAME-sh
-       fi
+    # if ssh auth forwarding is enabled, use it and dont start keychain
+    if [ "${SSH_AUTH_SOCK}x" == "x" ] && [ "$UID" != "0" ] ; then
+        if [ -x $KEYCHAIN ] ; then
+            $KEYCHAIN -q -Q --lockwait 1 $KEY_LIST
+            if [ -f ~/.keychain/$HOSTNAME-sh ] ; then
+                source ~/.keychain/$HOSTNAME-sh
+            fi
+        fi
     fi
 fi
-
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
-
 
 # Remove the garbage characters with the Unix tr command
 # tr -cd '\11\12\15\40-\176' < file-with-binary-chars > clean-file

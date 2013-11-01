@@ -14,7 +14,6 @@ first_or_stdin()
         read
         result="$REPLY"
     else
-        echo "Using arg1"
         result="$1"
     fi
 
@@ -24,6 +23,8 @@ first_or_stdin()
 ## quickly create a tarball of a dir and place it in /tmp
 # TODO: Check for correct path
 # TODO: Make it work for current directory
+# usage:
+#    qbak <directory>
 qbak()
 {
     DATE_STR=$(date "+%Y_%m_%d_%H_%M_%S")

@@ -42,8 +42,8 @@ alias g='gedit 2>/dev/null'
 # -t   run a console emacs client
 # -a   specify alternate editor
 if on_mac; then
-    export EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
-    export EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+    export EMACS="/Applications/Emacs-2013.10.31.app/Contents/MacOS/Emacs"
+    export EMACSCLIENT="/Applications/Emacs-2013.10.31.app/Contents/MacOS/bin/emacsclient"
 else
     export EMACS="emacs"
     export EMACSCLIENT="emacsclient"
