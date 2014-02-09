@@ -9,6 +9,14 @@ if [ -x /usr/bin/dircolors ]; then
     alias vdir='vdir --color=auto'
 fi
 
+alias cd..='cd ..'  # get rid of command not found
+alias ..='cd ..'
+alias ...='cd ../../../'
+alias ....='cd ../../../../'
+alias .....='cd ../../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../..'
+
 alias lf="ls -l | egrep -v '^d'"   # list non-directories
 alias ldir="ls -l | egrep '^d'"    # list directories
 alias lsd='ls -ld */ .*/'          # list directories
@@ -42,8 +50,8 @@ alias g='gedit 2>/dev/null'
 # -t   run a console emacs client
 # -a   specify alternate editor
 if on_mac; then
-    export EMACS="/Applications/Emacs-2013.10.31.app/Contents/MacOS/Emacs"
-    export EMACSCLIENT="/Applications/Emacs-2013.10.31.app/Contents/MacOS/bin/emacsclient"
+    export EMACS="/Applications/Emacs-2014.01.31.app/Contents/MacOS/Emacs"
+    export EMACSCLIENT="/Applications/Emacs-2014.01.31.app/Contents/MacOS/bin/emacsclient"
 else
     export EMACS="emacs"
     export EMACSCLIENT="emacsclient"
@@ -121,7 +129,6 @@ alias dumpfunc="declare -f"
 # a script wrapper to 'bc' command line calculator
 # note: collides with /usr/bin/cal - display calendar
 alias cal="solve.sh"
-
 
 pause() { read -p "Press Enter to continue..." ; }
 
