@@ -100,6 +100,7 @@ fi
 # A couple of locations - for debian or osx/brew
 SRC_HILITES[0]=/usr/share/source-highlight/src-hilite-lesspipe.sh
 SRC_HILITES[1]=/usr/local/bin/src-hilite-lesspipe.sh
+SRC_HILITES[2]=/usr/bin/src-hilite-lesspipe.sh
 
 for hl in "${SRC_HILITES[@]}"
 do
