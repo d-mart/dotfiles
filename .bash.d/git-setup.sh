@@ -11,6 +11,7 @@ function current_branch() {
   ref=$(git rev-parse --short HEAD 2> /dev/null) || return
   echo ${ref#refs/heads/}
 }
+alias cb="current_branch"
 
 # aliases for git
 alias gb="git branch"
