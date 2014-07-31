@@ -42,6 +42,9 @@ alias vnp="${__vagrant} up --no-provision"
 # knife
 alias kci="knife cookbook github install"
 
+# berksfile
+alias bu="berks upload --ssl-verify=false --no-freeze"
+
 # launching aliases
 alias g='gedit 2>/dev/null'
 # emacsclient args
@@ -85,7 +88,6 @@ function E()
 {
     "$EMACSCLIENT" -c -a "$EMACS" "sudo:root@localhost:$1"
 }
-
 
 # CLI tools aliases
 alias pg="ps aux | grep -v grep | grep"
