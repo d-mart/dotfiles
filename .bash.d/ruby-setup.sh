@@ -39,13 +39,11 @@ alias elm='ecl db/migrate/`ls -tr db/migrate | tail -1`'
 # prepare test database
 alias dbtp='$bundle_exec rake db:migrate db:test:prepare'
 
-## ruby environment
-#export RUBY_HEAP_MIN_SLOTS=800000
-#export RUBY_GC_HEAP_INIT_SLOTS=$RUBY_HEAP_MIN_SLOTS
-#export RUBY_HEAP_FREE_MIN=100000
-#export RUBY_HEAP_SLOTS_INCREMENT=300000
-#export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
-#export RUBY_GC_MALLOC_LIMIT=79000000
+## serve current directoryv via HTTP
+function serve {
+  port="${1:-3000}"
+  ruby -run -e httpd . -p $port
+}
 
 ## Ruby Version Manager - source first from ~, then if
 ## not present, look for system-wide RVM
