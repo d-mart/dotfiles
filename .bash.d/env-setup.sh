@@ -7,7 +7,7 @@
 # -~   empty lines at end of doc are blank, not ~
 # -i   searches ignore case unless search term contains caps
 export LESS=' -RSN#4~i '
-export LESS=' -RN~i '
+export LESS=' -R~i '
 
 # Add some personal dirs to the path
 export PATH=/usr/local/sbin:$PATH:~/.bash.d:~/bin:~/app
