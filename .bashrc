@@ -4,7 +4,7 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-
+p
 MY_SCRIPT_DIR="$HOME/.bash.d"
 
 # Load some utility functions
@@ -68,6 +68,11 @@ fi
 # emacs related setup
 if [ -f "$MY_SCRIPT_DIR/emacs-setup.sh" ]; then
     source "$MY_SCRIPT_DIR/emacs-setup.sh"
+fi
+
+# tmux rekated setup
+if [ -f "$MY_SCRIPT_DIR/tmux-setup.sh" ]; then
+    source "$MY_SCRIPT_DIR/tmux-setup.sh"
 fi
 
 # mac-specific stuff
