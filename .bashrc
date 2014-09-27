@@ -4,7 +4,7 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-MY_SCRIPT_DIR="$HOME/.bash.d"
+MY_SCRIPT_DIR="$HOME/.sh.d"
 
 # Load some utility functions
 source "$MY_SCRIPT_DIR/utils.sh"
