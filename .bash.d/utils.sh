@@ -190,6 +190,21 @@ function repeat()
     done
 }
 
+# (un)pause pids
+# @todo take param instead of hardcoding ffx
+# @todo extract the loop and pass the kill flag into a common helper
+function pause_pids()
+{
+    local __pid_regex=$1
+    __signal_pids "${__pid_regex}" SIGSTOP
+}
+
+function unpause_pids()
+{
+    local __pid_regex=$1
+    __signal_pids "${__pid_regex}" SIGCONT
+}
+
 ###########
 # Helpers #
 ###########
@@ -197,4 +212,18 @@ __pw_helper()
 {
     # osx (or other unicode env) requires the LC_CTYPE=C
     < /dev/urandom LC_CTYPE=C tr -cd "${1:-0-9A-F}" | head -c${2:-32}
+}
+
+__signal_pids()
+{
+    local __pid_match="$1"
+    local __pid_signal="$2"
+
+    for __pid in $(pgrep -i "${__pid_match}")
+    do
+        local __process_name=$(ps -p "${__pid}" -o comm=)
+        echo "Sending ${__pid_signal} to ${__process_name} with pid ${__pid}."
+        echo kill "-${__pid_signal}" "${__pid}"
+    done
+
 }
