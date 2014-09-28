@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # enable color support of ls and also add handy aliases
 # @todo make this dependent on linux
 if [ -x /usr/bin/dircolors ]; then
@@ -151,6 +149,7 @@ ftr()  { egrep -rIHn --include="*\.rb" --include="\*.feature" --exclude="TAGS" "
 ft()   { egrep -Rn "$@" * ; }
 
 # See if there is a local bash_aliases and source it
-if [ -f ~/.bash_aliases.local ]; then
-    source ~/.bash_aliases.local
-fi
+__aliases_path="${SHELL_HOME}/alias"
+__shell_alias_file="${__aliases_path}/aliases.$(shell_name)"
+__local_alias_file="${__aliases_path}/aliases.local"
+source_if_exists "${__shell_alias_file}" "${__local_alias_file}"

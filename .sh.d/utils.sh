@@ -6,6 +6,12 @@ on_mac()
     return $(uname -a | grep -iq darwin)
 }
 
+# bash, fish, zsh, etc.
+shell_name()
+{
+    basename ${SHELL}
+}
+
 # Return the first argument, or stdin if first arg is missing or '-'
 first_or_stdin()
 {
@@ -203,6 +209,16 @@ function unpause_pids()
 {
     local __pid_regex=$1
     __signal_pids "${__pid_regex}" SIGCONT
+}
+
+# source one or more files if they exist
+function source_if_exists()
+{
+    for __file in $@; do
+        if [ -f "${__file}" ]; then
+            source "${__file}"
+        fi
+    done
 }
 
 ###########

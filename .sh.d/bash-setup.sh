@@ -52,14 +52,18 @@ LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:c
 export LS_COLORS
 export CLICOLOR=true
 
-# ls aliases
-alias ll='ls -lh'
-alias la='ls -A'
-alias l='ls -hCF'
-alias ld='ls -d'
-alias ls='ls -h --color=tty'
-function cdl { cd $1; ls; }
+if [ -f /etc/bash_completion ]; then
+    source /etc/bash_completion
+fi
 
-# Reloads the .bashrc or .bash_aliases file
-alias rbash=". ~/.bashrc"
-alias ral=". ~/.bash_aliases"
+#####
+# Proceed with general initialization
+#####
+source "${SHELL_HOME}/shell-init.sh"
+
+if [ "$OS" = "mac" ]; then
+    source `/usr/local/bin/brew --prefix`/etc/bash_completion.d/git-prompt.sh
+    source `/usr/local/bin/brew --prefix`/etc/bash_completion.d/git-completion.bash
+fi
+
+source "${SHELL_HOME}/bash-prompt.sh"

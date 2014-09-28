@@ -69,7 +69,7 @@ case `hostname` in
 esac
 
 ## If the user is root, set the uid color to a special value
-if [ "`/usr/bin/whoami`" == "root" ]
+if [ "`/usr/bin/whoami`" = "root" ]
 then
     uidColor=$bakwht$bldred
 fi
