@@ -43,16 +43,9 @@ alias kci="knife cookbook github install"
 # berksfile
 alias bu="berks upload --ssl-verify=false --no-freeze"
 
-# launching aliases
-alias g='gedit 2>/dev/null'
-# emacsclient args
-# -n   don't wait for client
-# -c   run a new graphical emacs client (frame)
-# -t   run a console emacs client
-# -a   specify alternate editor
 if on_mac; then
-    export EMACS="/Applications/Emacs-2014.01.31.app/Contents/MacOS/Emacs"
-    export EMACSCLIENT="/Applications/Emacs-2014.01.31.app/Contents/MacOS/bin/emacsclient"
+    export EMACS="/Applications/Emacs-2014.08.08.app/Contents/MacOS/Emacs"
+    export EMACSCLIENT="/Applications/Emacs-2014.08.08.app/Contents/MacOS/bin/emacsclient"
 else
     export EMACS="emacs"
     export EMACSCLIENT="emacsclient"
@@ -77,8 +70,6 @@ alias ejd='sudo ejabberdctl'
 alias adb='/usr/local/android-sdk-linux_86/platform-tools/adb'
 alias ff='find . -name'
 alias ffx='firefox -no-remote -p quick'      # open 'quick' profile of firefox
-# @todo make more smarterer
-alias ffx='/Applications/Firefox.app/Contents/MacOS/firefox-bin -no-remote -P'
 
 # use emacs for quick su editing (via emacs-fu)
 alias sue="SUDO_EDITOR=\"$EMACSCLIENT -c -a emacs\" sudoedit"
