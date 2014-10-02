@@ -80,15 +80,13 @@ fi
 
 # @todo make this smarterer or dependent on os-setup above
 KEYCHAIN=`which keychain 2>/dev/null`
+HOSTNAME=${HOSTNAME:=$(hostname -s)}
 
 if [ -n "${KEYCHAIN:+X}" ]; then
-    # make a list of keyfiles
-    KEY_LIST="$( find ~/.ssh -name \*id_\?sa -print | tr '\n' ' ' )"
-
     # if ssh auth forwarding is enabled, use it and dont start keychain
     if [ "${SSH_AUTH_SOCK}x" = "x" ] && [ "$UID" != "0" ] ; then
         if [ -x $KEYCHAIN ] ; then
-            $KEYCHAIN -q -Q --lockwait 1 $KEY_LIST
+            find ~/.ssh -name \*id_\?sa -print0 | xargs -0 -- $KEYCHAIN -q -Q --lockwait 1
             if [ -f ~/.keychain/$HOSTNAME-sh ] ; then
                 source ~/.keychain/$HOSTNAME-sh
             fi
