@@ -7,7 +7,7 @@ bundle_exec="bundle exec"
 ## general aliases for ruby
 alias be="$bundle_exec"
 alias ber="$bundle_exec rake"
-alias rsp="LOG_LEVEL=DEBUG $bundle_exec rspec -f doc"
+alias rsp="LOG_LEVEL=DEBUG $bundle_exec rspec --color -f doc"
 alias cu="$bundle_exec cucumber -x"
 alias cuke="cu"
 alias rs="$bundle_exec rails server"
