@@ -31,6 +31,11 @@ if [ -f "$SCRIPT_HOME/ruby-setup.sh" ]; then
     source "$SCRIPT_HOME/ruby-setup.sh"
 fi
 
+# python related setup
+if [ -f "$SCRIPT_HOME/python-setup.sh" ]; then
+    source "$SCRIPT_HOME/python-setup.sh"
+fi
+
 # emacs related setup
 if [ -f "$SCRIPT_HOME/emacs-setup.sh" ]; then
     source "$SCRIPT_HOME/emacs-setup.sh"
