@@ -9,17 +9,22 @@ fi
 
 alias cd..='cd ..'  # get rid of command not found
 alias ..='cd ..'
-alias ...='cd ../../../'
-alias ....='cd ../../../../'
-alias .....='cd ../../../../'
-alias .4='cd ../../../../'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias .4='cd ../../../..'
 alias .5='cd ../../../../..'
+
+alias ducks='du -cks * | sort -rn | head -11'
+
+alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias iip="ip a | grep 'inet ' | sed -e 's/^.*inet //g' -e 's/\/.*//g' | grep -v '127.0.0.1'"
 
 alias lf="ls -l | egrep -v '^d'"   # list non-directories
 alias ldir="ls -l | egrep '^d'"    # list directories
 alias lsd='ls -ld */ .*/'          # list directories
 
-alias grep='grep --extended-regexp --color=auto --line-number --with-filename'
+alias grep='grep --extended-regexp --color=auto --line-number'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
@@ -44,8 +49,8 @@ alias kci="knife cookbook github install"
 alias bu="berks upload --ssl-verify=false --no-freeze"
 
 if on_mac; then
-    export EMACS="/Applications/Emacs-2014.08.08.app/Contents/MacOS/Emacs"
-    export EMACSCLIENT="/Applications/Emacs-2014.08.08.app/Contents/MacOS/bin/emacsclient"
+    export EMACS="/Applications/Emacs-2014.12.07.app/Contents/MacOS/Emacs"
+    export EMACSCLIENT="/Applications/Emacs-2014.12.07.app/Contents/MacOS/bin/emacsclient"
 else
     export EMACS="emacs"
     export EMACSCLIENT="emacsclient"
@@ -70,6 +75,8 @@ alias ejd='sudo ejabberdctl'
 alias adb='/usr/local/android-sdk-linux_86/platform-tools/adb'
 alias ff='find . -name'
 alias ffx='firefox -no-remote -p quick'      # open 'quick' profile of firefox
+# find newest files in or below current dir (need 'gstat' on OSX)
+alias newest="find . -type f -exec stat --format '%Y :%y %n' {} \; | sort -nr | cut -d: -f2- | head"
 
 # use emacs for quick su editing (via emacs-fu)
 alias sue="SUDO_EDITOR=\"$EMACSCLIENT -c -a emacs\" sudoedit"
