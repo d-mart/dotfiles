@@ -64,6 +64,15 @@ vssh()
     rm "$SSH_CFG"
 }
 
+## ssh to host and continue or start a tmux session
+# usage:
+#    tm foo@bar.com
+tm()
+{
+    tmux rename-window "$1" 2>/dev/null
+    ssh -t $@ 'tmux attach || tmux new'
+}
+
 # display and possibly add a dir to the path
 path()
 {
@@ -169,6 +178,12 @@ function up()
         echo "usage: up [NUMBER]"
         return 1
     fi
+}
+
+# Make directory and cd to it
+function mcd()
+{
+    mkdir -p "$1" && cd "$1"
 }
 
 # remove all compiled emacs files and then recompile them
