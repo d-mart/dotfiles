@@ -35,7 +35,7 @@ alias thingstart="$bundle_exec rake daemons:thingling:start"
 
 ## database
 # edit last migration file
-alias elm="ecl db/migrate/`ls -tr db/migrate | tail -1`"
+function elm() { ecl db/migrate/`ls -tr db/migrate | tail -1` }
 # prepare test database
 alias dbtp="$bundle_exec rake db:migrate db:test:prepare"
 
