@@ -13,6 +13,14 @@ function current_branch() {
 }
 alias cb="current_branch"
 
+function g() {
+  if [ $# -eq 0 ]; then
+    git status -sb
+  else
+    git "$@"
+  fi
+}
+
 # aliases for git
 alias gb="git branch"
 alias gba="git branch -a"
@@ -31,9 +39,10 @@ alias glp="git log --patch"
 alias grb="git rebase origin/master"
 alias gsu="git submodule update"
 alias gg="git grep"
-alias gfetch="git stash && git fetch origin && git rebase origin/master && git stash pop"
+alias gfetch='git stash && git fetch origin && git rebase origin/`cb` && git stash pop'
+alias groc='git rebase origin/`cb`'
 alias gs="git stash"
 alias gsp="git stash pop"
 
 alias pmb="git push dmartinez $(current_branch)"
-alias pmb="git push dmartinez $(current_branch)"
+alias pmbf="git push dmartinez $(current_branch)"
