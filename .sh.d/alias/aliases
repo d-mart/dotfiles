@@ -48,23 +48,9 @@ alias kci="knife cookbook github install"
 # berksfile
 alias bu="berks upload --ssl-verify=false --no-freeze"
 
-if on_mac; then
-    export EMACS="/Applications/Emacs-2014.12.07.app/Contents/MacOS/Emacs"
-    export EMACSCLIENT="/Applications/Emacs-2014.12.07.app/Contents/MacOS/bin/emacsclient"
-else
-    export EMACS="emacs"
-    export EMACSCLIENT="emacsclient"
-fi
-
-alias ec="$EMACSCLIENT"
-alias ecl="$EMACSCLIENT -n -a ''"
-alias eclw="$EMACSCLIENT -n -c -a ''"
-alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
-
-# launch emacsclient, or failing that, emacs
-export EDITOR="$EMACSCLIENT"
-export VISUAL="$EMACSCLIENT -a ''"
-export ALTERNATE_EDITOR="$EMACS"
+# override in aliases.local if necessary (osx)
+export EMACS="emacs"
+export EMACSCLIENT="emacsclient"
 
 alias mcom='minicom --noinit --baudrate=115200 --device'
 alias mcom4='minicom --noinit --baudrate=4800 --device'
@@ -77,13 +63,6 @@ alias ff='find . -name'
 alias ffx='firefox -no-remote -p quick'      # open 'quick' profile of firefox
 # find newest files in or below current dir (need 'gstat' on OSX)
 alias newest="find . -type f -exec stat --format '%Y :%y %n' {} \; | sort -nr | cut -d: -f2- | head"
-
-# use emacs for quick su editing (via emacs-fu)
-alias sue="SUDO_EDITOR=\"$EMACSCLIENT -c -a emacs\" sudoedit"
-function E()
-{
-    "$EMACSCLIENT" -c -a "$EMACS" "sudo:root@localhost:$1"
-}
 
 # CLI tools aliases
 alias pg="ps aux | grep -v grep | grep"
@@ -151,3 +130,21 @@ __aliases_path="${SHELL_HOME}/alias"
 __shell_alias_file="${__aliases_path}/aliases.$(shell_name)"
 __local_alias_file="${__aliases_path}/aliases.local"
 source_if_exists "${__shell_alias_file}" "${__local_alias_file}"
+
+#
+alias ec="$EMACSCLIENT"
+alias ecl="$EMACSCLIENT -n -a ''"
+alias eclw="$EMACSCLIENT -n -c -a ''"
+alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
+
+# launch emacsclient, or failing that, emacs
+export EDITOR="$EMACSCLIENT"
+export VISUAL="$EMACSCLIENT -a ''"
+export ALTERNATE_EDITOR="$EMACS"
+
+# use emacs for quick su editing (via emacs-fu)
+alias sue="SUDO_EDITOR=\"$EMACSCLIENT -c -a emacs\" sudoedit"
+function E()
+{
+    "$EMACSCLIENT" -c -a "$EMACS" "sudo:root@localhost:$1"
+}
