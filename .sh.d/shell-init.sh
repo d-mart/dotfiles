@@ -46,6 +46,11 @@ if [ -f "$SCRIPT_HOME/tmux-setup.sh" ]; then
     source "$SCRIPT_HOME/tmux-setup.sh"
 fi
 
+# docker setup
+if [ -f "$SCRIPT_HOME/docker-setup.sh" ]; then
+    source "$SCRIPT_HOME/docker-setup.sh"
+fi
+
 ## general alias definitions
 ## See /usr/share/doc/bash-doc/examples in the bash-doc package.
 if [ -f "$SCRIPT_HOME/alias/aliases" ]; then

@@ -1,0 +1,6 @@
+alias d='docker'
+alias di='docker images'
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+alias db='docker build .'
+alias drl='docker run --rm -it $(docker images -q | head -1)'
