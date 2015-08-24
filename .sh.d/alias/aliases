@@ -24,7 +24,7 @@ alias lf="ls -l | egrep -v '^d'"   # list non-directories
 alias ldir="ls -l | egrep '^d'"    # list directories
 alias lsd='ls -ld */ .*/'          # list directories
 
-alias grep='grep --extended-regexp --color=auto --line-number'
+alias grep='grep --extended-regexp --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
@@ -113,6 +113,8 @@ pause() { read -p "Press Enter to continue..." ; }
 wp() { dig +short txt $1.wp.dg.cx ; }
 # reverse dns lookup
 alias rdig='dig +short -x'
+# serve current directory via http
+alias server="ruby -run -ehttpd . -p 8080"
 
 # Grep shortcuts
 # -r recurse directories
