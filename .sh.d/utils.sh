@@ -190,9 +190,10 @@ function mcd()
 # from article+comments at http://linuxcommando.blogspot.com/2008/06/run-emacs-in-batch-mode-to-byte-compile.html
 function recompile_el()
 {
+    local __emacs=${EMACS:_emacs}
     find ~/.emacs.d/ -type f -name "*.elc" | xargs rm;
     find ~/.emacs.d/ -type f -name "*.el" | awk '{print "(byte-compile-file \"" $1 "\")";}' > /tmp/runme.el
-    emacs -batch -l /tmp/runme.el -kill
+    __emacs -batch -l /tmp/runme.el -kill
     rm /tmp/runme.el
 }
 
