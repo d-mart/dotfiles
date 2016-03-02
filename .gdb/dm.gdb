@@ -1,3 +1,6 @@
+## Source bigass community en-awesomenator gdb script based on https://github.com/gdbinit/Gdbinit
+source ~/.gdb/canned.gdb
+
 ## Personal settings for gdb
 
 ## command history
@@ -43,3 +46,10 @@ document type
 Alias for 'whatis'
 end
 
+define ll
+  frame
+  list *$pc
+end
+document ll
+Show current source location
+end
