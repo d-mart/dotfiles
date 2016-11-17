@@ -13,7 +13,7 @@ if [ -n "${KEYCHAIN:+X}" ]; then
     # if ssh auth forwarding is enabled, use it and dont start keychain
     if [ "${SSH_AUTH_SOCK}x" = "x" ] && [ "$UID" != "0" ] ; then
         if [ -x $KEYCHAIN ] ; then
-            find ~/.ssh -name \*id_\?sa -print0 | xargs -0 -- $KEYCHAIN -q -Q --lockwait 1
+            find ~/.ssh -name \*.pub | sed -e 's/\.pub//' | xargs -- $KEYCHAIN -q -Q --lockwait 1
             if [ -f ~/.keychain/$HOSTNAME-sh ] ; then
                 source ~/.keychain/$HOSTNAME-sh
             fi
