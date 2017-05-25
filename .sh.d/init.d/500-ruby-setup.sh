@@ -13,6 +13,8 @@ alias cuke="cu"
 alias rs="$bundle_exec rails server"
 alias rc="$bundle_exec rails console"
 
+alias agr="ag --ruby"
+
 ## daemon control
 # daemon status
 alias dstat="$bundle_exec rake daemons:status"
