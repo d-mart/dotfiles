@@ -26,3 +26,7 @@ setopt no_nomatch
 setopt auto_pushd
 
 source "${SHELL_HOME}/shell-init.sh"
+
+if [ -x $(which direnv) ]; then
+  eval "$(direnv hook zsh)"
+fi

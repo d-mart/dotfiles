@@ -66,4 +66,8 @@ if [ "$OS" = "mac" ]; then
     source `/usr/local/bin/brew --prefix`/etc/bash_completion.d/git-completion.bash
 fi
 
+if [ -x $(which direnv) ]; then
+  eval "$(direnv hook bash)"
+fi
+
 source "${SHELL_HOME}/bash-prompt.sh"
