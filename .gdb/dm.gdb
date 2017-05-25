@@ -53,3 +53,12 @@ end
 document ll
 Show current source location
 end
+
+define rt
+  tb $arg0
+  continue
+end
+document rt
+ "run' til" supplied location.  Sets a temporary breakpoint to the
+ first argument, then does 'continue'
+end
