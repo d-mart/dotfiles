@@ -238,6 +238,30 @@ function source_if_exists()
 }
 
 ###########
+# Countdown timer and stopwatch
+# adapted from http://superuser.com/questions/611538/is-there-a-way-to-display-a-countdown-or-stopwatch-timer-in-a-terminal
+###########
+countdown(){
+    readonly _date=$(which gdate || echo "date") # use gdate if present (osx hack)
+    date1=$((`$_date +%s` + $1));
+    while [ "$date1" -ge `$_date +%s` ]; do
+    ## Is this more than 24h away?
+    days=$(($(($(( $date1 - $($_date +%s))) * 1 ))/86400))
+    echo -ne "$days day(s) and $($_date -u --date @$(($date1 - `$_date +%s`)) +%H:%M:%S)\r";
+    sleep 0.1
+    done
+}
+stopwatch(){
+    readonly _date=$(which gdate || echo "date") # use gdate if present (osx hack)
+    date1=`$_date +%s`;
+    while true; do
+    days=$(( $(($($_date +%s) - date1)) / 86400 ))
+    echo -ne "$days day(s) and $($_date -u --date @$((`$_date +%s` - $date1)) +%H:%M:%S)\r";
+    sleep 0.1
+    done
+}
+
+###########
 # Helpers #
 ###########
 __pw_helper()
