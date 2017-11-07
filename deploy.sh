@@ -10,7 +10,8 @@ dirList=".gdb .mlocate .sh.d .rb.d"
 # Hash where the key is the target directory and the value is the git url
 # e.g.  repos["foo"]="https://github.com/bar/foo"
 declare -A repos=( ["~/.oh-my-zsh"]="https://github.com/robbyrussell/oh-my-zsh"
-                   ["~/.bash-it"]="https://github.com/revans/bash-it")
+                   ["~/.prezto"]="https://github.com/sorin-ionescu/prezto"
+                   ["~/.bash-it"]="https://github.com/revans/bash-it" )
 
 # Set up "from" and "to" variables
 srcDir=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)

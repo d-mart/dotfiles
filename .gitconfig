@@ -17,11 +17,12 @@
     remote = green
 
 [color "diff"]
-    meta = yellow bold
-    frag = magenta bold
-    old = red bold
-    new = green bold
-    whitespace = red reverse
+	meta = 227
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+	commit = 227 bold
 
 [color "status"]
     added = yellow
@@ -30,11 +31,12 @@
 
 [core]
     autocrlf = input
-    #autocrlf = false
-    #autocrlf = true
     excludesfile = "~/.gitexcludes"
+    # pager = diff-so-fancy | less --tabs=4 -RFX --pattern '^(Date|added|deleted|modified): '
+    pager = diff-so-fancy | less --tabs=4 -RFX
 
 [alias]
+    ap = add -p
     ci = commit
     pu = push origin master
     st = status
@@ -42,6 +44,7 @@
     up = pull origin master
     co = checkout
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%cr)' --abbrev-commit --date=relative
+    lgt = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%ci)' --abbrev-commit
     lp = log -p
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     incoming = '!git remote update -p; git log ..@{u}'
@@ -52,7 +55,7 @@
 	theirs   = "!__f() { git checkout --theirs $@ && git add $@; }; __f"
 
 [diff]
-    tool = meld
+    tool = ediffclient
 
 [difftool]
     prompt = false
@@ -63,10 +66,10 @@
     trustExitCode = false
 
 [difftool "ediff"]
-    cmd = emacs --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+    cmd = $EMACS --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 [difftool "ediffclient"]
-    cmd = emacsclient --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+    cmd = $EMACSCLIENT --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 [merge]
     #tool = diffmerge
@@ -87,3 +90,8 @@
 
 [push]
 	default = current
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22

@@ -8,12 +8,30 @@ ZSH=~/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme
 ZSH_THEME="tjkirch_mod"
-#ZSH_THEME="random"
+ZSH_THEME="obraun"
+ZSH_THEME="fino"
+ZSH_THEME="random"
+ZSH_THEME="dmart"
+ZSH_THEME="dogenpunk"
+ZSH_THEME="gnzh"
+ZSH_THEME="lambda-mod"
+ZSH_THEME="re5et"
 
 # plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git ruby rails rvm)
+plugins=( git ruby rails rvm zaw zsh-syntax-highlighting zsh-history-substring-search )
+
+if [ -n "$INSIDE_EMACS" ]; then
+    plugins=("${(@)a:#zsh-syntax-highlighting}")
+    # there is support for detecting being inside emacs which willl do this
+    # but it is colliding with my $EMACS var.
+    # See https://github.com/robbyrussell/oh-my-zsh/blob/master/lib/termsupport.zsh#L12
+    export DISABLE_AUTO_TITLE=true
+    ZSH_THEME="robbyrussell"
+fi
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets pattern cursor )
 
 source $ZSH/oh-my-zsh.sh
 #
@@ -23,3 +41,13 @@ source $ZSH/oh-my-zsh.sh
 export SHELL_HOME="${HOME}/.sh.d"
 
 source "${SHELL_HOME}/zsh-setup.sh"
+
+#### @todo process vvvvv
+# HIST_EXPIRE_DUPS_FIRST # save unique hist entries longer
+# HIST_VERIFY # edit recalled history before running
+# INC_APPEND_HISTORY # add commands to .history immediately
+#
+# For the completion I vvvv but I'm not sure what they all do ;-P
+#setopt AUTO_REMOVE_SLASH GLOB_COMPLETE MENU_COMPLETE NO_AUTO_LIST NO_BAD_PATTERN NO_BEEP NO_LIST_AMBIGUOUS NO_LIST_BEEP NO_NOMATCH
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
