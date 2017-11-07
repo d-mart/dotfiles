@@ -1,6 +1,6 @@
 [user]
 	name = David Martinez
-	email = dmartinez@comverge.com
+	email = david.martinez@itron.com
 	initials = DM
 
 [color]
@@ -49,10 +49,20 @@
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     incoming = '!git remote update -p; git log ..@{u}'
     outgoing = 'log @{u}..'
-    diffall  =
-	snapshot = "!__f() { git stash save \"snapshot: $@ $(date)\" && git stash apply \"stash@{0}\"; }; __f"
-	ours     = "!__f() { git checkout --ours $@ && git add $@; }; __f"
-	theirs   = "!__f() { git checkout --theirs $@ && git add $@; }; __f"
+    patch = !git --no-pager diff --no-color
+    snapshot = "!__f() { git stash save \"snapshot: $@ $(date)\" && git stash apply \"stash@{0}\"; }; __f"
+    ours     = "!__f() { git checkout --ours $@ && git add $@; }; __f"
+    theirs   = "!__f() { git checkout --theirs $@ && git add $@; }; __f"
+    merge-log = "!f() { git log --stat \"$1^..$1\"; }; f"
+
+[url "git://gist.github.com/"]
+	insteadOf = gist:
+[url "git://github.com/"]
+	insteadOf = github:
+[url "git@github.comverge.com:"]
+	insteadOf = comv:
+[url "git@github.comverge.com:software/"]
+	insteadOf = sw:
 
 [diff]
     tool = ediffclient
