@@ -30,3 +30,9 @@ source_if_exists "$HOME/.tmuxinator/scripts/tmuxinator"
 
 # host-specific shell twiddlings
 source_if_exists "$SCRIPT_HOME/shell-init.local.sh"
+
+# kiex elixir version manager
+#source_if_exists "$HOME/.kiex/scripts/kiex"
+
+# asdf version manager for various languages
+#source_if_exists "$HOME/.asdf/asdf.sh"

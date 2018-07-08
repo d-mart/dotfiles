@@ -138,6 +138,7 @@ source_if_exists "${__shell_alias_file}" "${__local_alias_file}"
 
 #
 alias ec="$EMACSCLIENT"
+alias en="$EMACSCLIENT -n"
 alias ecl="$EMACSCLIENT -n -a ''"
 alias eclw="$EMACSCLIENT -n -c -a ''"
 alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
