@@ -1,107 +1,117 @@
 [user]
-	name = David Martinez
-	email = david.martinez@itron.com
-	initials = DM
+  name = David Martinez
+  email = david.martinez@itron.com
+  initials = DM
 
 [color]
-    diff = auto
-    status = auto
-    branch = auto
-    interactive = auto
-    ui = auto
-    pager = true
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = auto
+  pager = true
 
 [color "branch"]
-    current = yellow reverse
-    local = yellow
-    remote = green
+  current = yellow reverse
+  local = yellow
+  remote = green
 
 [color "diff"]
-	meta = 227
-	frag = magenta bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
-	commit = 227 bold
+  meta = 227
+  frag = magenta bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
+  commit = 227 bold
 
 [color "status"]
-    added = yellow
-    changed = green
-    untracked = cyan
+  added = yellow
+  changed = green
+  untracked = cyan
 
 [core]
-    autocrlf = input
-    excludesfile = "~/.gitexcludes"
-    # pager = diff-so-fancy | less --tabs=4 -RFX --pattern '^(Date|added|deleted|modified): '
-    pager = diff-so-fancy | less --tabs=4 -RFX
+  autocrlf = input
+  excludesfile = "~/.gitexcludes"
+  # pager = diff-so-fancy | less --tabs=4 -RFX --pattern '^(Date|added|deleted|modified): '
+  pager = diff-so-fancy | less --tabs=4 -RFX
+
+[commit]
+	verbose = true
 
 [alias]
-    ap = add -p
-    ci = commit
-    pu = push origin master
-    st = status
-    undo = reset --soft HEAD^
-    up = pull origin master
-    co = checkout
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%cr)' --abbrev-commit --date=relative
-    lgt = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%ci)' --abbrev-commit
-    lp = log -p
-    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-    incoming = '!git remote update -p; git log ..@{u}'
-    outgoing = 'log @{u}..'
-    patch = !git --no-pager diff --no-color
-    snapshot = "!__f() { git stash save \"snapshot: $@ $(date)\" && git stash apply \"stash@{0}\"; }; __f"
-    ours     = "!__f() { git checkout --ours $@ && git add $@; }; __f"
-    theirs   = "!__f() { git checkout --theirs $@ && git add $@; }; __f"
-    merge-log = "!f() { git log --stat \"$1^..$1\"; }; f"
+  ap = add -p
+  ci = commit
+  can = commit --amend --no-edit
+  pu = push origin master
+  puf = push -f
+  st = status
+  undo = reset --soft HEAD^
+  up = pull origin master
+  co = checkout
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%cr)' --abbrev-commit --date=relative
+  lgt = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%ci)' --abbrev-commit
+  lp = log -p
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  incoming = '!git remote update -p; git log ..@{u}'
+  outgoing = 'log @{u}..'
+  patch = !git --no-pager diff --no-color
+  snapshot = "!__f() { git stash save \"snapshot: $@ $(date)\" && git stash apply \"stash@{0}\"; }; __f"
+  ours     = "!__f() { git checkout --ours $@ && git add $@; }; __f"
+  theirs   = "!__f() { git checkout --theirs $@ && git add $@; }; __f"
+  merge-log = "!f() { git log --stat \"$1^..$1\"; }; f"
 
 [url "git://gist.github.com/"]
-	insteadOf = gist:
+  insteadOf = gist:
 [url "git://github.com/"]
-	insteadOf = github:
+  insteadOf = github:
 [url "git@github.comverge.com:"]
-	insteadOf = comv:
+  insteadOf = comv:
 [url "git@github.comverge.com:software/"]
-	insteadOf = sw:
+  insteadOf = sw:
+[url "ssh://git@gitlab.dmartinez.net:61222/"]
+  insteadOf = gl:
+#	pushInsteadOf = gitlab:
+#	pushInsteadOf = git://gitlab.com/
 
 [diff]
-    tool = ediffclient
+  tool = ediffclient
 
 [difftool]
-    prompt = false
+  prompt = false
 
 [difftool "diffmerge"]
-    cmd = "~/diffmerge.sh \"$LOCAL\" \"$REMOTE\""
-    prompt = false
-    trustExitCode = false
+  cmd = "~/diffmerge.sh \"$LOCAL\" \"$REMOTE\""
+  prompt = false
+  trustExitCode = false
 
 [difftool "ediff"]
-    cmd = $EMACS --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+  cmd = $EMACS --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 [difftool "ediffclient"]
-    cmd = $EMACSCLIENT --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+  cmd = $EMACSCLIENT --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 [merge]
-    #tool = diffmerge
-    tool = meld
+  #tool = diffmerge
+  tool = meld
 
 [mergetool]
-    prompt = false
+  prompt = false
 
 [mergetool "diffmerge"]
-    cmd = "/cygdrive/c/'Program Files'/SourceGear/DiffMerge/DiffMerge.exe" --merge --result=$MERGED $LOCAL $BASE $REMOTE
-    trustExitCode = false
+  cmd = "/cygdrive/c/'Program Files'/SourceGear/DiffMerge/DiffMerge.exe" --merge --result=$MERGED $LOCAL $BASE $REMOTE
+  trustExitCode = false
 
 [apply]
-    whitespace = nowarn
+  whitespace = nowarn
 
 [branch]
-    autosetupmerge = true
+  autosetupmerge = true
 
 [push]
-	default = current
+  default = current
+
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
