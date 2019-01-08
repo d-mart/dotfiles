@@ -36,20 +36,16 @@ which colorgcc &> /dev/null  && alias gcc=colorgcc
 which colordiff &> /dev/null && alias diff=colordiff
 alias ccat=/usr/share/source-highlight/src-hilite-lesspipe.sh
 
-# vagrant
-__vagrant="vagrant"
-alias v="${__vagrant}"
-alias vp="${__vagrant} provision"
-alias vnp="${__vagrant} up --no-provision"
-
 # openssl
 alias x5='openssl x509 -noout -text -in'  # x5 foo.crt -> view certificate
 
 # knife
 alias kci="knife cookbook github install"
 
-# berksfile
-alias bu="berks upload --ssl-verify=false --no-freeze"
+# date / time formats
+alias today="date +%Y-%m-%d"
+alias time="date +%H-%M-%S"
+alias timestamp="date +%Y%m%d-%H%M%S"
 
 # override in aliases.local if necessary (osx)
 export EMACS="emacs"
@@ -57,10 +53,6 @@ export EMACSCLIENT="emacsclient"
 
 alias mcom='minicom --noinit --baudrate=115200 --device'
 alias mcom4='minicom --noinit --baudrate=4800 --device'
-alias ta='textadept'
-alias tea='~/app/tea-31.0.0/bin/tea'
-alias sub=sublime-text-2
-alias ejd='sudo ejabberdctl'
 alias adb='/usr/local/android-sdk-linux_86/platform-tools/adb'
 alias ff='find . -name'
 alias ffx='firefox -no-remote -p quick'      # open 'quick' profile of firefox
@@ -142,6 +134,10 @@ alias en="$EMACSCLIENT -n"
 alias ecl="$EMACSCLIENT -n -a ''"
 alias eclw="$EMACSCLIENT -n -c -a ''"
 alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
+
+alias preview="fzf --preview 'bat --color \"always\" {}'"
+export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(en {})+abort'"
+
 
 # launch emacsclient, or failing that, emacs
 export EDITOR="$EMACSCLIENT"
