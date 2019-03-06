@@ -5,13 +5,7 @@ start_dir = Dir.pwd
 base_conf_dir = File.join(ENV['HOME'], ".rb.d")
 irb_conf_dir  = File.join(base_conf_dir, "irb")
 # load debundle - allow loading of unbundled gems while running under bundler
-load File.join(base_conf_dir, "debundle.rb")
-
-# load rubygems for older rubies
-begin
-  require 'rubygems' if RUBY_VERSION < '1.9'
-rescue LoadError
-end
+#load File.join(base_conf_dir, "debundle.rb")
 
 ## General irb / rails console customization
 # Get a list of irb init files, ignorning those starting with '_'
