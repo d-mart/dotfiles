@@ -7,20 +7,12 @@ ZSH=~/.oh-my-zsh
 
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme
-ZSH_THEME="tjkirch_mod"
-ZSH_THEME="obraun"
-ZSH_THEME="fino"
-ZSH_THEME="random"
-ZSH_THEME="dmart"
-ZSH_THEME="dogenpunk"
-ZSH_THEME="gnzh"
-ZSH_THEME="lambda-mod"
 ZSH_THEME="re5et"
 
 # plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=( git ruby rvm zaw zsh-syntax-highlighting zsh-history-substring-search )
+plugins=( git ruby rvm zaw zsh-syntax-highlighting )
 
 if [ -n "$INSIDE_EMACS" ]; then
     plugins=("${(@)a:#zsh-syntax-highlighting}")
@@ -50,4 +42,4 @@ source "${SHELL_HOME}/zsh-setup.sh"
 # For the completion I vvvv but I'm not sure what they all do ;-P
 #setopt AUTO_REMOVE_SLASH GLOB_COMPLETE MENU_COMPLETE NO_AUTO_LIST NO_BAD_PATTERN NO_BEEP NO_LIST_AMBIGUOUS NO_LIST_BEEP NO_NOMATCH
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export PATH="/usr/local/bin:$PATH"
