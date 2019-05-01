@@ -19,6 +19,7 @@ function mkdir_with_ln() {
 
 declare -a brewlist=(
   "ag"
+  "asdf"
   "bash"
   "bat"
   "coreutils"
@@ -128,7 +129,6 @@ ln -s ~/personal/dotemacs ~/.emacs.d/
 ( cd ~/.emacs.d ; ~/.cask/bin/cask install ; ~/.cask/bin/cask install ; ~/.cask/bin/cask install )
 
 ## versions of stuff
-brew install asdf
 asdf plugin-add elixir
 asdf plugin-add erlang
 asdf plugin-add ruby
