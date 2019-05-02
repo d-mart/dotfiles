@@ -64,10 +64,8 @@
   insteadOf = gist:
 [url "git://github.com/"]
   insteadOf = github:
-[url "git@github.comverge.com:"]
-  insteadOf = comv:
-[url "git@github.comverge.com:software/"]
-  insteadOf = sw:
+[url "git@github.com:roadie-app/"]
+  insteadOf = r:
 [url "ssh://git@gitlab.dmartinez.net:61222/"]
   insteadOf = gl:
 #	pushInsteadOf = gitlab:
