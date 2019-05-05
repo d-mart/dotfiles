@@ -5,7 +5,7 @@
 
 # deploy these files and dirs.
 # @todo - automate generation of this list.
-fileList=".zshrc .bashrc .bash_aliases .bash_profile prompt.sh .gitconfig .gitexcludes .screenrc .screenrc.infotainment .inputrc .ackrc .Xdefaults .calcrc .gdbinit .irbrc .rbrc .pryrc .tmux.conf"
+fileList=".zshrc .bashrc .bash_aliases .bash_profile prompt.sh .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .irbrc .rbrc .pryrc .tmux.conf"
 dirList=".gdb .mlocate .sh.d .rb.d"
 
 # fetch these repositories
@@ -16,6 +16,14 @@ declare -A repos=(
   ["${HOME}/.bash-it"]="https://github.com/revans/bash-it"
   ["${HOME}/.oh-my-zsh/plugins/zaw"]="https://github.com/yqrashawn/zaw"
   ["${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting"
+  ["${HOME}/.tmux/plugins/tpm"]="https://github.com/tmux-plugins/tpm"
+  ["${HOME}/.tmux/plugins/tmux-yank"]="https://github.com/tmux-plugins/tmux-yank"
+  ["${HOME}/.tmux/plugins/tmux-open"]="https://github.com/tmux-plugins/tmux-open"
+  ["${HOME}/.tmux/plugins/tmux-fpp"]="https://github.com/tmux-plugins/tmux-fpp"
+  ["${HOME}/.tmux/plugins/tmux-battery"]="https://github.com/tmux-plugins/tmux-battery"
+  ["${HOME}/.tmux/plugins/tmux-cpu"]="https://github.com/tmux-plugins/tmux-cpu"
+  ["${HOME}/.tmux/plugins/tmux-copycat"]="https://github.com/tmux-plugins/tmux-copycat"
+
   #["~/.prezto"]="https://github.com/sorin-ionescu/prezto"
 )
 
