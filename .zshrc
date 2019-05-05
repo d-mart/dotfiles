@@ -12,7 +12,16 @@ ZSH_THEME="re5et"
 # plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=( git ruby rvm zaw zsh-syntax-highlighting )
+plugins=(
+  asdf
+  fasd
+  fd
+  fzf
+  git
+  ruby
+  zaw
+  zsh-syntax-highlighting
+)
 
 if [ -n "$INSIDE_EMACS" ]; then
     plugins=("${(@)a:#zsh-syntax-highlighting}")
