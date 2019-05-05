@@ -43,12 +43,4 @@ export SHELL_HOME="${HOME}/.sh.d"
 
 source "${SHELL_HOME}/zsh-setup.sh"
 
-#### @todo process vvvvv
-# HIST_EXPIRE_DUPS_FIRST # save unique hist entries longer
-# HIST_VERIFY # edit recalled history before running
-# INC_APPEND_HISTORY # add commands to .history immediately
-#
-# For the completion I vvvv but I'm not sure what they all do ;-P
-#setopt AUTO_REMOVE_SLASH GLOB_COMPLETE MENU_COMPLETE NO_AUTO_LIST NO_BAD_PATTERN NO_BEEP NO_LIST_AMBIGUOUS NO_LIST_BEEP NO_NOMATCH
-
 export PATH="/usr/local/bin:$PATH"
