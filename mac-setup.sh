@@ -37,6 +37,7 @@ declare -a brewlist=(
   "jq"
   "openssh"
   "pwgen"
+  "telnet"
   "tmux"
   "tree"
   "vim"
