@@ -6,7 +6,7 @@
 # deploy these files and dirs.
 # @todo - automate generation of this list.
 fileList=".zshrc .bashrc .bash_aliases .bash_profile prompt.sh .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .irbrc .rbrc .pryrc .tmux.conf"
-dirList=".gdb .mlocate .sh.d .rb.d"
+dirList=".gdb .mlocate .sh.d .rb.d .hammerspoon"
 
 # fetch these repositories
 # Hash where the key is the target directory and the value is the git url
@@ -23,8 +23,6 @@ declare -A repos=(
   ["${HOME}/.tmux/plugins/tmux-battery"]="https://github.com/tmux-plugins/tmux-battery"
   ["${HOME}/.tmux/plugins/tmux-cpu"]="https://github.com/tmux-plugins/tmux-cpu"
   ["${HOME}/.tmux/plugins/tmux-copycat"]="https://github.com/tmux-plugins/tmux-copycat"
-
-  #["~/.prezto"]="https://github.com/sorin-ionescu/prezto"
 )
 
 # Set up "from" and "to" variables
