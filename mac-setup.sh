@@ -169,6 +169,12 @@ npm install -g vmd
 killall Dock
 killall SystemUIServer
 
+## Add some more readline shortuvst
+mkdir -p ~/Library/KeyBindings
+curl -o \
+     ~/Library/KeyBindings/DefaultKeyBinding.dict \
+     https://gist.githubusercontent.com/cheapRoc/9670905/raw/1c1cd2e84daf07c9a4c8de0ff86d1baf75d858c6/EmacsKeyBinding.dict
+
 ## requires password
 sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
 brew cask install karabiner-elements
