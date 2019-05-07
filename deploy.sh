@@ -5,7 +5,7 @@
 
 # deploy these files and dirs.
 # @todo - automate generation of this list.
-fileList=".zshrc .bashrc .bash_aliases .bash_profile prompt.sh .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .irbrc .rbrc .pryrc .tmux.conf"
+fileList=".zshrc .bashrc .bash_aliases .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .irbrc .rbrc .pryrc .tmux.conf"
 dirList=".gdb .mlocate .sh.d .rb.d .hammerspoon"
 
 # fetch these repositories
@@ -33,25 +33,27 @@ targetDir="$HOME"
 #targetDir="/tmp/test"; mkdir -p $targetDir &> /dev/null
 
 for file in $fileList; do
-  # make a backup of existing dotFiles
-  if [ -f "${targetDir}/${file}" ]; then
-    mv "${targetDir}/${file}" "${targetDir}/${file}.bak"
+  src_path="${srcDir}/${file}"
+  tgt_path="${targetDir}/${file}"
+
+  # make a backup of existing dotFiles if they are real files
+  if [[ -f "$tgt_path" && ! -L "$tgt_path" ]]; then
+    mv "$tgt_path" "${tgt_path}.bak"
   fi
 
-  pushd "$targetDir" > /dev/null
-  ln -sf "${srcDir}/${file}" "$file"
-  popd > /dev/null
+  ln -sf "$src_path" "$tgt_path"
 done
 
 # directories
 for dir in $dirList; do
-  pushd "$targetDir" > /dev/null
-  if [ -e "$dir" ]; then
+  src_path="${srcDir}/${dir}"
+  tgt_path="${targetDir}/${dir}"
+
+  if [ -d "$tgt_path" ]; then
     echo "Skippping link for directory $dir - already exists"
   else
-    ln -s "${srcDir}/{$dir}" "$dir"
+    ln -s "$src_path" "$tgt_path"
   fi
-  popd > /dev/null
 done
 
 # git repos
