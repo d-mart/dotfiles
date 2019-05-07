@@ -34,6 +34,7 @@ declare -a brewlist=(
   "git"
   "gnu-sed"
   "gnu-awk"
+  "gpg2"
   "jq"
   "openssh"
   "pwgen"
@@ -50,6 +51,7 @@ declare -a brewcasklist=(
   "betterzip"
   "caffeine"
   "docker"
+  "dozer"
   "dropbox"
   "emacs"
   "firefox"
@@ -152,8 +154,16 @@ asdf plugin-add elixir
 asdf plugin-add erlang
 asdf plugin-add ruby
 asdf plugin-add python https://github.com/danhper/asdf-python.git
-asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf plugin-add rust https://github.com/code-lever/asdf-rust
+asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+asdf plugin-add lua https://github.com/Stratus3D/asdf-lua.git
+
+# add gpg keys for node packages
+bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+latest_node=$(asdf list-all nodejs | tail -n 1)
+asdf install nodejs "$latest_node"
+asdf global nodejs "$latest_node"
+npm install -g vmd
 
 ## Restart some things
 killall Dock
