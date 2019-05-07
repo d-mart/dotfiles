@@ -165,6 +165,11 @@ asdf install nodejs "$latest_node"
 asdf global nodejs "$latest_node"
 npm install -g vmd
 
+# install a MRI / C-based ruby
+latest_ruby=$(asdf list-all ruby | grep ^[0-9] | grep -v dev | tail -n 1)
+asdf global "$latest_ruby"
+gem install tmuxinator
+
 ## Restart some things
 killall Dock
 killall SystemUIServer
