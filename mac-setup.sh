@@ -155,6 +155,7 @@ asdf plugin-add erlang
 asdf plugin-add ruby
 asdf plugin-add python https://github.com/danhper/asdf-python.git
 asdf plugin-add rust https://github.com/code-lever/asdf-rust
+asdf plugin-add go https://github.com/kennyp/asdf-golang
 asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf plugin-add lua https://github.com/Stratus3D/asdf-lua.git
 
