@@ -80,7 +80,6 @@ declare -a brewcasklist=(
   "hammerspoon"
   "insomnia"
   "iterm2"
-  "karabiner-elements"
   "qlcolorcode"
   "qlmarkdown"
   "qlprettypatch"
@@ -172,3 +171,4 @@ killall SystemUIServer
 
 ## requires password
 sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
+brew cask install karabiner-elements
