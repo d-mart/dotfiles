@@ -5,8 +5,8 @@
 
 # deploy these files and dirs.
 # @todo - automate generation of this list.
-fileList=".zshrc .bashrc .bash_aliases .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .irbrc .rbrc .pryrc .tmux.conf"
-dirList=".gdb .mlocate .sh.d .rb.d .hammerspoon"
+fileList=".zshrc .bashrc .bash_aliases .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .tmux.conf"
+dirList=".gdb .mlocate .sh.d .hammerspoon"
 
 # fetch these repositories
 # Hash where the key is the target directory and the value is the git url
