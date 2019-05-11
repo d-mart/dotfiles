@@ -42,6 +42,7 @@ declare -a brewlist=(
   "tmux"
   "tree"
   "vim"
+  "zlib"
   "zsh"
 )
 
@@ -170,8 +171,18 @@ npm install -g vmd
 
 # install a MRI / C-based ruby
 latest_ruby=$(asdf list-all ruby | grep ^[0-9] | grep -v dev | tail -n 1)
+asdf install ruby "$latest_ruby"
 asdf global ruby "$latest_ruby"
 gem install tmuxinator
+
+# install a newish c-python
+latest_python3=$(asdf list-all python | grep ^3 | grep -v dev | tail -n 1)
+latest_python2=$(asdf list-all python | grep ^2 | grep -v dev | tail -n 1)
+LDFLAGS="-L/usr/local/opt/zlib/lib" CPPFLAGS="-I/usr/local/opt/zlib/include" asdf install python "$latest_python3"
+LDFLAGS="-L/usr/local/opt/zlib/lib" CPPFLAGS="-I/usr/local/opt/zlib/include" asdf install python "$latest_python2"
+asdf global "$latest_python3" "$latest_python2"
+adsf reshim python
+PIP_REQUIRE_VIRTUALENV='' pip3 install --user mdv pipenv
 
 ## Restart some things
 killall Dock
@@ -183,6 +194,6 @@ curl -o \
      ~/Library/KeyBindings/DefaultKeyBinding.dict \
      https://gist.githubusercontent.com/cheapRoc/9670905/raw/1c1cd2e84daf07c9a4c8de0ff86d1baf75d858c6/EmacsKeyBinding.dict
 
-## requires password
+## require password ... keep these last
 sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
 brew cask install karabiner-elements
