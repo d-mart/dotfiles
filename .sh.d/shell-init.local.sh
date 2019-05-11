@@ -1,3 +1,0 @@
-#####
-# Local system environment settings
-#####

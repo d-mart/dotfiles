@@ -5,7 +5,7 @@
 
 # deploy these files and dirs.
 # @todo - automate generation of this list.
-fileList=".zshrc .bashrc .bash_aliases .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .tmux.conf"
+fileList=".zshrc .bashrc .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .tmux.conf"
 dirList=".gdb .mlocate .sh.d .hammerspoon"
 
 # fetch these repositories
@@ -29,8 +29,8 @@ declare -A repos=(
 srcDir=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
 targetDir="$HOME"
 
-# for testing
-#targetDir="/tmp/test"; mkdir -p $targetDir &> /dev/null
+# # for testing
+# #targetDir="/tmp/test"; mkdir -p $targetDir &> /dev/null
 
 for file in $fileList; do
   src_path="${srcDir}/${file}"
@@ -66,3 +66,26 @@ for target_dir in "${!repos[@]}"; do
     git clone --recursive "${repo}" "${target_dir}"
   fi
 done
+
+# Some stubs for local files
+local_init_file="${srcDir}/.sh.d/shell-init.local.sh"
+if [ ! -e "$local_init_file" ]; then
+  cat > "$local_init_file" <<EOF
+#####
+# Local system environment settings
+#####
+
+#export foo=bar
+EOF
+fi
+
+local_aliases_file="${srcDir}/.sh.d/alias/aliases.local"
+if [ ! -e "$local_aliases_file" ]; then
+  cat > "$local_aliases_file" <<EOF
+#####
+# Local aliases
+#####
+
+# alias foo=bar
+EOF
+fi
