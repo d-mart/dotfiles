@@ -80,6 +80,8 @@ declare -a brewcasklist=(
   "hammerspoon"
   "insomnia"
   "iterm2"
+  "ngrok"
+  "private-internet-access"
   "qlcolorcode"
   "qlmarkdown"
   "qlprettypatch"
@@ -89,6 +91,7 @@ declare -a brewcasklist=(
   "slack"
   "superduper"
   "suspicious-package"
+  "tunnelblick"
   "vlc"
   "webpquicklook"
 )
