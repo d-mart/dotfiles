@@ -24,12 +24,10 @@ function g() {
 # aliases for git
 alias gb="git branch"
 alias gba="git branch -a"
-alias gca="git commit -a -v"
 alias gc="git commit -v"
 alias gfo="git fetch origin"
 alias gd="git diff"
 alias gdc="git diff --cached"
-alias gdt="git difftool"
 alias gl="git pull"
 alias gp="git push"
 alias gst="git status"
@@ -39,8 +37,11 @@ alias gly="git log --since=\"yesterday\""
 alias glp="git log --patch"
 alias gsu="git submodule update"
 alias gg="git grep"
-alias gfetch='git stash && git fetch origin && git rebase origin/`cb` && git stash pop'
-alias grb='git rebase origin/`cb`'
+alias gfetch="git stash && git fetch origin && git rebase origin/`cb` && git stash pop"
+alias grb="git rebase origin/`cb`"
+alias grbm="git rebase origin/master"
+alias grbi="git rebase --interactive"
+alias gpfb="git push -f origin $(current_branch)"
 alias gs="git stash"
 alias gsp="git stash pop"
 
