@@ -4,7 +4,7 @@
 # TODO: bail out if bash version is not new enough for associative arrays
 
 # deploy these files and dirs.
-# @todo - automate generation of this list.
+# TODO - automate generation of this list.
 fileList=".zshrc .bashrc .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .tmux.conf"
 dirList=".gdb .mlocate .sh.d .hammerspoon"
 
@@ -53,6 +53,19 @@ for dir in $dirList; do
     echo "Skippping link for directory $dir - already exists"
   else
     ln -s "$src_path" "$tgt_path"
+  fi
+done
+
+# directories in ~/.config
+mkdir -p ~/.config
+for config_dir in $(find "$srcDir/.config" -type d -depth 1); do
+  base_config_dir=$(basename "$config_dir")
+  tgt_path="${targetDir}/.config/${base_config_dir}"
+
+  if [ -d "$tgt_path" ]; then
+    echo "Skipping link for directory .config/${base_config_dir} - already exists"
+  else
+    ln -s "$config_dir" "$tgt_path"
   fi
 done
 
