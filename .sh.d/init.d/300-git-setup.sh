@@ -39,7 +39,7 @@ alias gpfb="git push -f origin $(current_branch)"
 alias gs="git stash"
 alias gsp="git stash pop"
 alias gcan="git commit --amend --no-edit"
-alias gpushall="git remote | xargs -n 1 git push \&"
+alias gpushall="git remote | xargs -n 1 git push"
 alias gcan="git commit --amend --no-edit"
 
 alias gfo="git fetch origin"
