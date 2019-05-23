@@ -44,6 +44,8 @@ alias grbi="git rebase --interactive"
 alias gpfb="git push -f origin $(current_branch)"
 alias gs="git stash"
 alias gsp="git stash pop"
+alias gcan="git commit --amend --no-edit"
+alias gcm="git commit --message"
 
 alias pmb="git push dmartinez $(current_branch)"
 alias pmbf="git push dmartinez $(current_branch)"
