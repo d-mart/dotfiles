@@ -20,6 +20,7 @@ function mkdir_with_ln() {
 declare -a brewlist=(
   "ag"
   "asdf"
+  "autossh"
   "bash"
   "bat"
   "coreutils"
@@ -119,10 +120,12 @@ hash brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Ho
 brew tap caskroom/cask
 brew tap caskroom/fonts
 
+# Install each of the homebrew packages in the list
 for package in "${brewlist[@]}"; do
   brew install "$package"
 done
 
+# Install each of the homebrew casks in the list
 for cask in "${brewcasklist[@]}"; do
   brew cask install "$cask"
 done
