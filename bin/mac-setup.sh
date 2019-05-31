@@ -36,6 +36,7 @@ declare -a brewlist=(
   "gnu-sed"
   "gnu-awk"
   "gpg2"
+  "hub"
   "jq"
   "openssh"
   "pwgen"
