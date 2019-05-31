@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+source "${SHELL_HOME}/get-os.sh"
+
+SCRIPT_DIR="$( cd "$( echo "${BASH_SOURCE[0]%/*}"  )"; pwd  )"
+OS="$(get_os)"
+
+if [ "$OS" = "mac" ]; then
+  FIREFOX="/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox"
+elif [ "$OS" = "linux" ]; then
+  FIREFOX="firefox_developer_edition" # TODO: verify this
+else
+  echo "Unknown operating system"
+  exit 111
+fi
+
+export FIREFOX
+"${SCRIPT_DIR}/ffx" "$@"

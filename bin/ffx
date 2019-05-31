@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# interesting ffx options
+# --no-remote essentially blocks a new session from being created
+# --new-window <url> Open <url> in a new window.
+# --new-tab <url>    Open <url> in a new tab.
+# --private-window <url> Open <url> in a new private window.
+# --preferences      Open Preferences dialog.
+# --screenshot [<path>] Save screenshot to <path> or in working directory.
+# --window-size width[,height] Width and optionally height of screenshot.
+# --search <term>    Search <term> with your default search engine.
+
+source "${SHELL_HOME}/get-os.sh"
+
+if [ -z "$FIREFOX" ]; then
+  OS="$(get_os)"
+
+  if [ "$OS" = "mac" ]; then
+    FIREFOX="/Applications/Firefox.app/Contents/MacOS/firefox"
+  elif [ "$OS" = "linux" ]; then
+    FIREFOX="firefox_developer_edition" # TODO: verify this
+  else
+    echo "Unknown operating system"
+    exit 111
+  fi
+fi
+
+FFX_ARGS=""
+if [ "0" = "$#" ]; then
+  FFX_ARGS="--ProfileManager"
+fi
+
+"$FIREFOX" "$FFX_ARGS" $@
