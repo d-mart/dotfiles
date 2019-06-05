@@ -6,7 +6,7 @@
 # deploy these files and dirs.
 # TODO - automate generation of this list.
 fileList=".zshrc .bashrc .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .tmux.conf"
-dirList=".gdb .mlocate .sh.d .hammerspoon"
+dirList=".gdb .mlocate .sh.d .hammerspoon bin"
 
 # fetch these repositories
 # Hash where the key is the target directory and the value is the git url

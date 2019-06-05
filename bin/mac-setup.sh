@@ -24,6 +24,7 @@ declare -a brewlist=(
   "bash"
   "bat"
   "coreutils"
+  "datamash"
   "diff-so-fancy"
   "direnv"
   "exa"
@@ -103,7 +104,6 @@ declare -a brewcasklist=(
 mkdir_with_ln "$HOME/util" "$HOME/u"
 mkdir_with_ln "$HOME/personal" "$HOME/p"
 mkdir_with_ln "$HOME/workspace" "$HOME/w"
-mkdir -p "$HOME/bin"
 mkdir -p "$HOME/tmp"
 
 ## command line tools
