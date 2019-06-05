@@ -1,3 +1,7 @@
+ readonly __aliases_path="${SHELL_HOME}/alias"
+ readonly __shell_alias_file="${__aliases_path}/aliases.$(shell_name)"
+ readonly __local_alias_file="${__aliases_path}/aliases.local"
+
 # enable color support of ls and also add handy aliases
 # @todo make this dependent on linux
 if [ -x /usr/bin/dircolors ]; then
@@ -28,19 +32,20 @@ alias grep='grep --extended-regexp --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-# Wine
-alias win="env WINEPREFIX=\"~/.wine\" wine"
+# remove ansi codes from a stream, e.g. ls -l --color | strip_ansi
+# NB: gsed is brew install gnu-sed on mac
+SED=sed
+if [ $(get_os) = "mac" ]; then
+  SED=gsed
+fi
+alias strip_ansi="$SED -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g'"
 
-# Me likey color!
-which colorgcc &> /dev/null  && alias gcc=colorgcc
-which colordiff &> /dev/null && alias diff=colordiff
-alias ccat=/usr/share/source-highlight/src-hilite-lesspipe.sh
+# collapse whitespace to comma or single space (for reference)
+alias compact2c="sed -E 's/[[:space:]]+/,/g'"
+alias compact="sed -E 's/[[:space:]]+/ /g'"
 
 # openssl
 alias x5='openssl x509 -noout -text -in'  # x5 foo.crt -> view certificate
-
-# knife
-alias kci="knife cookbook github install"
 
 # date / time formats
 alias today="date +%Y-%m-%d"
@@ -100,7 +105,7 @@ alias dumpfunc="declare -f"
 
 # a script wrapper to 'bc' command line calculator
 # note: collides with /usr/bin/cal - display calendar
-alias cal="solve.sh"
+alias cal="${HOME}/bin/solve.sh"
 
 pause() { read -p "Press Enter to continue..." ; }
 
@@ -123,9 +128,6 @@ ftr()  { egrep -rIHn --include="*\.rb" --include="\*.feature" --exclude="TAGS" "
 ft()   { egrep -Rn "$@" * ; }
 
 # See if there is a local bash_aliases and source it
-__aliases_path="${SHELL_HOME}/alias"
-__shell_alias_file="${__aliases_path}/aliases.$(shell_name)"
-__local_alias_file="${__aliases_path}/aliases.local"
 source_if_exists "${__shell_alias_file}" "${__local_alias_file}"
 
 #
