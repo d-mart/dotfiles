@@ -3,5 +3,5 @@
 # print the active tmux session name
 tmux_active_session()
 {
-    tmux list-sessions | \grep attached | cut -f 1 -d ':'
+  tmux list-sessions | \grep attached | cut -f 1 -d ':'
 }
