@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # Install / copy repository dotFiles etc
 
-# TODO: bail out if bash version is not new enough for associative arrays
+if ((BASH_VERSINFO[0] < 4)); then
+  echo "This script requires bash >= 4.0 for associative array support"
+  exit 40
+fi
 
 # deploy these files and dirs.
 # TODO - automate generation of this list.
-fileList=".zshrc .bashrc .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .tmux.conf"
+fileList=".zshrc .bashrc .bash_profile .gitconfig .gitexcludes .inputrc .ackrc .Xdefaults .calcrc .gdbinit .tmux.conf .ripgreprc"
 dirList=".gdb .mlocate .sh.d .hammerspoon bin"
 
 # fetch these repositories
