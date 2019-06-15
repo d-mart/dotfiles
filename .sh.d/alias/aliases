@@ -142,7 +142,6 @@ alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(en {})+abort'"
 
-
 # launch emacsclient, or failing that, emacs
 export EDITOR="$EMACSCLIENT"
 export VISUAL="$EMACSCLIENT -a ''"
@@ -150,7 +149,14 @@ export ALTERNATE_EDITOR="$EMACS"
 
 # use emacs for quick su editing (via emacs-fu)
 alias sue="SUDO_EDITOR=\"$EMACSCLIENT -c -a emacs\" sudoedit"
-function E()
-{
+function E() {
   "$EMACSCLIENT" -c -a "$EMACS" "sudo:root@localhost:$1"
 }
+
+function pgc() {
+  PGPASSWORD="$DB_PASS" psql --username "$DB_USER" --host "$DB_HOST" --port="$DB_PORT" "$DB_NAME"
+}
+
+if ! command -v wget > /dev/null; then
+  alias wget='echo "(using curl)"; curl -O'
+fi
