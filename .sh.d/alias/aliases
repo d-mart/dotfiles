@@ -3,6 +3,7 @@
 readonly __aliases_path="${SHELL_HOME}/alias"
 readonly __shell_alias_file="${__aliases_path}/aliases.$(shell_name)"
 readonly __local_alias_file="${__aliases_path}/aliases.local"
+readonly __os_alias_file="${__aliases_path}/aliases.$(get_os)"
 
 # enable color support of ls and also add handy aliases
 # @todo make this dependent on linux
@@ -129,9 +130,6 @@ ftch() { egrep -rIHn --include="*\.[ch]" --exclude="TAGS" "$@" * ; }
 ftr()  { egrep -rIHn --include="*\.rb" --include="\*.feature" --exclude="TAGS" "$@" * ; }
 ft()   { egrep -Rn "$@" * ; }
 
-# See if there is a local bash_aliases and source it
-source_if_exists "${__shell_alias_file}" "${__local_alias_file}"
-
 #
 alias ec="$EMACSCLIENT"
 alias en="$EMACSCLIENT -n"
@@ -160,3 +158,6 @@ function pgc() {
 if ! command -v wget > /dev/null; then
   alias wget='echo "(using curl)"; curl -O'
 fi
+
+# See if there is a local bash_aliases and source it
+source_if_exists "${__os_alias_file}" "${__shell_alias_file}" "${__local_alias_file}"
