@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+set -e
+
+function usage() {
+  cat <<EOF
+$0 <profile_name> [overrides_file]
+
+  profile_name    THe name for a new firefox profile. For example,
+                  'work', 'banking'
+  overrides_file  The name of a .js file which has overrides from
+                  the (very strict) user.js file base.
+
+  Example:
+    $0 socialmedia
+
+  # if you are me:
+    $0 work ~/personal/dotfiles/firefox_personal_user.js
+EOF
+}
+
+function exit_with_error() {
+  msg="$1"
+  error_code="${2:-255}"
+
+  echo "$msg"
+  exit "$error_code"
+}
+
+function get_tmp_dir() {
+  tmp_dir="${TMPDIR:-$HOME/tmp}"
+  mkdir -p "$tmp_dir"
+  echo "$tmp_dir"
+}
+
+function get_user_js_base() {
+  profile_dir="$1"
+
+  curl --silent --output "${profile_dir}/user.js" https://raw.githubusercontent.com/pyllyukko/user.js/master/user.js
+}
+
+function concat_personal_settings() {
+  profile_dir="$1"
+  additional_prefs_file="$2"
+
+  if [ ! -z "$additional_prefs_file" ]; then
+    cat "$additional_prefs_file" >> "${profile_dir}/user.js"
+  fi
+}
+
+function firefox_bin() {
+  case "$(uname)" in
+    *Darwin*)
+      echo "/Applications/Firefox.app/Contents/MacOS/firefox"
+      ;;
+
+    *linux*)
+      which firefox
+      ;;
+
+    *)
+      exit_with_error "Unsupported operating system" 20
+      ;;
+  esac
+}
+
+function firefox_profile_dir() {
+  # Linux      ~/.mozilla/firefox/XXXXXXXX.your_profile_name/user.js
+  # OS X       ~/Library/Application Support/Firefox/Profiles/XXXXXXXX.your_profile_name
+  # Android    /data/data/org.mozilla.firefox/files/mozilla/XXXXXXXX.your_profile_name and see issue #14
+  # Sailfish OS + Alien Dalvik /opt/alien/data/data/org.mozilla.firefox/files/mozilla/XXXXXXXX.your_profile_name
+  case "$(uname)" in
+    *Darwin*)
+      echo "${HOME}/Library/Application Support/Firefox/Profiles"
+      ;;
+
+    *linux*)
+      echo "${HOME}/.mozilla/firefox"
+      ;;
+
+    *)
+      exit_with_error "Unsupported operating system" 20
+      ;;
+  esac
+}
+
+function make_empty_profile() {
+  profile_name="$1"
+  ffx_bin=$(firefox_bin)
+
+  $ffx_bin --no-remote --CreateProfile "$profile_name"
+  find "$(firefox_profile_dir)" -maxdepth 1 -regex ".*/.*${profile_name}"
+}
+
+function addons_list() {
+  cat <<EOF | tr '\n' ' '
+https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
+https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/
+https://addons.mozilla.org/en-US/firefox/addon/ekill/
+https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/
+EOF
+}
+
+#
+# Main entrypoint
+#
+
+# Profile name, e.g. "work" or "development"
+profile_name="$1"
+
+# OPTIONAL - path of another .js file that will be concatenated to the "stock"
+# user.js file
+additional_settings_file="$2"
+
+if [ -z "$profile_name" ]; then
+  exit_with_error "Supply a profile name as an arg to this script" 1
+fi
+
+profile_dir=$(make_empty_profile "$profile_name")
+get_user_js_base "$profile_dir"
+concat_personal_settings "$profile_dir" "$additional_settings_file"
+$(firefox_bin) --no-remote --Profile "$profile_dir" $(addons_list) &
