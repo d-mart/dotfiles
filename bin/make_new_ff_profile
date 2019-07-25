@@ -1,6 +1,23 @@
 #!/usr/bin/env bash
 set -e
 
+function usage() {
+  cat <<EOF
+$0 <profile_name> [overrides_file]
+
+  profile_name    THe name for a new firefox profile. For example,
+                  'work', 'banking'
+  overrides_file  The name of a .js file which has overrides from
+                  the (very strict) user.js file base.
+
+  Example:
+    $0 socialmedia
+
+  # if you are me:
+    $0 work ~/personal/dotfiles/firefox_personal_user.js
+EOF
+}
+
 function exit_with_error() {
   msg="$1"
   error_code="${2:-255}"
@@ -70,22 +87,8 @@ function make_empty_profile() {
   profile_name="$1"
   ffx_bin=$(firefox_bin)
 
-  $ffx_bin --CreateProfile "$profile_name"
+  $ffx_bin --no-remote --CreateProfile "$profile_name"
   find "$(firefox_profile_dir)" -maxdepth 1 -regex ".*/.*${profile_name}"
-}
-
-function add_ublock_origin() {
-  # This has so many roadblocks (for good reason...). Skipping for now
-  profile_dir="$1"
-  tmp_dir=$(get_tmp_dir)
-  # TODO obvs make this find the path/version itself
-  extension_filename="uBlock0_1.19.6.firefox.xpi"
-  extension_url="https://github.com/gorhill/uBlock/releases/download/1.19.6/${extension_filename}"
-  extension_file_path="${tmp_dir}/${extension_filename}"
-  ffx_bin=$(firefox_bin)
-  curl --silent --location --output "$extension_file_path" "$extension_url"
-  $ffx_bin --install --extension "$extension_file_path"
-  rm "$extension_file_path"
 }
 
 function addons_list() {
@@ -93,6 +96,7 @@ function addons_list() {
 https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
 https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/
 https://addons.mozilla.org/en-US/firefox/addon/ekill/
+https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/
 EOF
 }
 
@@ -114,4 +118,4 @@ fi
 profile_dir=$(make_empty_profile "$profile_name")
 get_user_js_base "$profile_dir"
 concat_personal_settings "$profile_dir" "$additional_settings_file"
-$(firefox_bin) --Profile "$profile_dir" $(addons_list) &
+$(firefox_bin) --no-remote --Profile "$profile_dir" $(addons_list) &

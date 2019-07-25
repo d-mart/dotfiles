@@ -13,8 +13,15 @@ user_pref("browser.tabs.warnOnCloseOtherTabs", false);
 // Overrides to stock user.js
 user_pref("browser.privatebrowsing.autostart", false);
 user_pref("privacy.clearOnShutdown.history",   false);
-user_pref("places.history.enabled",             true);
-user_pref("keyword.enabled",                    true);
-user_pref("signon.rememberSignons",	            true);
-user_pref("signon.autofillForms",               true);
-user_pref("browser.urlbar.suggest.history",     true);
+user_pref("privacy.clearOnShutdown.sessions",  false);
+user_pref("places.history.enabled",            true);
+user_pref("keyword.enabled",                   true);
+user_pref("signon.rememberSignons",	           true);
+user_pref("signon.autofillForms",              true);
+user_pref("browser.urlbar.suggest.history",    true);
+user_pref("browser.search.defaultenginename",  "DuckDuckGo"); // does nothing
+user_pref("browser.urlbar.placeholderName",    "DuckDuckGo"); // sets the name in the bar but nothing else
+
+// need to find:
+// - resume session on restart
+// - default search engine
