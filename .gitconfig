@@ -9,6 +9,9 @@
 [includeIf "gitdir:~/personal/"]
   path = ~/personal/.gitconfig
 
+[includeIf "gitdir:~/roadie/"]
+  path = ~/roadie/.gitconfig
+
 [color]
   diff = auto
   status = auto
