@@ -237,10 +237,6 @@ function source_if_exists()
     done
 }
 
-# kill all druva pids 
-kill_druva() {
-    ps aux | grep -i druva | grep -v grep | sed -e 's/ \+/,/g' | cut -f 2 -d, | xargs sudo kill -9
-}
 ###########
 # Countdown timer and stopwatch
 # adapted from http://superuser.com/questions/611538/is-there-a-way-to-display-a-countdown-or-stopwatch-timer-in-a-terminal
