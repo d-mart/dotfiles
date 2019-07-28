@@ -122,6 +122,7 @@ defaults write com.apple.screencapture location ~/screenshots/
 hash brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew tap caskroom/cask
 brew tap caskroom/fonts
+brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
 
 # Install each of the homebrew packages in the list
 for package in "${brewlist[@]}"; do
