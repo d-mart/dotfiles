@@ -22,6 +22,12 @@ require("caffeine")
 --   spoon.Lunette:bindHotkeys()
 -- end
 
+if file_exists("Spoons/ControlEscape.spoon/init.lua") then
+  hs.loadSpoon("ControlEscape")
+  spoon.ControlEscape:start()
+end
+
+
 -- some shortcuts
 bind       = hs.hotkey.bind
 grid       = hs.grid
