@@ -37,8 +37,8 @@ focusedWin = window.focusedWindow
 -- setup
 grid.MARGINX = 0
 grid.MARGINY = 0
-grid.GRIDHEIGHT = 4
-grid.GRIDWIDTH  = 4
+grid.GRIDHEIGHT = 3
+grid.GRIDWIDTH  = 3
 
 -- key bindings
 --bind(mashshift, 'R', openconsole)
