@@ -14,6 +14,7 @@ alias rs="$bundle_exec rails server"
 alias rc="$bundle_exec rails console"
 
 alias agr="ag --ruby"
+alias rgr="rg --type ruby"
 
 ## daemon control
 # daemon status
