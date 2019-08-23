@@ -2,3 +2,8 @@
 
 alias ffx="/Applications/Firefox.app/Contents/MacOS/firefox --no-remote"
 alias ffxde="/Applications/Firefox\ Developer\ Edition.app/Contents/MacOS/firefox --no-remote"
+
+function ntfy() {
+  # osascript -e "display notification \"Command done\" with title \"$@\""
+  terminal-notifier -title "Terminal" -message "$@"
+}

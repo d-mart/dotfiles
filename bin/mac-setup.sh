@@ -44,6 +44,7 @@ declare -a brewlist=(
   "pwgen"
   "ranger"
   "telnet"
+  "temrinal-notifier"
   "tmux"
   "tree"
   "vim"
