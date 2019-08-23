@@ -130,9 +130,18 @@ ftch() { egrep -rIHn --include="*\.[ch]" --exclude="TAGS" "$@" * ; }
 ftr()  { egrep -rIHn --include="*\.rb" --include="\*.feature" --exclude="TAGS" "$@" * ; }
 ft()   { egrep -Rn "$@" * ; }
 
-#
-alias ec="$EMACSCLIENT"
-alias en="$EMACSCLIENT -n"
+# open path/to/file.ext:123 at the line 123
+function ec_with_line_number() {
+  if [[ $1 =~ (.*):([0-9]+)$ ]]; then
+    $EMACSCLIENT -n "+${BASH_REMATCH[2]}" "${BASH_REMATCH[1]}"
+  else
+    $EMACSCLIENT -n "$@"
+  fi
+}
+
+alias ec="ec_with_line_number"
+alias e="ec_with_line_number"
+alias et="$EMACSCLIENT -t"
 alias ecl="$EMACSCLIENT -n -a ''"
 alias eclw="$EMACSCLIENT -n -c -a ''"
 alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
