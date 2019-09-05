@@ -23,6 +23,7 @@ declare -a brewlist=(
   "autossh"
   "bash"
   "bat"
+  "calc"
   "coreutils"
   "datamash"
   "diff-so-fancy"
