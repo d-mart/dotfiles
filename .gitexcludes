@@ -1,6 +1,5 @@
 SyncToy*.dat
 *.elc
-*.sql
 TAGS
 *#
 .DS_Store
