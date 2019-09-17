@@ -44,6 +44,7 @@ declare -a brewlist=(
   "openssh"
   "pwgen"
   "ranger"
+  "starship"
   "telnet"
   "temrinal-notifier"
   "tmux"

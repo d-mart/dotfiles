@@ -43,4 +43,9 @@ export SHELL_HOME="${HOME}/.sh.d"
 
 source "${SHELL_HOME}/zsh-setup.sh"
 
+# use starship prompt over O-M-Z if it's present
+if [ -x "$(command -v starship)" ]; then
+  eval "$(starship init zsh)"
+fi
+
 export PATH="/usr/local/bin:$PATH"
