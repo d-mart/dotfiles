@@ -1,4 +1,32 @@
-
 [directory]
 truncate_to_repo = false
 truncation_length = 8
+
+[battery]
+full_symbol = "🔋"
+charging_symbol = "⚡️"
+discharging_symbol = "💀"
+disabled = false
+
+[[battery.display]]
+threshold = 10
+style = "bold red"
+disabled = false
+
+[jobs]
+symbol = "+"
+threshold = 1
+disabled = false
+
+[time]
+format = "🕙[ %T ]"
+disabled = true
+
+[hostname]
+ssh_only = false
+prefix = "⟪"
+suffix = "⟫"
+disabled = true
+
+[username]
+disabled = true
