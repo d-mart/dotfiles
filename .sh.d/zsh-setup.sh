@@ -41,6 +41,11 @@ setopt auto_continue
 # exit status of a pipe is the rightmost that *failed*
 setopt pipefail
 
+# keybindings
+bindkey "^t" transpose-chars
+bindkey "\el" down-case-word
+bindkey "^i" fzf-file-widget # remapped from ctrl-t ; look in /usr/local/opt/fzf/shell/key-bindings.zsh
+
 source "${SHELL_HOME}/shell-init.sh"
 
 if (which direnv > /dev/null) ; then
