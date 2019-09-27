@@ -65,6 +65,7 @@ declare -a brewcasklist=(
   "firefox"
   "flux"
   "font-anonymous-pro"
+  "font-cascadia"
   "font-dejavu-sans-mono-for-powerline"
   "font-droidsansmono-nerd-font"
   "font-droid-sans-mono-for-powerline"
