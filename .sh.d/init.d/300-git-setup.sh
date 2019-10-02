@@ -41,6 +41,7 @@ alias gsp="git stash pop"
 alias gcan="git commit --amend --no-edit"
 alias gpushall="git remote | xargs -n 1 git push"
 alias gcan="git commit --amend --no-edit"
+alias gap="git add -p"
 
 alias gfo="git fetch origin"
 alias gst="git status"
