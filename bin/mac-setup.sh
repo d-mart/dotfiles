@@ -197,10 +197,8 @@ gem install tmuxinator
 
 # install a newish c-python
 latest_python3=$(asdf list-all python | grep ^3 | grep -v dev | tail -n 1)
-latest_python2=$(asdf list-all python | grep ^2 | grep -v dev | tail -n 1)
 LDFLAGS="-L/usr/local/opt/zlib/lib" CPPFLAGS="-I/usr/local/opt/zlib/include" asdf install python "$latest_python3"
-LDFLAGS="-L/usr/local/opt/zlib/lib" CPPFLAGS="-I/usr/local/opt/zlib/include" asdf install python "$latest_python2"
-asdf global python "$latest_python3" "$latest_python2"
+asdf global python "$latest_python3"
 asdf reshim python
 PIP_REQUIRE_VIRTUALENV='' pip3 install --user mdv pipenv
 
