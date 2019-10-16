@@ -52,6 +52,7 @@ declare -a brewlist=(
   "vim"
   "zlib"
   "zsh"
+  "yqrashawn/goku/goku"
 )
 
 declare -a brewcasklist=(
@@ -72,8 +73,13 @@ declare -a brewcasklist=(
   "font-fira-code"
   "font-fira-mono"
   "font-fira-mono-for-powerline"
+  "font-ibm-plex"
   "font-inconsolata"
   "font-inconsolata-for-powerline"
+  "font-iosevka"
+  "font-iosevka-nerd-font"
+  "font-iosevka-nerd-font-mono"
+  "font-iosevka-slab"
   "font-liberation-sans"
   "font-liberationmono-nerd-font"
   "font-liberation-mono-for-powerline"
