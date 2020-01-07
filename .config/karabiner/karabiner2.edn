@@ -1,0 +1,145 @@
+{
+    ;; !  | means mandatory
+    ;; #  | means optional
+    ;; !! | mandatory command + control + optional + shift (hyper)
+    ;; ## | optional any
+
+    ;; to understand better how modifiers work in karabiner
+    ;; https://pqrs.org/osx/karabiner/json.html#from-event-definition-modifiers
+
+    ;; C  | left_command
+    ;; T  | left_control
+    ;; O  | left_option
+    ;; S  | left_shift
+    ;; F  | fn
+    ;; Q  | right_command
+    ;; W  | right_control
+    ;; E  | right_option
+    ;; R  | right_shift
+    ;; need to prefix C T O S F with ! or #
+
+ ;; code won't read cheatsheet section
+:cheatsheet {
+    :!Ca "command a" ;; mandatory left_command
+    :!Ta "control a" ;; mandatory left_control
+    :!Oa "option a"
+    :!Sa "shift a"
+    :#Sa "shift a" ;; keycode a, optional left_shift
+    :!CTOa "command control option a"
+    :!Cspacebar "command space"
+    :!Fa "fn a"
+    :##a "keycode a optional any"
+    :!!a "mandatory hyper(control command option shift) a "
+} ;; cheatsheet
+
+:templates {
+    :km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+    :open "open \"%s\""
+} ;; templates
+
+:profiles {
+    :Default {  :default true
+                :sim     50     ;; simultaneous_threshold_milliseconds (def: 50)
+                                ;; keys need to be pressed within this threshold to be considered simultaneous
+                :delay   500    ;; to_delayed_action_delay_milliseconds (def: 500)
+                                ;;
+                :alone   500    ;; to_if_alone_timeout_milliseconds (def: 1000)
+                                ;; hold for 995s and single tap registered; hold for 1005s and seen as modifier
+                :held    1000   ;; to_if_held_down_threshold_milliseconds (def: 500)
+                                ;; key is fired twice when 500 ms is elapsed (otherwise seen as a hold command)
+             }
+} ;; profiles
+
+;; Define different kinds of keyboards
+:devices {
+    :apl-usb-int [{:vendor_id 1452, :product_id 635 }]  ;; Apple Internal & Magic Keyboard (USB)
+    :apl-bt [{:vendor_id 1452, :product_id 615}] ;; Apple Magic Keyboard (Bluetooth)
+    :ap2 [{:vendor_id 1241, :product_id 41618}] ;; Anne Pro 2 (mechanical)
+} ;; devices
+
+;; simlayers are basically "hyper" keys
+;; press this in combination with something else and depending on your rule, make things happen
+:simlayers {
+    :close-bracket-mode {:key :close_bracket}
+    :open-bracket-mode  {:key :open_bracket}
+
+    :o-mode {:key :o}
+
+} ;; simlayers
+
+
+;; main contains multiple manipulators
+;; each manipulator has a description and multiple rules
+
+;; main                -> {:main [{:des "..." :rules [rule1 rule2 ...]}]}
+;; manipulator         -> {:des "..." :rules [rule1 rule2 ...]}
+;; manipulator's rules -> [rule1 rule2 ...]
+
+:main [
+
+    {:des "[ mode"
+     :rules [:open-bracket-mode
+                [:close_bracket :!Sopen_bracket ] ;; quickly type the "{" character
+    ]}
+
+    {:des "] mode"
+     :rules [:close-bracket-mode
+                [:open_bracket :!Sclose_bracket ] ;; quickly type the "}" character
+    ]}
+
+    {:des "o-mode: quick open"
+     :rules [:o-mode
+                [:f [:open "/Applications/Firefox.app"] ]
+                [:g [:km "0) Search Google"] ]
+                [:i [:open "/Applications/iTerm.app"] ]
+                [:q [:km "open: Quip"] ]
+                [:t [:open "/Applications/Things3.app"] ]
+    ]}
+
+    {:des "right cmd -> right ctrl"
+     :rules [
+       [:##right_command :right_control [:apl-usb-int :apl-bt :ap2] ]
+     ]}
+
+    {:des "left shift once -> ("
+     :rules [
+       [:##left_shift :left_shift nil {:alone :!S9} ]
+     ]}
+
+    {:des "right shift once -> )"
+     :rules [
+       [:##right_shift :right_shift nil {:alone :!S0} ]
+     ]}
+
+    {:des "caps lock : vim navigation + escape"
+     :rules [   [:caps_lock ["caps-lock-mode" 1] nil { :afterup ["caps-lock-mode" 0]
+                                                       :alone :escape } ]
+                [:h :left_arrow ["caps-lock-mode" 1] ]
+                [:j :down_arrow ["caps-lock-mode" 1] ]
+                [:k :up_arrow   ["caps-lock-mode" 1] ]
+                [:l :right_arrow ["caps-lock-mode" 1] ]
+                [:!Sh :!Sleft_arrow ["caps-lock-mode" 1] ]
+                [:!Sj :!Sdown_arrow ["caps-lock-mode" 1] ]
+                [:!Sk :!Sup_arrow   ["caps-lock-mode" 1] ]
+                [:!Sl :!Sright_arrow ["caps-lock-mode" 1] ]
+                [:!Ch :!Cleft_arrow ["caps-lock-mode" 1] ]
+                [:!Cj :!Cdown_arrow ["caps-lock-mode" 1] ]
+                [:!Ck :!Cup_arrow   ["caps-lock-mode" 1] ]
+                [:!Cl :!Cright_arrow ["caps-lock-mode" 1] ]
+                [:!CSh :!CSleft_arrow ["caps-lock-mode" 1] ]
+                [:!CSj :!CSdown_arrow ["caps-lock-mode" 1] ]
+                [:!CSk :!CSup_arrow   ["caps-lock-mode" 1] ]
+                [:!CSl :!CSright_arrow ["caps-lock-mode" 1] ]
+                [:!Oh :!Oleft_arrow ["caps-lock-mode" 1] ]
+                [:!Oj :!Odown_arrow ["caps-lock-mode" 1] ]
+                [:!Ok :!Oup_arrow   ["caps-lock-mode" 1] ]
+                [:!Ol :!Oright_arrow ["caps-lock-mode" 1] ]
+                [:!OSh :!OSleft_arrow ["caps-lock-mode" 1] ]
+                [:!OSj :!OSdown_arrow ["caps-lock-mode" 1] ]
+                [:!OSk :!OSup_arrow   ["caps-lock-mode" 1] ]
+                [:!OSl :!OSright_arrow ["caps-lock-mode" 1] ]
+     ]}
+
+] ;; main list
+
+}
