@@ -62,8 +62,9 @@ declare -a brewcasklist=(
   "docker"
   "dozer"
   "dropbox"
-  "emacs"
+  "emacs-plus --without-spacemacs-icon --with-emacs-icons-project-EmacsIcon4"
   "firefox"
+  "firefox-developer-edition"
   "flux"
   "font-anonymous-pro"
   "font-cascadia"
@@ -113,7 +114,6 @@ declare -a brewcasklist=(
   "quicklook-csv"
   "quicklook-json"
   "slack"
-  "superduper"
   "suspicious-package"
   "tunnelblick"
   "vlc"
@@ -141,6 +141,7 @@ hash brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Ho
 brew tap caskroom/cask
 brew tap caskroom/fonts
 brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
+brew tap d12frosted/emacs-plus
 
 # Install each of the homebrew packages in the list
 for package in "${brewlist[@]}"; do
@@ -168,6 +169,7 @@ fi
 if [ ! -d ~/.cask ]; then
   git clone https://github.com/cask/cask ~/.cask
 fi
+brew link --override emacs-plus
 
 if [ ! -d ~/personal/dotemacs ]; then
   git clone ssh://git@gitlab.dmartinez.net:61222/dmartinez/dotfiles.git ~/personal/dotemacs
