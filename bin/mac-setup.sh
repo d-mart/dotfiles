@@ -62,7 +62,7 @@ declare -a brewcasklist=(
   "docker"
   "dozer"
   "dropbox"
-  "emacs"
+  "emacs-plus"
   "firefox"
   "flux"
   "font-anonymous-pro"
@@ -141,6 +141,7 @@ hash brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Ho
 brew tap caskroom/cask
 brew tap caskroom/fonts
 brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
+brew tap d12frosted/emacs-plus
 
 # Install each of the homebrew packages in the list
 for package in "${brewlist[@]}"; do
@@ -151,6 +152,11 @@ done
 for cask in "${brewcasklist[@]}"; do
   brew cask install "$cask"
 done
+
+# not in brew cask list because of command-line options
+# icon option doesn't work brew tap d12frosted/emacs-plus --with-emacs-icons-project-EmacsIcon4
+# so grab icon from here https://github.com/emacsfodder/emacs-icons-project/
+ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications # maybe not needed if regular emacs isn't present
 
 # fetch personal dotfiles
 if [ ! -d ~/personal/dotfiles ]; then
