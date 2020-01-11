@@ -153,6 +153,11 @@ for cask in "${brewcasklist[@]}"; do
   brew cask install "$cask"
 done
 
+# not in brew cask list because of command-line options
+# icon option doesn't work brew tap d12frosted/emacs-plus --with-emacs-icons-project-EmacsIcon4
+# so grab icon from here https://github.com/emacsfodder/emacs-icons-project/
+ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications # maybe not needed if regular emacs isn't present
+
 # fetch personal dotfiles
 if [ ! -d ~/personal/dotfiles ]; then
   git clone ssh://git@gitlab.dmartinez.net:61222/dmartinez/dotfiles.git ~/personal/dotfiles
