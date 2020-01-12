@@ -1,0 +1,161 @@
+{
+  ;; !  | means mandatory
+  ;; #  | means optional
+  ;; !! | mandatory command + control + optional + shift (hyper)
+  ;; ## | optional any
+
+  ;; to understand better how modifiers work in karabiner
+  ;; https://pqrs.org/osx/karabiner/json.html#from-event-definition-modifiers
+
+  ;; C  | left_command
+  ;; T  | left_control
+  ;; O  | left_option
+  ;; S  | left_shift
+  ;; F  | fn
+  ;; Q  | right_command
+  ;; W  | right_control
+  ;; E  | right_option
+  ;; R  | right_shift
+  ;; need to prefix C T O S F with ! or #
+
+ ;; code won't read cheatsheet section
+:cheatsheet {
+  :!Ca "command a" ;; mandatory left_command
+  :!Ta "control a" ;; mandatory left_control
+  :!Oa "option a"
+  :!Sa "shift a"
+  :#Sa "shift a" ;; keycode a, optional left_shift
+  :!CTOa "command control option a"
+  :!Cspacebar "command space"
+  :!Fa "fn a"
+  :##a "keycode a optional any"
+  :!!a "mandatory hyper(control command option shift) a "
+} ;; cheatsheet
+
+:templates {
+  :open "open \"%s\""
+  :alfred "osascript -e 'tell application \"Alfred 4\" to run trigger \"%s\" in workflow \"%s\" with argument \"%s\"'"
+  ;:km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+  :hs "open -g hammerspoon://%s"
+}
+
+:profiles {
+  :Default {
+    :default true
+    :sim     50     ;; simultaneous_threshold_milliseconds (def: 50)
+                    ;; keys need to be pressed within this threshold to be considered simultaneous
+    :delay   250    ;; to_delayed_action_delay_milliseconds (def: 500)
+                    ;;
+    :alone   500    ;; to_if_alone_timeout_milliseconds (def: 1000)
+                    ;; hold for 995s and single tap registered; hold for 1005s and seen as modifier
+    :held    500    ;; to_if_held_down_threshold_milliseconds (def: 500)
+                    ;; key is fired twice when 500 ms is elapsed (otherwise seen as a hold command)
+  }
+} ;; profiles
+
+;; Define different kinds of keyboards
+:devices {
+  :apl-usb-int [{:vendor_id 1452, :product_id 635 }]  ;; Apple Internal & Magic Keyboard (USB)
+  :apl-bt [{:vendor_id 1452, :product_id 615}] ;; Apple Magic Keyboard (Bluetooth)
+} ;; devices
+
+;; simlayers are basically "hyper" keys
+;; press this in combination with something else and depending on your rule, make things happen
+:simlayers {
+  :close-bracket-mode {:key :close_bracket}
+  :open-bracket-mode  {:key :open_bracket}
+  :o-mode             {:key :o}
+  :mouse-keys-mode    {:key :d}
+} ;; simlayers
+
+;; main contains multiple manipulators
+;; each manipulator has a description and multiple rules
+
+;; main                -> {:main [{:des "..." :rules [rule1 rule2 ...]}]}
+;; manipulator         -> {:des "..." :rules [rule1 rule2 ...]}
+;; manipulator's rules -> [rule1 rule2 ...]
+
+:main [
+  {:des "various in-progress/experiments"
+   :rules [
+     [[:e :t] :r]
+  ]}
+
+  {:des "mouse-keys-mode"
+   :rules [:mouse-keys-mode
+    ; buttons
+    [:v {:pkey :button1}]
+    [:b {:pkey :button3}]
+    [:n {:pkey :button2}]
+
+    ; movement
+    [:h {:mkey {:x -1536}} :!mouse-scroll-mode ]
+    [:j {:mkey {:y  1536}} :!mouse-scroll-mode ]
+    [:k {:mkey {:y -1536}} :!mouse-scroll-mode ]
+    [:l {:mkey {:x  1536}} :!mouse-scroll-mode ]
+
+    ; speed - hold 'a' for slower, 'f' for faster
+    [:a {:mkey {:speed 0.5}} nil {:afterup {:mkey {:speed 1.0}} }]
+    [:f {:mkey {:speed 2.0}} nil {:afterup {:mkey {:speed 1.0}} }]
+
+    ; scrolling
+    [:s ["mouse-scroll-mode" 1] nil { :afterup ["mouse-scroll-mode" 0] }]
+
+    [:h {:mkey {:hwheel -32}} :mouse-scroll-mode ]
+    [:j {:mkey {:vwheel  32}} :mouse-scroll-mode ]
+    [:k {:mkey {:vwheel -32}} :mouse-scroll-mode ]
+    [:l {:mkey {:hwheel  32}} :mouse-scroll-mode ]
+  ]}
+
+  {:des "Right ⌘ to ⌘ + ⇥"
+   :rules [
+     [:right_command :!Ctab]
+  ]}
+
+  {:des "[ mode"
+   :rules [:open-bracket-mode
+     [:close_bracket :!Sopen_bracket ] ;; quickly type the "{" character
+  ]}
+
+  {:des "] mode"
+   :rules [:close-bracket-mode
+     [:open_bracket :!Sclose_bracket ] ;; quickly type the "}" character
+  ]}
+
+  {:des "o-mode: quick open"
+   :rules [:o-mode
+     [:f [:open "/Applications/Firefox Developer Edition.app"] ]
+     [:e [:open "/Applications/Emacs.app"] ]
+     [:i [:open "/Applications/iTerm.app"] ]
+  ]}
+
+  {:des "left shift once -> ("
+   :rules [
+     [:##left_shift :left_shift nil {:alone :!S9} ]
+  ]}
+
+  {:des "right shift once -> )"
+   :rules [
+     [:##right_shift :right_shift nil {:alone :!S0} ]
+  ]}
+
+  {:des "caps lock: tap -> escape, hold -> l_ctrl"
+   :rules [
+     [:caps_lock :left_control nil {:alone :escape}]
+  ]}
+
+  {:des "space : vim navigation"
+   :rules [
+     ;; TODO - can't hold spacebar and get repeat
+     [:spacebar ["vim-nav-mode" 1] nil { :afterup ["vim-nav-mode" 0]
+                                         :alone :spacebar } ]
+     [:##h    :left_arrow      :vim-nav-mode ]
+     [:##j    :down_arrow      :vim-nav-mode ]
+     [:##k    :up_arrow        :vim-nav-mode ]
+     [:##l    :right_arrow     :vim-nav-mode ]
+     [:u      :page_up         :vim-nav-mode ]
+     [:n      :page_down       :vim-nav-mode ]
+   ]}
+
+] ;; main list
+}
