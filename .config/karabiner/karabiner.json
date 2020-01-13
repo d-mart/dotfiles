@@ -7,9 +7,9 @@
   "profiles" : [ {
     "complex_modifications" : {
       "parameters" : {
-        "basic.simultaneous_threshold_milliseconds" : 50,
+        "basic.simultaneous_threshold_milliseconds" : 20,
         "basic.to_delayed_action_delay_milliseconds" : 250,
-        "basic.to_if_alone_timeout_milliseconds" : 500,
+        "basic.to_if_alone_timeout_milliseconds" : 200,
         "basic.to_if_held_down_threshold_milliseconds" : 500
       },
       "rules" : [ {
@@ -1009,6 +1009,51 @@
               } ]
             }
           }
+        }, {
+          "from" : {
+            "key_code" : "s"
+          },
+          "to" : [ {
+            "shell_command" : "open \"/Applications/Slack.app\""
+          } ],
+          "conditions" : [ {
+            "name" : "o-mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "o-mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "open \"/Applications/Slack.app\""
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "s"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "o-mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         } ]
       }, {
         "description" : "left shift once -> (",
@@ -1063,26 +1108,6 @@
       }, {
         "description" : "space : vim navigation",
         "manipulators" : [ {
-          "to_if_alone" : [ {
-            "key_code" : "spacebar"
-          } ],
-          "to_after_key_up" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 0
-            }
-          } ],
-          "from" : {
-            "key_code" : "spacebar"
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 1
-            }
-          } ],
-          "type" : "basic"
-        }, {
           "from" : {
             "key_code" : "h",
             "modifiers" : {
@@ -1098,6 +1123,38 @@
             "type" : "variable_if"
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "vim-nav-mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "left_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "spacebar"
+            }, {
+              "key_code" : "h"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "vim-nav-mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         }, {
           "from" : {
             "key_code" : "j",
@@ -1115,6 +1172,38 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "vim-nav-mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "down_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "spacebar"
+            }, {
+              "key_code" : "j"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "vim-nav-mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
           "from" : {
             "key_code" : "k",
             "modifiers" : {
@@ -1130,6 +1219,38 @@
             "type" : "variable_if"
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "vim-nav-mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "up_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "spacebar"
+            }, {
+              "key_code" : "k"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "vim-nav-mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         }, {
           "from" : {
             "key_code" : "l",
@@ -1147,6 +1268,38 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "vim-nav-mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "right_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "spacebar"
+            }, {
+              "key_code" : "l"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "vim-nav-mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
           "from" : {
             "key_code" : "u"
           },
@@ -1160,6 +1313,38 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "vim-nav-mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "page_up"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "spacebar"
+            }, {
+              "key_code" : "u"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "vim-nav-mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
           "from" : {
             "key_code" : "n"
           },
@@ -1172,6 +1357,38 @@
             "type" : "variable_if"
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "vim-nav-mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "page_down"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "spacebar"
+            }, {
+              "key_code" : "n"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "vim-nav-mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         } ]
       } ]
     },

@@ -42,11 +42,11 @@
 :profiles {
   :Default {
     :default true
-    :sim     50     ;; simultaneous_threshold_milliseconds (def: 50)
+    :sim     20     ;; simultaneous_threshold_milliseconds (def: 50)
                     ;; keys need to be pressed within this threshold to be considered simultaneous
     :delay   250    ;; to_delayed_action_delay_milliseconds (def: 500)
                     ;;
-    :alone   500    ;; to_if_alone_timeout_milliseconds (def: 1000)
+    :alone   200    ;; to_if_alone_timeout_milliseconds (def: 1000)
                     ;; hold for 995s and single tap registered; hold for 1005s and seen as modifier
     :held    500    ;; to_if_held_down_threshold_milliseconds (def: 500)
                     ;; key is fired twice when 500 ms is elapsed (otherwise seen as a hold command)
@@ -54,10 +54,9 @@
 } ;; profiles
 
 ;; Define different kinds of keyboards
-:devices {
-  :apl-usb-int [{:vendor_id 1452, :product_id 635 }]  ;; Apple Internal & Magic Keyboard (USB)
-  :apl-bt [{:vendor_id 1452, :product_id 615}] ;; Apple Magic Keyboard (Bluetooth)
-} ;; devices
+;:devices {
+;  :apl-usb-int [{:vendor_id 1452, :product_id 636 }]  ;; Apple Internal & Magic Keyboard (USB)
+;} ;; devices
 
 ;; simlayers are basically "hyper" keys
 ;; press this in combination with something else and depending on your rule, make things happen
@@ -66,6 +65,7 @@
   :open-bracket-mode  {:key :open_bracket}
   :o-mode             {:key :o}
   :mouse-keys-mode    {:key :d}
+  :vim-nav-mode       {:key :spacebar}
 } ;; simlayers
 
 ;; main contains multiple manipulators
@@ -127,6 +127,7 @@
      [:f [:open "/Applications/Firefox Developer Edition.app"] ]
      [:e [:open "/Applications/Emacs.app"] ]
      [:i [:open "/Applications/iTerm.app"] ]
+     [:s [:open "/Applications/Slack.app"] ]
   ]}
 
   {:des "left shift once -> ("
@@ -145,16 +146,13 @@
   ]}
 
   {:des "space : vim navigation"
-   :rules [
-     ;; TODO - can't hold spacebar and get repeat
-     [:spacebar ["vim-nav-mode" 1] nil { :afterup ["vim-nav-mode" 0]
-                                         :alone :spacebar } ]
-     [:##h    :left_arrow      :vim-nav-mode ]
-     [:##j    :down_arrow      :vim-nav-mode ]
-     [:##k    :up_arrow        :vim-nav-mode ]
-     [:##l    :right_arrow     :vim-nav-mode ]
-     [:u      :page_up         :vim-nav-mode ]
-     [:n      :page_down       :vim-nav-mode ]
+   :rules [:vim-nav-mode
+     [:##h :left_arrow]
+     [:##j :down_arrow]
+     [:##k :up_arrow]
+     [:##l :right_arrow]
+     [:u   :page_up]
+     [:n   :page_down]
    ]}
 
 ] ;; main list
