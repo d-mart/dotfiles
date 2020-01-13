@@ -33,6 +33,7 @@ declare -a brewlist=(
   "fasd"
   "fd"
   "fpp"
+  "fswatch"
   "fzf"
   "gawk"
   "git"
