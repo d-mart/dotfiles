@@ -54,9 +54,11 @@
 } ;; profiles
 
 ;; Define different kinds of keyboards
-;:devices {
-;  :apl-usb-int [{:vendor_id 1452, :product_id 636 }]  ;; Apple Internal & Magic Keyboard (USB)
-;} ;; devices
+:devices {
+  :apl-usb-int     [{:vendor_id 1452, :product_id 636}]   ;; Apple Internal & Magic Keyboard (USB)
+  :code-104-clear  [{:vendor_id 1241, :product_id 361}]   ;; 104-key CODE w/ MX-clear
+  :ltech-usb-mouse [{:vendor_id 1133, :product_id 49219}] ;; Logitech 5-button mouse
+} ;; devices
 
 ;; simlayers are basically "hyper" keys
 ;; press this in combination with something else and depending on your rule, make things happen
@@ -153,7 +155,19 @@
      [:##l :right_arrow]
      [:u   :page_up]
      [:n   :page_down]
+     [:return_or_enter :!Cspacebar]
    ]}
 
+   {:des "mouse forward and backward buttons DWIM"
+    :rules [
+    [{:pkey :button4} :!Copen_bracket]
+    [{:pkey :button5} :!Cclose_bracket]
+   ]}
+
+;   {:des "double-tap left alt -> activate control-lock"
+;    :rules [
+;
+;
+;   ]}
 ] ;; main list
 }
