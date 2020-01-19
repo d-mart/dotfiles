@@ -1,2 +1,4 @@
 aliases.local
 shell-init.local.sh
+.config/pgcli/history
+.config/pgcli/log
