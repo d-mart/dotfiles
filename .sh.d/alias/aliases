@@ -59,15 +59,11 @@ alias timestamp="date +%Y%m%d-%H%M%S"
 export EMACS="emacs"
 export EMACSCLIENT="emacsclient"
 
-alias mcom='minicom --noinit --baudrate=115200 --device'
-alias mcom4='minicom --noinit --baudrate=4800 --device'
-alias adb='/usr/local/android-sdk-linux_86/platform-tools/adb'
-alias ff='find . -name'
-
 # find newest files in or below current dir (need 'gstat' on OSX)
 alias newest="find . -type f -exec stat --format '%Y :%y %n' {} \; | sort -nr | cut -d: -f2- | head"
 
 # CLI tools aliases
+alias b="bat"
 alias pg="ps aux | grep -v grep | grep"
 alias myip="ifconfig | grep \"inet addr\" | awk -F\: '{ print \$2 }' | awk '{ print \$1 }' "
 alias mem="free -m"
