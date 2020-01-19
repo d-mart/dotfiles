@@ -19,6 +19,7 @@ declare -A repos=(
   ["${HOME}/.bash-it"]="https://github.com/revans/bash-it"
   ["${HOME}/.oh-my-zsh/plugins/zaw"]="https://github.com/yqrashawn/zaw"
   ["${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting"
+  ["${HOME}/.oh-my-zsh/plugins/autoswitch_virtualenv"]="https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git"
   ["${HOME}/.tmux/plugins/tpm"]="https://github.com/tmux-plugins/tpm"
   ["${HOME}/.tmux/plugins/tmux-yank"]="https://github.com/tmux-plugins/tmux-yank"
   ["${HOME}/.tmux/plugins/tmux-open"]="https://github.com/tmux-plugins/tmux-open"

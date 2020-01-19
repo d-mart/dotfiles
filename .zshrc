@@ -21,6 +21,7 @@ plugins=(
   ruby
   zaw
   zsh-syntax-highlighting
+  autoswitch_virtualenv
 )
 
 if [ -n "$INSIDE_EMACS" ]; then
