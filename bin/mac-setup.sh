@@ -29,6 +29,7 @@ declare -a brewlist=(
   "datamash"
   "diff-so-fancy"
   "direnv"
+  "emacs-plus"
   "exa"
   "fasd"
   "fd"
@@ -65,7 +66,6 @@ declare -a brewcasklist=(
   "docker"
   "dozer"
   "dropbox"
-  "emacs-plus --without-spacemacs-icon --with-emacs-icons-project-EmacsIcon4"
   "firefox"
   "firefox-developer-edition"
   "flux"
@@ -90,6 +90,7 @@ declare -a brewcasklist=(
   "font-liberation-sans"
   "font-liberationmono-nerd-font"
   "font-liberation-mono-for-powerline"
+  "font-jetbrains-mono"
   "font-meslo-lg"
   "font-input"
   "font-meslo-lg"
@@ -159,7 +160,9 @@ done
 # not in brew cask list because of command-line options
 # icon option doesn't work brew tap d12frosted/emacs-plus --with-emacs-icons-project-EmacsIcon4
 # so grab icon from here https://github.com/emacsfodder/emacs-icons-project/
-ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications # maybe not needed if regular emacs isn't present
+ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
+brew link --overwrite emacs-plus  # maybe not needed if regular emacs isn't present
+
 
 # fetch personal dotfiles
 if [ ! -d ~/personal/dotfiles ]; then
