@@ -1,4 +1,4 @@
-# shell environment setup for rusr
+# shell environment setup for rust
 
 ## rustup if present
 if [[ -d ~/.cargo/bin ]]; then
