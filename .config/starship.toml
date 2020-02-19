@@ -1,3 +1,11 @@
+[aws]
+style = "#FFA500"
+#symbol = "🅰 "
+symbol = "☁️ "
+displayed_items = "region"
+[aws.region_aliases]
+us-west-1 = "west-1"
+
 [directory]
 truncate_to_repo = false
 truncation_length = 8
@@ -12,6 +20,10 @@ disabled = false
 threshold = 10
 style = "bold red"
 disabled = false
+
+[[battery.display]]
+threshold = 30 # when capacity is between 10% and 30%
+style = "bold yellow"
 
 [jobs]
 symbol = "+"
@@ -30,3 +42,22 @@ disabled = true
 
 [username]
 disabled = true
+
+[git_branch]
+#symbol = " "
+symbol = "🌱 "
+
+[git_status]
+conflicted = "🏳"
+ahead = "🏎💨"
+behind = "😰"
+diverged = "😵"
+untracked = "🤷‍"
+stashed = "📦"
+modified = "📝"
+staged.value = "++"
+staged.style = "green"
+staged_count.enabled = true
+staged_count.style = "green"
+renamed = "👅"
+deleted = "🗑"
