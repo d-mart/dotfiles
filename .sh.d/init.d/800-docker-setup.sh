@@ -10,5 +10,9 @@ alias dc='docker-compose'
 alias dce='docker-compose exec'
 function dck() { docker-compose stop "$1" ; docker-compose rm -f "$1" }
 
+# if needed...
+#export DOCKER_CLIENT_TIMEOUT=120
+#export COMPOSE_HTTP_TIMEOUT=120
+
 # TODO Maybe helps tmux run
 # docker run -i -t ... sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
