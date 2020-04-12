@@ -89,7 +89,7 @@ timing = True
 # ascii, double, github, orgtbl, rst, mediawiki, html, latex, latex_booktabs,
 # textile, moinmoin, jira, vertical, tsv, csv.
 # Recommended: psql, fancy_grid and grid.
-table_format = fancy_grid
+table_format = plain
 
 # Syntax Style. Possible values: manni, igor, xcode, vim, autumn, vs, rrt,
 # native, perldoc, borland, tango, emacs, friendly, monokai, paraiso-dark,
@@ -109,7 +109,7 @@ vi = False
 on_error = STOP
 
 # Set threshold for row limit. Use 0 to disable limiting.
-row_limit = 1000
+row_limit = 5000
 
 # Skip intro on startup and goodbye on exit
 less_chatty = False
@@ -177,3 +177,6 @@ float = ""
 
 [named queries]
 user_list = "SELECT * FROM users WHERE first_name LIKE '$1'"
+gig_route_req = "SELECT created_at, data->>'gigs' FROM consumer_logs WHERE data->'gigs' IS NOT NULL AND data->>'gigs' LIKE '%$1%' AND name = 'RouteEventsConsumer' ORDER BY created_at DESC"
+gig_route_resp = "SELECT created_at, data->>'stops' FROM consumer_logs WHERE data->>'stops' LIKE '%$1%' ORDER BY created_at DESC"
+db_stats = "SELECT pid, application_name, client_addr, client_port, query_start, wait_event_type, wait_event, state FROM pg_stat_activity ORDER BY application_name"
