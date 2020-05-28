@@ -47,6 +47,12 @@ alias strip_ansi="$SED -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g'"
 alias compact2c="sed -E 's/[[:space:]]+/,/g'"
 alias compact="sed -E 's/[[:space:]]+/ /g'"
 
+if [ $(get_os) = "mac" ]; then
+  alias comma2nl="pbpaste | tr ',' '\n' | pbcopy && echo converted"
+  alias nl2comma="pbpaste | tr '\n' ',' | pbcopy && echo converted"
+fi
+
+
 # openssl
 alias x5='openssl x509 -noout -text -in'  # x5 foo.crt -> view certificate
 
