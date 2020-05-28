@@ -27,8 +27,12 @@ multi_line_mode = psql
 destructive_warning = True
 
 # Enables expand mode, which is similar to `\x` in psql.
+# These make every column value be in its own row like
+#-[ RECORD 3 ]-------------------------
+#id         | 12406199
+#name       | PaymentEventsConsumer
+#message_id | 88ce8a86-91e6-445f-88ba-732e5eae4459
 expand = False
-
 # Enables auto expand mode, which is similar to `\x auto` in psql.
 auto_expand = False
 
@@ -42,7 +46,7 @@ generate_aliases = False
 log_file = default
 
 # keyword casing preference. Possible values "lower", "upper", "auto"
-keyword_casing = auto
+keyword_casing = upper
 
 # casing_file location.
 # In Unix/Linux: ~/.config/pgcli/casing
@@ -80,7 +84,8 @@ search_path_filter = False
 
 # Default pager.
 # By default 'PAGER' environment variable is used
-pager = less -SRXF
+#pager = less -SRXF
+pager = less -RXF
 
 # Timing of sql statments and table rendering.
 timing = True
