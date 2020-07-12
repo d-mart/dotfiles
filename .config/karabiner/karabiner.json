@@ -873,7 +873,7 @@
           }
         } ]
       }, {
-        "description" : "o-mode: quick open",
+        "description" : "app-nav-mode: quick open",
         "manipulators" : [ {
           "from" : {
             "key_code" : "f"
@@ -882,7 +882,7 @@
             "shell_command" : "open \"/Applications/Firefox Developer Edition.app\""
           } ],
           "conditions" : [ {
-            "name" : "o-mode",
+            "name" : "app-nav-mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -894,7 +894,7 @@
           },
           "to" : [ {
             "set_variable" : {
-              "name" : "o-mode",
+              "name" : "app-nav-mode",
               "value" : 1
             }
           }, {
@@ -902,7 +902,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "o"
+              "key_code" : "backslash"
             }, {
               "key_code" : "f"
             } ],
@@ -913,7 +913,7 @@
               "key_up_when" : "any",
               "to_after_key_up" : [ {
                 "set_variable" : {
-                  "name" : "o-mode",
+                  "name" : "app-nav-mode",
                   "value" : 0
                 }
               } ]
@@ -927,7 +927,7 @@
             "shell_command" : "open \"/Applications/Emacs.app\""
           } ],
           "conditions" : [ {
-            "name" : "o-mode",
+            "name" : "app-nav-mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -939,7 +939,7 @@
           },
           "to" : [ {
             "set_variable" : {
-              "name" : "o-mode",
+              "name" : "app-nav-mode",
               "value" : 1
             }
           }, {
@@ -947,7 +947,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "o"
+              "key_code" : "backslash"
             }, {
               "key_code" : "e"
             } ],
@@ -958,7 +958,7 @@
               "key_up_when" : "any",
               "to_after_key_up" : [ {
                 "set_variable" : {
-                  "name" : "o-mode",
+                  "name" : "app-nav-mode",
                   "value" : 0
                 }
               } ]
@@ -972,7 +972,7 @@
             "shell_command" : "open \"/Applications/iTerm.app\""
           } ],
           "conditions" : [ {
-            "name" : "o-mode",
+            "name" : "app-nav-mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -984,7 +984,7 @@
           },
           "to" : [ {
             "set_variable" : {
-              "name" : "o-mode",
+              "name" : "app-nav-mode",
               "value" : 1
             }
           }, {
@@ -992,7 +992,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "o"
+              "key_code" : "backslash"
             }, {
               "key_code" : "i"
             } ],
@@ -1003,7 +1003,7 @@
               "key_up_when" : "any",
               "to_after_key_up" : [ {
                 "set_variable" : {
-                  "name" : "o-mode",
+                  "name" : "app-nav-mode",
                   "value" : 0
                 }
               } ]
@@ -1017,7 +1017,7 @@
             "shell_command" : "open \"/Applications/Slack.app\""
           } ],
           "conditions" : [ {
-            "name" : "o-mode",
+            "name" : "app-nav-mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1029,7 +1029,7 @@
           },
           "to" : [ {
             "set_variable" : {
-              "name" : "o-mode",
+              "name" : "app-nav-mode",
               "value" : 1
             }
           }, {
@@ -1037,7 +1037,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "o"
+              "key_code" : "backslash"
             }, {
               "key_code" : "s"
             } ],
@@ -1048,7 +1048,7 @@
               "key_up_when" : "any",
               "to_after_key_up" : [ {
                 "set_variable" : {
-                  "name" : "o-mode",
+                  "name" : "app-nav-mode",
                   "value" : 0
                 }
               } ]
@@ -1056,10 +1056,10 @@
           }
         } ]
       }, {
-        "description" : "left shift once -> (",
+        "description" : "left shift once -> {",
         "manipulators" : [ {
           "to_if_alone" : [ {
-            "key_code" : "9",
+            "key_code" : "open_bracket",
             "modifiers" : [ "left_shift" ]
           } ],
           "from" : {
@@ -1074,10 +1074,10 @@
           "type" : "basic"
         } ]
       }, {
-        "description" : "right shift once -> )",
+        "description" : "right shift once -> }",
         "manipulators" : [ {
           "to_if_alone" : [ {
-            "key_code" : "0",
+            "key_code" : "close_bracket",
             "modifiers" : [ "left_shift" ]
           } ],
           "from" : {

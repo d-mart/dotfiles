@@ -65,7 +65,7 @@
 :simlayers {
   :close-bracket-mode {:key :close_bracket}
   :open-bracket-mode  {:key :open_bracket}
-  :o-mode             {:key :o}
+  :app-nav-mode       {:key :backslash}
   :mouse-keys-mode    {:key :d}
   :vim-nav-mode       {:key :spacebar}
 } ;; simlayers
@@ -124,22 +124,22 @@
      [:open_bracket :!Sclose_bracket ] ;; quickly type the "}" character
   ]}
 
-  {:des "o-mode: quick open"
-   :rules [:o-mode
+  {:des "app-nav-mode: quick open"
+   :rules [:app-nav-mode
      [:f [:open "/Applications/Firefox Developer Edition.app"] ]
      [:e [:open "/Applications/Emacs.app"] ]
      [:i [:open "/Applications/iTerm.app"] ]
      [:s [:open "/Applications/Slack.app"] ]
   ]}
 
-  {:des "left shift once -> ("
+  {:des "left shift once -> {"
    :rules [
-     [:##left_shift :left_shift nil {:alone :!S9} ]
+     [:##left_shift :left_shift nil {:alone :!Sopen_bracket} ]
   ]}
 
-  {:des "right shift once -> )"
+  {:des "right shift once -> }"
    :rules [
-     [:##right_shift :right_shift nil {:alone :!S0} ]
+     [:##right_shift :right_shift nil {:alone :!Sclose_bracket} ]
   ]}
 
   {:des "caps lock: tap -> escape, hold -> l_ctrl"
