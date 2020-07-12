@@ -30,6 +30,7 @@ alias gpu="git push"
 alias gstu="git status --untracked=no"
 alias gly="git log --since=\"yesterday\""
 alias glp="git log --patch"
+alias glh="git lg | head -n 15" # relies on 'gl' from .gitconfig
 alias gsu="git submodule update"
 alias gg="git grep"
 alias grb="git rebase origin/$(current_branch)"
