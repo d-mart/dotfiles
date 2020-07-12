@@ -18,6 +18,7 @@ plugins=(
   fd
   fzf
   git
+  kubectl
   ruby
   zaw
   zsh-syntax-highlighting
