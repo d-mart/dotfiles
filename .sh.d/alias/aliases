@@ -29,7 +29,7 @@ alias iip="ip a | grep 'inet ' | sed -e 's/^.*inet //g' -e 's/\/.*//g' | grep -v
 
 alias lf="ls -l | egrep -v '^d'"   # list non-directories
 alias ldir="ls -l | egrep '^d'"    # list directories
-alias lsd='ls -ld */ .*/'          # list directories
+alias lsdir='ls -ld */ .*/'        # list directories
 
 alias grep='grep --extended-regexp --color=auto'
 alias fgrep='fgrep --color=auto'

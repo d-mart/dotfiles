@@ -45,6 +45,7 @@ declare -a brewlist=(
   "hub"
   "jq"
   "jump"
+  "lsd"
   "nnn"
   "openssh"
   "pgcli"
