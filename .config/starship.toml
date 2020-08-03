@@ -35,10 +35,18 @@ format = "🕙[ %T ]"
 disabled = true
 
 [hostname]
-ssh_only = false
+ssh_only = true
 prefix = "⟪"
 suffix = "⟫"
-disabled = true
+disabled = false
+
+[kubernetes]
+symbol = "⛵ "
+style = "dimmed green"
+disabled = false
+[kubernetes.context_aliases]
+"docker-desktop" = "local"
+"dev.local.cluster.k8s" = "dev"
 
 [username]
 disabled = true
