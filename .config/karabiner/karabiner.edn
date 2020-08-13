@@ -1,3 +1,6 @@
+;; single re-run with
+;; GOKU_EDN_CONFIG_FILE=~/.config/karabiner/karabiner.edn goku
+
 {
   ;; !  | means mandatory
   ;; #  | means optional
