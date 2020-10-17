@@ -1,1 +1,1 @@
-eval "$(jump shell)"
+#eval "$(jump shell)"
