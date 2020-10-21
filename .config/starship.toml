@@ -36,10 +36,9 @@ disabled = true
 
 [hostname]
 ssh_only = true
-prefix = "⟪💻"
-suffix = "⟫"
-disabled = false
 style = "dimmed underline fg:yellow"
+format = "⟪[$hostname]($style)⟫"
+disabled = false
 
 [kubernetes]
 symbol = "⛵ "
