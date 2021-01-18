@@ -31,8 +31,9 @@ threshold = 1
 disabled = false
 
 [time]
-format = "🕙[ %T ]"
-disabled = true
+style = "dimmed blue"
+format = "🕙[$time]($style)"
+disabled = false
 
 [hostname]
 ssh_only = true
