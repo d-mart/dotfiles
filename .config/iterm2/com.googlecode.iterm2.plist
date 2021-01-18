@@ -1663,15 +1663,15 @@
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>380 503 798 382 0 0 3440 1417 </string>
 	<key>NSWindow Frame ProfilesPanel</key>
-	<string>377 568 735 382 0 0 1920 1057 </string>
+	<string>861 871 735 382 0 0 3440 1417 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>530 476 620 392 0 0 1680 1027 </string>
 	<key>NSWindow Frame SharedPreferences</key>
 	<string>1010 947 958 470 0 0 3440 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 0 1920 1057 0 0 1920 1057 </string>
+	<string>0 0 1675 1027 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>-1919 -1 1918 1057 -1920 0 1920 1057 </string>
+	<string>-1920 0 1920 1057 -1920 0 1920 1057 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
 	<string>-1680 0 1680 1027 -1680 0 1680 1027 </string>
 	<key>NeverWarnAboutShortLivedSessions_D0D7675C-9B8A-424C-A65B-2D10856FEA06</key>
@@ -2332,7 +2332,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>DroidSansMonoNerdFontComplete- 15</string>
+			<string>JetBrainsMono-Regular 15</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
@@ -2418,6 +2418,7 @@
 	</array>
 	<key>NoSyncBFPRecents</key>
 	<array>
+		<string>JetBrains Mono</string>
 		<string>DroidSansMono Nerd Font</string>
 	</array>
 	<key>NoSyncFrame_SharedPreferences</key>
@@ -2434,7 +2435,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>2EDDE0EB-957E-46F9-BB0D-4263264E9D95</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>19</integer>
+	<integer>25</integer>
 	<key>NoSyncNeverAskAboutSettingAlternateMouseScroll</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
@@ -3179,7 +3180,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-07-12T17:20:11Z</date>
+	<date>2020-10-20T19:34:53Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>
