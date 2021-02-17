@@ -56,6 +56,7 @@ declare -a brewlist=(
   "ripgrep"
   "sc-im"
   "starship"
+  "tealdeer"
   "telnet"
   "temrinal-notifier"
   "tmux"
