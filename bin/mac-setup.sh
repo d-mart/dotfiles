@@ -46,6 +46,7 @@ declare -a brewlist=(
   "jq"
   "jump"
   "k9s"
+  "kubie"
   "lf"
   "lsd"
   "nnn"
