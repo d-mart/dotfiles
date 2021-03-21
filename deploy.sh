@@ -29,7 +29,9 @@ declare -A repos=(
   ["${HOME}/.tmux/plugins/tmux-copycat"]="https://github.com/tmux-plugins/tmux-copycat"
 )
 
+##############################
 # Set up "from" and "to" variables
+##############################
 srcDir=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
 targetDir="$HOME"
 
@@ -48,7 +50,20 @@ for file in $fileList; do
   ln -sf "$src_path" "$tgt_path"
 done
 
+##############################
 # directories
+##############################
+
+# general well-known
+mkdir -p "$HOME/workspace"
+mkdir -p "$HOME/experiments"
+mkdir -p "$HOME/personal"
+
+ln -sf "$HOME/workspace"   "$HOME/w"
+ln -sf "$HOME/experiments" "$HOME/x"
+ln -sf "$HOME/personal"    "$HOME/p"
+
+# linked into source-controlled
 for dir in $dirList; do
   src_path="${srcDir}/${dir}"
   tgt_path="${targetDir}/${dir}"
@@ -60,9 +75,11 @@ for dir in $dirList; do
   fi
 done
 
+##############################
 # directories in ~/.config
+##############################
 mkdir -p ~/.config
-for config_dir in $(find "$srcDir/.config" -type d -depth 1); do
+for config_dir in $(find "$srcDir/.config" -depth 1 -type d); do
   base_config_dir=$(basename "$config_dir")
   tgt_path="${targetDir}/.config/${base_config_dir}"
 
@@ -73,7 +90,9 @@ for config_dir in $(find "$srcDir/.config" -type d -depth 1); do
   fi
 done
 
+##############################
 # git repos
+##############################
 for target_dir in "${!repos[@]}"; do
   repo=${repos["$target_dir"]}
   if [ -d "$target_dir" ]; then
@@ -84,7 +103,10 @@ for target_dir in "${!repos[@]}"; do
   fi
 done
 
+##############################
 # Some stubs for local files
+##############################
+
 local_init_file="${srcDir}/.sh.d/shell-init.local.sh"
 if [ ! -e "$local_init_file" ]; then
   cat > "$local_init_file" <<EOF
