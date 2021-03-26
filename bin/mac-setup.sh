@@ -57,6 +57,7 @@ declare -a brewlist=(
   "ripgrep"
   "sc-im"
   "starship"
+  "stern"
   "tealdeer"
   "teleport"
   "telnet"
