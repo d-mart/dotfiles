@@ -23,6 +23,21 @@ function use-ctx() {
   fi
 }
 
+
+## List all image versions running in a context (with counts)
+function kgetver() {
+  ctx_match="$1"
+
+  ctx=$(_k_get-context-from-match "$ctx_match") || echo "$ctx" && return
+
+  kubectl get pods \
+          --context="$ctx" \
+          --all-namespaces \
+          --output=jsonpath="{.items[*].spec.containers[*].image}" 2>&1 | \
+    tr ' ' '\n' | cut -d '/' -f 2 | sort | uniq -c
+}
+
+## Run an interactive command (default: bash) on a deployment
 function kshell() {
   ctx_match="$1" # single match - dev, qa, staging, production
   deployment_match="$2" # a deployment
@@ -34,7 +49,7 @@ function kshell() {
     return 250
   fi
 
-  namespace="${NAMESPACE:-roadie}"
+  namespace=$(_k_get-namespace)
 
   shift ; shift
   cmd="$@" # optional, defaults to /bin/bash
@@ -43,38 +58,75 @@ function kshell() {
     cmd="/bin/bash"
   fi
 
+  ctx=$(_k_get-context-from-match "$ctx_match") \
+    || _k_log_error "$ctx" $? || return 230
+
+  deployment=$(_k_get-deployment-from-match "$ctx" "$deployment_match") \
+    || _k_log_error "$deployment" $? || return 231
+
+  echo "Using context    [$ctx]"
+  echo "Using deployment [$deployment]"
+  echo "Using command    [$cmd]"
+  kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$deployment" -- "$cmd"
+}
+
+###############
+# helper funcs
+###############
+function _k_get-namespace() {
+  namespace="${NAMESPACE:-roadie}"
+
+  echo "$namespace"
+}
+
+function _k_get-context-from-match() {
+  ctx_match="$1" # single match - dev, qa, staging, production
+
   ctx=$(kubectl config get-contexts --output=name | grep "$ctx_match")
 
   # ensure we found only one context
   num_matches=$(echo "$ctx" | wc -l)
 
   if [ "$num_matches" -gt 1 ]; then
-    echo "ERROR - matched more than one context: [$ctx_match]\n$ctx"
+    echo "ERROR: matched more than one context with \"$ctx_match\" :\n$ctx"
     return 240
   fi
 
   if [ -z "$ctx" ]; then
-    echo "ERROR - couldn't find matching context: $ctx_match"
+    echo "ERROR: couldn't find matching context: $ctx_match"
     return 241
   fi
 
-  deployment=$(kubectl get deployments --namespace="$namespace" --output=name | grep "$deployment_match")
+  echo "$ctx"
+}
+
+function _k_get-deployment-from-match() {
+  ctx="$1"
+  deployment_match="$2"
+  namespace=$(_k_get-namespace)
+
+  deployment=$(kubectl get deployments --context="$ctx" --namespace="$namespace" --output=name | grep "$deployment_match")
 
   # ensure we found exactly one deployment
   num_matches=$(echo "$deployment" | wc -l)
 
   if [ "$num_matches" -gt 1 ]; then
-    echo "ERROR - matched more than one deployment: [$deployment_match]\n$deployment"
+    echo "ERROR: matched more than one deployment with \"$deployment_match\" :\n$deployment"
     return 242
   fi
 
   if [ -z "$deployment" ]; then
-    echo "ERROR - couldn't find matching deployment: $deployment"
+    echo "ERROR: couldn't find matching deployment: $deployment_match"
     return 243
   fi
 
-  echo "Using context    [$ctx]"
-  echo "Using deployment [$deployment]"
-  echo "Using command    [$cmd]"
-  echo kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$deployment" -- "$cmd"
+  echo "$deployment"
+}
+
+function _k_log_error() {
+  message="$1"
+  code="$2"
+
+  echo "[$code] $message"
+  return "$code"
 }
