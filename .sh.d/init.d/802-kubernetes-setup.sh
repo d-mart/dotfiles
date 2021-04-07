@@ -14,21 +14,22 @@ alias kai='kubectl get pods --all-namespaces -o jsonpath="{..image}" | tr -s "[[
 alias kgpow='kubectl get pods --output=wide'
 
 function use-ctx() {
+  search_arg="$1"
   local selected_ctx
 
-  selected_ctx=$(kubectl config get-contexts --output=name | fzf --height=40%)
+  selected_ctx=$(kubectl config get-contexts --output=name | fzf --height=10 --query="$search_arg")
 
   if [ -n "$selected_ctx" ]; then
     kubectl config use-context "$selected_ctx"
   fi
 }
 
-
 ## List all image versions running in a context (with counts)
 function kgetver() {
   ctx_match="$1"
 
-  ctx=$(_k_get-context-from-match "$ctx_match") || echo "$ctx" && return
+  ctx=$(_k_get-context-from-match "$ctx_match") \
+     || _k_log_error "$ctx" 220 || return 220
 
   kubectl get pods \
           --context="$ctx" \
@@ -37,14 +38,14 @@ function kgetver() {
     tr ' ' '\n' | cut -d '/' -f 2 | sort | uniq -c
 }
 
-## Run an interactive command (default: bash) on a deployment
+## Run an interactive command (default: bash) on a pod
 function kshell() {
   ctx_match="$1" # single match - dev, qa, staging, production
-  deployment_match="$2" # a deployment
+  pod_match="$2" # a deployment
 
   if [ ! "$#" -ge 1 ]; then
     echo "num args: $#"
-    echo "Usage: $0 <context-matching string> <deployment-matching string> [command and args]"
+    echo "Usage: $0 <context-matching string> <pod-matching string> [command and args]"
     echo " e.g.: $0 qa admin-web bundle exec rails console"
     return 250
   fi
@@ -61,13 +62,15 @@ function kshell() {
   ctx=$(_k_get-context-from-match "$ctx_match") \
     || _k_log_error "$ctx" $? || return 230
 
-  deployment=$(_k_get-deployment-from-match "$ctx" "$deployment_match") \
-    || _k_log_error "$deployment" $? || return 231
+  pod=$(_k_get-pod-from-match "$ctx" "$pod_match") \
+    || _k_log_error "$pod" $? || return 231
 
-  echo "Using context    [$ctx]"
-  echo "Using deployment [$deployment]"
-  echo "Using command    [$cmd]"
-  kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$deployment" -- "$cmd"
+  echo "Using context [$ctx]"
+  echo "Using pod     [$pod]"
+  echo "Using command [$cmd]"
+
+  echo kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- $cmd
+       kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- $cmd
 }
 
 ###############
@@ -121,6 +124,23 @@ function _k_get-deployment-from-match() {
   fi
 
   echo "$deployment"
+}
+
+function _k_get-pod-from-match() {
+  ctx="$1"
+  pod_match="$2"
+  namespace=$(_k_get-namespace)
+
+  SHUF=shuf
+  if ! command -v $SHUF &>/dev/null; then
+    SHUF="head"
+  fi
+
+  pod=$(kubectl get pods --context="$ctx" --namespace="$namespace" --output=name |
+          grep "$pod_match" |
+          $SHUF -n 1)
+
+  echo "$pod"
 }
 
 function _k_log_error() {
