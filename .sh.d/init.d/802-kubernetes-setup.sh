@@ -108,7 +108,9 @@ function _k_get-deployment-from-match() {
   deployment_match="$2"
   namespace=$(_k_get-namespace)
 
-  deployment=$(kubectl get deployments --context="$ctx" --namespace="$namespace" --output=name | grep "$deployment_match")
+  deployment=$(kubectl get deployments --context="$ctx" --namespace="$namespace" --output=name |
+                 sed -e 's/\.app//' |
+                 grep "$deployment_match")
 
   # ensure we found exactly one deployment
   num_matches=$(echo "$deployment" | wc -l)
