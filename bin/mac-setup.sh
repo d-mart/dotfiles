@@ -43,6 +43,7 @@ declare -a brewlist=(
   "gpg2"
   "httpie"
   "hub"
+  "icdiff"
   "jq"
   "jump"
   "k9s"
