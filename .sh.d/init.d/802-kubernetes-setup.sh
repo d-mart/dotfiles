@@ -69,8 +69,10 @@ function kshell() {
   echo "Using pod     [$pod]"
   echo "Using command [$cmd]"
 
-  echo kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- $cmd
-       kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- $cmd
+  # the /bin/bash -c $cmd is a hack - without it (just $cmd), an error is throwin that
+  # "entire long commend with args" can't be found (vs expected - running "enitre" with arguments)
+  # echo kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- $cmd
+  kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- /bin/bash -c $cmd
 }
 
 ###############
