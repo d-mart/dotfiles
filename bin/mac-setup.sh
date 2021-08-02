@@ -66,6 +66,7 @@ declare -a brewlist=(
   "tmux"
   "tree"
   "vim"
+  "watch"
   "zlib"
   "zsh"
   "yqrashawn/goku/goku"
