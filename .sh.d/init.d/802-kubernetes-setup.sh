@@ -2,6 +2,9 @@
 # including many kubectl aliases and loading autocomplete
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/kubectl/kubectl.plugin.zsh
 
+# minikube
+alias mk='minikube'
+
 # teleport login
 alias tli='tsh login --proxy=roadie.teleport.sh:443 --auth=google-roadie --ttl=1440'
 alias tlin='tli --browser=none'
