@@ -13,6 +13,9 @@ alias kai='kubectl get pods --all-namespaces -o jsonpath="{..image}" | tr -s "[[
 # wide pod display
 alias kgpow='kubectl get pods --output=wide'
 
+# set default workspace
+alias ns='kubectl config set-context --current --namespace'
+
 function use-ctx() {
   search_arg="$1"
   local selected_ctx
@@ -69,7 +72,7 @@ function kshell() {
   echo "Using pod     [$pod]"
   echo "Using command [$cmd]"
 
-  # the /bin/bash -c $cmd is a hack - without it (just $cmd), an error is throwin that
+  # the /bin/bash -c $cmd is a hack - without it (just $cmd), an error is thrown that
   # "entire long commend with args" can't be found (vs expected - running "enitre" with arguments)
   # echo kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- $cmd
   kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- /bin/bash -c $cmd
