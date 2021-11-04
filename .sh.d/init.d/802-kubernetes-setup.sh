@@ -13,6 +13,9 @@ alias kai='kubectl get pods --all-namespaces -o jsonpath="{..image}" | tr -s "[[
 # wide pod display
 alias kgpow='kubectl get pods --output=wide'
 
+# show pods' resource usage by label, e.g. podtop app=foobar
+alias podtop='kubectl top pod -l'
+
 # set default workspace
 alias ns='kubectl config set-context --current --namespace'
 
