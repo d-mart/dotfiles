@@ -132,6 +132,7 @@ declare -a brewcasklist=(
   "quicklook-csv"
   "quicklook-json"
   "slack"
+  "speedcrunch"
   "suspicious-package"
   "tunnelblick"
   "vlc"
