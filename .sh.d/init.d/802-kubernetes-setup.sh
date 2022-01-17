@@ -84,6 +84,18 @@ function kshell() {
   kubectl exec --namespace="$namespace" --context="$ctx" --stdin --tty "$pod" -- /bin/bash -c $cmd
 }
 
+#### IN PROGRESS - hardcoded things
+function krestart() {
+  app_mather="${1:-main-api}"
+  cluster="roadie.teleport.sh-roadie-qa-cluster"
+  namespace="roadie"
+
+  kubectl --namespace=roadie --context="$cluster" get deployments | \
+    grep "$app_matcher" | \
+    cut -f 1 -d ' ' | \
+    xargs -n 1 kubectl --namespace="$namespace" --context="$context" rollout restart deployment
+}
+
 ###############
 # helper funcs
 ###############
