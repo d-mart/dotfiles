@@ -12,6 +12,9 @@ export LESS=' -R~i '
 # Add some personal dirs to the path
 export PATH=/usr/local/sbin:$PATH:~/.bash.d:~/bin:~/app
 
+# pip (maybe others) put things here
+export PATH=$PATH:~/.local/bin
+
 # Use a particular firefox profile for webdev
 export SELENIUM_PROFILE_FOR_FIREFOX="selenium"
 
