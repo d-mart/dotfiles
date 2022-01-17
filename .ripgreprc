@@ -3,7 +3,7 @@
 --max-columns-preview
 
 # show column num
---column
+#--column
 
 # put filename on same line as match
 --no-heading

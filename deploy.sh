@@ -110,6 +110,9 @@ done
 local_init_file="${srcDir}/.sh.d/shell-init.local.sh"
 if [ ! -e "$local_init_file" ]; then
   cat > "$local_init_file" <<EOF
+
+touch "${HOME}/.tmux.conf.local"
+
 #####
 # Local system environment settings
 #####
