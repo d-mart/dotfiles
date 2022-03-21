@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# If emacs/tramp etc are connecting, offer dumb prompts / setup
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
+
 # -{{{ Oh My Zsh setup
 #
 # Path to your oh-my-zsh configuration.
