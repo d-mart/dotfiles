@@ -6,11 +6,11 @@
 alias mk='minikube'
 
 # teleport login
-alias tli='tsh login --proxy=roadie.teleport.sh:443 --auth=google-roadie --ttl=1440'
+alias tli='tsh login --proxy=roadie.teleport.sh:443 --auth=google-roadie --ttl=1440 --bind=127.0.0.1:55229'
 alias tlin='tli --browser=none'
 #
 
-# list all running pods in a cluster
+# list all running images in a cluster
 alias kai='kubectl get pods --all-namespaces -o jsonpath="{..image}" | tr -s "[[:space:]]" "\n" | sort | uniq -c'
 
 # wide pod display
