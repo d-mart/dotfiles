@@ -6,7 +6,7 @@
 alias mk='minikube'
 
 # teleport login
-alias tli='tsh login --proxy=roadie.teleport.sh:443 --auth=google-roadie --ttl=1440 --bind=127.0.0.1:55229'
+alias tli='tsh login --proxy=roadie.teleport.sh:443 --auth=google-roadie --ttl=1440 --bind-addr=127.0.0.1:55229'
 alias tlin='tli --browser=none'
 #
 
