@@ -73,6 +73,11 @@ alias b="bat"
 alias pg="ps aux | grep -v grep | grep"
 alias myip="ifconfig | grep \"inet addr\" | awk -F\: '{ print \$2 }' | awk '{ print \$1 }' "
 alias mem="free -m"
+
+# mapping newer cli tools to their proper names (linux)
+alias_existing batcat bat
+alias_existing fdfind fd
+
 # use my local (home dir) mlocate database (local-locate)
 alias lloc="locate --database ~/.mlocate/mlocate.db"
 alias llocb="locate --database ~/.mlocate/mlocate.db --basename"
@@ -80,13 +85,6 @@ alias llocb="locate --database ~/.mlocate/mlocate.db --basename"
 ## Record of longish useful shell commands for reference
 # find zero-length files older than 90 days and delete
 alias rm_old_empty="find . -type f -size 0 -mtime +90 | xargs rm"
-
-# apt aliases
-alias install='sudo apt-get -y install'
-alias search='apt-cache search'
-alias purge='sudo apt-get purge'
-alias pkginfo='apt-cache show'      # show description of package
-alias whichpkg='apt-file search'    # needs apt-file update to be run to update db
 
 # workflow shortcuts
 alias tag="find . -name \*.[ch] -print | etags --filter=yes > TAGS"
