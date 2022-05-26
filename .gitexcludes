@@ -6,3 +6,5 @@ TAGS
 .powrc
 .projectile
 ._sync_*
+.tool-versions
+.envrc
