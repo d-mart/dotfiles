@@ -95,14 +95,13 @@ alias rtag="find . -name \*.rb -print | etags --filter=yes > TAGS"
 ## sshfs usage: sshfs [user@]host:[dir] mountpoint [options]
 ## sshfs -oreconnect -p 2223 Administrator@localhost:/cygdrive/c ~/sshfs
 # sshfs mount aliases removed (public github)
-function ssh_umount()
-{
-    local __ssh_mounts=`mount | grep \`whoami\` | grep fuse.sshfs | awk '{ print $3 }'`;
-    for __mount in $__ssh_mounts;
-    do
-        echo "Unmounting $__mount";
-        fusermount -u -z $__mount;
-    done
+function ssh_umount() {
+  local __ssh_mounts=`mount | grep \`whoami\` | grep fuse.sshfs | awk '{ print $3 }'`;
+  for __mount in $__ssh_mounts;
+  do
+      echo "Unmounting $__mount";
+      fusermount -u -z $__mount;
+  done
 }
 
 # print the definition of a bash function, e.g. dumpfunc ftc
