@@ -13,6 +13,9 @@ source "$SCRIPT_HOME/utils.sh"
 source "$SCRIPT_HOME/get-os.sh"
 export OS=$(get_os)
 
+# host-specific shell settings that should come before general scripts
+source_if_exists "$SCRIPT_HOME/shell-vars.local.sh"
+
 # load all files in init.d that look like '000_stuff.sh', specifically
 # omitting files named with leading underscore like '_000_skip_me.sh'
 __init_files=($(find ${SCRIPT_HOME}/init.d -type f -name \*.sh | grep '[^_][0-9]\{3\}'))
