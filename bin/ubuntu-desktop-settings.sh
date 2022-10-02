@@ -1,0 +1,8 @@
+
+## list settings
+# dconf dump / | grep -i "suspend|sleep"
+# gsettings list-recursively | grep -i "suspend|sleep"
+
+#
+gsettings set org.gnome.desktop.session idle-delay 3600
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 39600
