@@ -1,9 +1,12 @@
 # set up ssh-agent etc
-readonly agent_file="${HOME}/.ssh/ssh_auth_sock"
+export SSH_AUTH_SOCK="$HOME/.ssh/ssh-agent.$(hostname).sock"
 
-if [ ! -S "$agent_file" ]; then
-  eval `ssh-agent`
-  ln -sf "$SSH_AUTH_SOCK" "$agent_file"
+# test if agent is loaded
+ssh-add -l 2>/dev/null >/dev/null
+
+if [ $? -ge 2 ]; then
+  ssh-agent -a "$SSH_AUTH_SOCK" > /dev/null
 fi
-export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-ssh-add -l > /dev/null || ssh-add
+
+# Load local identities
+ssh-add > /dev/null
