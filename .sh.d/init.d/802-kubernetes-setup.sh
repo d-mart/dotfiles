@@ -7,7 +7,7 @@ alias mk='minikube'
 
 # teleport login
 TELEPORT_PORT="${TELEPORT_PORT:-55229}"
-alias tli="tsh login --proxy=roadie.teleport.sh:443 --auth=google-roadie --ttl=1800 --bind-addr=127.0.0.1:${TELEPORT_PORT}"
+alias tli="tsh login --proxy=roadie.teleport.sh:443 --auth=google --ttl=1800 --bind-addr=127.0.0.1:${TELEPORT_PORT}"
 alias tlin='tli --browser=none'
 #
 
