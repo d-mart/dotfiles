@@ -51,7 +51,7 @@ declare -a brewlist=(
   "noahgorstein/tap/jqp"
   "jump"
   "k9s"
-  "kubie"
+  "krew"
   "lf"
   "lsd"
   "nnn"
@@ -85,10 +85,10 @@ declare -a brewcasklist=(
   "dozer"
   "dropbox"
   "firefox"
-  "firefox-developer-edition"
-  "flux"
+  "homebrew/cask-versions/firefox-developer-edition"
   "font-anonymous-pro"
-  "font-cascadia"
+  "font-cascadia-mono"
+  "font-cascadia-code"
   "font-dejavu-sans-mono-for-powerline"
   "font-droidsansmono-nerd-font"
   "font-droid-sans-mono-for-powerline"
@@ -127,6 +127,7 @@ declare -a brewcasklist=(
   "iterm2"
   "keepmeawake"
   "lens"
+  "keepingyouawake"
   "mark-text"
   "ngrok"
   "private-internet-access"
@@ -157,13 +158,14 @@ xcode-select -p 1>/dev/null || xcode-select --install
 ## System Prefs
 defaults write com.apple.dock workspaces-auto-swoosh -bool NO
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+defaults write com.apple.Finder AppleShowAllFiles true
 mkdir -p ~/screenshots
 defaults write com.apple.screencapture location ~/screenshots/
 
 ## Install homebrew
 hash brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-brew tap caskroom/cask
-brew tap caskroom/fonts
+brew tap homebrew/cask
+brew tap homebrew/fonts
 brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
 brew tap d12frosted/emacs-plus
 
@@ -174,7 +176,7 @@ done
 
 # Install each of the homebrew casks in the list
 for cask in "${brewcasklist[@]}"; do
-  brew cask install "$cask"
+  brew install --cask "$cask"
 done
 
 # not in brew cask list because of command-line options
@@ -196,23 +198,7 @@ if [ ! -d ~/.vim_runtime ]; then
  sh ~/.vim_runtime/install_awesome_vimrc.sh
 fi
 
-## emacs
-if [ ! -d ~/.cask ]; then
-  git clone https://github.com/cask/cask ~/.cask
-fi
-brew link --override emacs-plus
-
-if [ ! -d ~/personal/dotemacs ]; then
-  git clone ssh://git@gitlab.dmartinez.net:61222/dmartinez/dotfiles.git ~/personal/dotemacs
-  ln -sf ~/personal/dotemacs/.emacs.d ~/.emacs.d
-  ( cd ~/.cask ; bin/cask install )
-  # Yes, it takes repeated tries for some reason.
-  ( cd ~/.emacs.d ; ~/.cask/bin/cask install ; ~/.cask/bin/cask install ; ~/.cask/bin/cask install )
-fi
-
 ## versions of stuff
-asdf plugin-add elixir
-asdf plugin-add erlang
 asdf plugin-add ruby
 asdf plugin-add python https://github.com/danhper/asdf-python.git
 asdf plugin-add rust https://github.com/code-lever/asdf-rust.git
