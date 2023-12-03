@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+# set -e
 
 ## helpers
 function echo_ok    { echo -e '\033[1;32m'"$1"'\033[0m'; }
@@ -24,6 +24,7 @@ declare -a brewlist=(
   "bash"
   "bat"
   "broot"
+  "btop"
   "calc"
   "coreutils"
   "datamash"
@@ -32,7 +33,6 @@ declare -a brewlist=(
   "direnv"
   "emacs-plus"
   "exa"
-  "fasd"
   "fd"
   "fpp"
   "fswatch"
@@ -42,7 +42,6 @@ declare -a brewlist=(
   "gitui"
   "git-delta"
   "gnu-sed"
-  "gnu-awk"
   "gpg2"
   "httpie"
   "hub"
@@ -68,6 +67,7 @@ declare -a brewlist=(
   "telnet"
   "temrinal-notifier"
   "tmux"
+  "tmuxinator"
   "tree"
   "vim"
   "saulpw/vd/visidata"
@@ -81,9 +81,6 @@ declare -a brewcasklist=(
   "alfred"
   "appcleaner"
   "betterzip"
-  "docker"
-  "dozer"
-  "dropbox"
   "firefox"
   "homebrew/cask-versions/firefox-developer-edition"
   "font-anonymous-pro"
@@ -109,6 +106,7 @@ declare -a brewcasklist=(
   "font-liberationmono-nerd-font"
   "font-liberation-mono-for-powerline"
   "font-jetbrains-mono"
+  "font-monaspace"
   "font-meslo-lg"
   "font-input"
   "font-meslo-lg"
@@ -121,26 +119,22 @@ declare -a brewcasklist=(
   "font-source-code-pro-for-powerline"
   "font-source-sans-pro"
   "font-victor-mono"
+  "gimp"
   "google-chrome"
   "hammerspoon"
   "insomnia"
   "iterm2"
-  "keepmeawake"
-  "lens"
+  "keepingyouawake"
+  "openlens"
   "keepingyouawake"
   "mark-text"
   "ngrok"
-  "private-internet-access"
-  "qlcolorcode"
-  "qlmarkdown"
-  "qlprettypatch"
-  "qlstephen"
   "quicklook-csv"
   "quicklook-json"
-  "slack"
   "speedcrunch"
   "suspicious-package"
-  "tunnelblick"
+  "syncthing"
+  "virtualbox"
   "vlc"
   "webpquicklook"
 )
@@ -165,7 +159,7 @@ defaults write com.apple.screencapture location ~/screenshots/
 ## Install homebrew
 hash brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew tap homebrew/cask
-brew tap homebrew/fonts
+brew tap homebrew/cask-fonts
 brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
 brew tap d12frosted/emacs-plus
 
@@ -182,7 +176,7 @@ done
 # not in brew cask list because of command-line options
 # icon option doesn't work brew tap d12frosted/emacs-plus --with-emacs-icons-project-EmacsIcon4
 # so grab icon from here https://github.com/emacsfodder/emacs-icons-project/
-ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
+#ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
 brew link --overwrite emacs-plus  # maybe not needed if regular emacs isn't present
 
 
@@ -237,5 +231,5 @@ curl -o \
      https://gist.githubusercontent.com/cheapRoc/9670905/raw/1c1cd2e84daf07c9a4c8de0ff86d1baf75d858c6/EmacsKeyBinding.dict
 
 ## require password ... keep these last
-sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
-brew cask install karabiner-elements
+sudo dscl . -create /Users/$USER UserShell /opt/homebrew/bin/zsh
+brew install --cask karabiner-elements
