@@ -62,6 +62,7 @@ declare -a brewlist=(
   "sc-im"
   "starship"
   "stern"
+  "superfile"
   "tealdeer"
   "teleport"
   "telnet"
@@ -151,6 +152,7 @@ xcode-select -p 1>/dev/null || xcode-select --install
 defaults write com.apple.dock workspaces-auto-swoosh -bool NO
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 defaults write com.apple.Finder AppleShowAllFiles true
+defaults write com.apple.dock appswitcher-all-displays -bool true
 mkdir -p ~/screenshots
 defaults write com.apple.screencapture location ~/screenshots/
 
