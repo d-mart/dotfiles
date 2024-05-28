@@ -131,20 +131,32 @@
   {:des "app-nav-mode: quick open"
    :rules [:app-nav-mode
      [:f [:open "/Applications/Firefox Developer Edition.app"] ]
-     [:e [:open "/Applications/Emacs.app"] ]
+     [:e [:open "/Applications/Emacs.app"] ] ;; doesn't match brew location anymore
      [:i [:open "/Applications/iTerm.app"] ]
      [:s [:open "/Applications/Slack.app"] ]
+     [:z [:open "/Applications/zoom.us.app"] ]
   ]}
 
-  {:des "left shift once -> {"
+  {:des "left shift once -> left_arrow"
    :rules [
-     [:##left_shift :left_shift nil {:alone :!Sopen_bracket} ]
+     [:##left_shift :left_shift nil {:alone :left_arrow} ]
   ]}
 
-  {:des "right shift once -> }"
+  {:des "right shift once -> right_arrow"
    :rules [
-     [:##right_shift :right_shift nil {:alone :!Sclose_bracket} ]
+     [:##right_shift :right_shift nil {:alone :right_arrow} ]
   ]}
+
+  ;; {:des "left shift once -> {"
+  ;;  :rules [
+  ;;    [:##left_shift :left_shift nil {:alone :!Sopen_bracket} ]
+  ;; ]}
+
+  ;; {:des "right shift once -> }"
+  ;;  :rules [
+  ;;    [:##right_shift :right_shift nil {:alone :!Sclose_bracket} ]
+  ;; ]}
+
 
   {:des "caps lock: tap -> escape, hold -> l_ctrl"
    :rules [
