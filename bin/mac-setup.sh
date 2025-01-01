@@ -81,7 +81,6 @@ declare -a brewlist=(
 
 declare -a brewcasklist=(
   "alfred"
-  "appcleaner"
   "betterzip"
   "difftastic"
   "docker"
@@ -98,7 +97,6 @@ declare -a brewcasklist=(
   "font-fira-mono-for-powerline"
   "font-hack"
   "font-hack-nerd-font"
-  "font-ibm-plex"
   "font-inconsolata"
   "font-inconsolata-for-powerline"
   "font-iosevka"
@@ -127,13 +125,12 @@ declare -a brewcasklist=(
   "insomnia"
   "iterm2"
   "keepingyouawake"
-  "openlens"
-  "keepingyouawake"
+  "librewolf"
   "mark-text"
   "ngrok"
   "quicklook-csv"
   "quicklook-json"
-  "speedcrunch"
+  "setapp"
   "suspicious-package"
   "syncthing"
   "virtualbox"
@@ -161,8 +158,6 @@ defaults write com.apple.screencapture location ~/screenshots/
 
 ## Install homebrew
 hash brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-brew tap homebrew/cask
-brew tap homebrew/cask-fonts
 brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
 brew tap d12frosted/emacs-plus
 
