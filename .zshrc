@@ -18,7 +18,6 @@ ZSH_THEME="re5et"
 plugins=(
   asdf
   fasd
-  fd
   fzf
   git
   kubectl
