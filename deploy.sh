@@ -27,6 +27,7 @@ declare -A repos=(
   ["${HOME}/.tmux/plugins/tmux-battery"]="https://github.com/tmux-plugins/tmux-battery"
   ["${HOME}/.tmux/plugins/tmux-cpu"]="https://github.com/tmux-plugins/tmux-cpu"
   ["${HOME}/.tmux/plugins/tmux-copycat"]="https://github.com/tmux-plugins/tmux-copycat"
+  ["${HOME}/.tmux/plugins/tmux-resurrect"]="https://github.com/tmux-plugins/tmux-resurrect"
 )
 
 ##############################
