@@ -19,7 +19,6 @@ plugins=(
   asdf
   brew
   eza
-  fasd
   fzf
   git
   kubectl
