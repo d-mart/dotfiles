@@ -54,6 +54,7 @@ declare -a brewlist=(
   "krew"
   "lf"
   "lsd"
+  "nmap"
   "nnn"
   "openssh"
   "pgcli"
@@ -82,6 +83,8 @@ declare -a brewlist=(
 declare -a brewcasklist=(
   "alfred"
   "betterzip"
+  "brave-browser"
+  "cursor"
   "difftastic"
   "docker"
   "firefox"
@@ -120,7 +123,6 @@ declare -a brewcasklist=(
   "font-source-code-pro-for-powerline"
   "font-victor-mono"
   "gimp"
-  "google-chrome"
   "hammerspoon"
   "insomnia"
   "iterm2"
@@ -133,9 +135,11 @@ declare -a brewcasklist=(
   "setapp"
   "suspicious-package"
   "syncthing"
+  "utm"
   "virtualbox"
   "vlc"
   "webpquicklook"
+  "whisky"
 )
 
 ## make some directories
