@@ -49,6 +49,11 @@ function serve {
   ruby -run -e httpd . -p $port
 }
 
+function woof {
+  filename="${1}"
+  ruby -run -e httpd . -p 8000 -o 0.0.0.0 -f some-file-to-share.zip
+}
+
 ## Ruby Version Manager - source first from ~, then if
 ## not present, look for system-wide RVM
 if [[ -s ~/.rvm/scripts/rvm ]]; then
