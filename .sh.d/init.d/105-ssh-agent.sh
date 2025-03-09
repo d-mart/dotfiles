@@ -16,3 +16,9 @@ else
   # it at least one identity, assume we're good to go
   #echo "using existing ssh agent"
 fi
+
+function rtmux {
+  local remote_host="$1"
+
+  autossh -M 0 -t "$remote_host" "LC_ALL=en_US.UTF-8 tmux att || LC_ALL=en_US.UTF-8 tmux new"
+}
