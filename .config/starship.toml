@@ -9,7 +9,8 @@ us-west-1 = "west-1"
 
 [directory]
 truncate_to_repo = false
-truncation_length = 8
+truncation_length = 20
+truncation_symbol = "…/"  # Symbol for truncated segments (optional)
 
 [battery]
 full_symbol = "🔋"
@@ -50,11 +51,7 @@ disabled = false
 "docker-desktop" = "local"
 "dev.local.cluster.k8s" = "dev-local"
 "roadie.teleport.sh-roadie-dev-cluster" = "dev"
-"roadie.teleport.sh-roadie-qa-cluster" = "qa"
 "roadie.teleport.sh-roadie-perf-cluster" = "perf"
-"roadie.teleport.sh-roadie-staging-cluster" = "staging"
-"roadie.teleport.sh-roadie-sandbox-cluster" = "sandbox"
-"roadie.teleport.sh-roadie-production-cluster" = "prod"
 
 [username]
 disabled = true
