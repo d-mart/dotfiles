@@ -17,11 +17,14 @@ ZSH_THEME="re5et"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(
   asdf
+  brew
+  eza
   fasd
   fzf
   git
   kubectl
   ruby
+  z
   zaw
   zsh-syntax-highlighting
   autoswitch_virtualenv
