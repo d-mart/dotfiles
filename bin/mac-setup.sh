@@ -129,6 +129,7 @@ declare -a brewcasklist=(
   "keepingyouawake"
   "librewolf"
   "mark-text"
+  "neohtop"
   "ngrok"
   "quicklook-csv"
   "quicklook-json"
