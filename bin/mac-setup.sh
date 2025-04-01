@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# TODO: macs seem to default to a 20 minute sudo. Consider
+#       streamlining this or at least doing manually first
+# visudo, then add the line:
+# Defaults timestamp_timeout=60
+
 # set -e
 
 ## helpers
@@ -15,6 +20,23 @@ function mkdir_with_ln() {
   if [ ! -e "$2" ]; then
     ln -s "$1" "$2"
   fi
+}
+
+cleanup() {
+  echo "Cleaning up..."
+  kill $KEEP_SUDO_WARM_PID 2>/dev/null
+  exit
+}
+
+# Function to keep sudo warm in the background
+# worst case, will run 2 hours, but should be stopped by this script
+keep_sudo_warm() {
+  end_time=$((SECONDS + 7200))  # 2 hours in seconds
+  while [ $SECONDS -lt $end_time ]; do
+    echo "running sudo...."
+    sudo -v  # Refresh the sudo timestamp
+    sleep 15 # Wait for 15 seconds before refreshing again
+  done
 }
 
 declare -a brewlist=(
@@ -85,7 +107,6 @@ declare -a brewcasklist=(
   "betterzip"
   "brave-browser"
   "cursor"
-  "difftastic"
   "docker"
   "firefox"
   "homebrew/cask-versions/firefox-developer-edition"
@@ -142,6 +163,21 @@ declare -a brewcasklist=(
   "whisky"
 )
 
+##
+## Main entry point
+##
+
+# Trap SIGINT (Ctrl+C) and SIGTERM (kill)
+trap cleanup SIGINT SIGTERM
+
+# Prompt for sudo access
+echo "Please authorize sudo to enable unattended install..."
+sudo -v
+
+# keep sudo access warm in the backgrouns
+keep_sudo_warm &
+KEEP_SUDO_WARM_PID=$!
+
 ## make some directories
 mkdir_with_ln "$HOME/util" "$HOME/u"
 mkdir_with_ln "$HOME/personal" "$HOME/p"
@@ -153,10 +189,39 @@ mkdir -p "$HOME/tmp"
 xcode-select -p 1>/dev/null || xcode-select --install
 
 ## System Prefs
-defaults write com.apple.dock workspaces-auto-swoosh -bool NO
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-defaults write com.apple.Finder AppleShowAllFiles true
+# disable dashboard
+defaults write com.apple.dashboard mcx-disabled -bool true
+# not sure
+defaults write com.apple.dock workspaces-auto-swoosh -bool false
+# show cmd-tab ui on all monitors
 defaults write com.apple.dock appswitcher-all-displays -bool true
+# smallish dock
+defaults write com.apple.dock tilesize -int 40
+# a lil bit o zoom
+defaults write com.apple.dock magnification -int 1
+# no recent apps in dock
+defaults write com.apple.dock show-recents -bool false
+# dock on the right side of screen
+defaults write com.apple.dock orientation -string "right"
+# autohide dock
+defaults write com.apple.dock autohide -bool true
+# allow tap to perform a click
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+# show hidden files
+defaults write com.apple.Finder AppleShowAllFiles -bool true
+# don't ask "Are you sure you want to launch this?"
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+# scroll the Right way
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+# more trackpad settings
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# fastest key repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 1
+# shortest key repeat delay
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+# dark mode UI
+defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
+
 mkdir -p ~/screenshots
 defaults write com.apple.screencapture location ~/screenshots/
 
@@ -180,7 +245,6 @@ done
 # so grab icon from here https://github.com/emacsfodder/emacs-icons-project/
 #ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
 brew link --overwrite emacs-plus  # maybe not needed if regular emacs isn't present
-
 
 # fetch personal dotfiles
 if [ ! -d ~/personal/dotfiles ]; then
@@ -235,3 +299,6 @@ curl -o \
 ## require password ... keep these last
 sudo dscl . -create /Users/$USER UserShell /opt/homebrew/bin/zsh
 brew install --cask karabiner-elements
+
+# do any cleanup
+cleanup
