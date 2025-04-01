@@ -137,7 +137,6 @@ declare -a brewcasklist=(
   "suspicious-package"
   "syncthing"
   "utm"
-  "virtualbox"
   "vlc"
   "webpquicklook"
   "whisky"
