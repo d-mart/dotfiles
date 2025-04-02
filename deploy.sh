@@ -15,7 +15,7 @@ dirList=".gdb .mlocate .sh.d .hammerspoon bin"
 # Hash where the key is the target directory and the value is the git url
 # e.g.  repos["foo"]="https://github.com/bar/foo"
 declare -A repos=(
-  ["${HOME}/.oh-my-zsh"]="https://github.com/ohmyzsh/ohmyzsh"
+  # assoc arrays don't work in order - for now doing this one explicitly ["${HOME}/.oh-my-zsh"]="https://github.com/ohmyzsh/ohmyzsh"
   ["${HOME}/.bash-it"]="https://github.com/revans/bash-it"
   ["${HOME}/.oh-my-zsh/plugins/zaw"]="https://github.com/yqrashawn/zaw"
   ["${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting"
@@ -59,9 +59,9 @@ mkdir -p "$HOME/workspace"
 mkdir -p "$HOME/experiments"
 mkdir -p "$HOME/personal"
 
-ln -sf "$HOME/workspace"   "$HOME/w"
-ln -sf "$HOME/experiments" "$HOME/x"
-ln -sf "$HOME/personal"    "$HOME/p"
+[ -L "$HOME/w" ] || ln -sf "$HOME/workspace"   "$HOME/w"
+[ -L "$HOME/x" ] || ln -sf "$HOME/experiments" "$HOME/x"
+[ -L "$HOME/p" ] || ln -sf "$HOME/personal"    "$HOME/p"
 
 # linked into source-controlled
 for dir in $dirList; do
@@ -93,10 +93,16 @@ done
 ##############################
 # git repos
 ##############################
+[ -d "$HOME/.oh-my-zsh" ] || git clone --recursive "https://github.com/ohmyzsh/ohmyzsh" "$HOME/.oh-my-zsh"
+
 for target_dir in "${!repos[@]}"; do
   repo=${repos["$target_dir"]}
+
   if [ -d "$target_dir" ]; then
-    echo "Skipping $repo - $target_dir already exists"
+    echo "Refreshing $repo - at $target_dir"
+    pushd "$target_dir" > /dev/null
+    git pull
+    popd > /dev/null
   else
     echo "cloning ${repo} to ${target_dir}"
     git clone --recursive "${repo}" "${target_dir}"
