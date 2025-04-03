@@ -7,6 +7,8 @@
 
 # set -e
 
+unset KEEP_SUDO_WARM_PID
+
 ## helpers
 function echo_ok    { echo -e '\033[1;32m'"$1"'\033[0m'; }
 function echo_warn  { echo -e '\033[1;33m'"$1"'\033[0m'; }
@@ -22,21 +24,29 @@ function mkdir_with_ln() {
   fi
 }
 
-cleanup() {
+function cleanup() {
   echo "Cleaning up..."
-  kill $KEEP_SUDO_WARM_PID 2>/dev/null
-  exit
+  if [ -n "$KEEP_SUDO_WARM_PID" ]; then
+    kill $KEEP_SUDO_WARM_PID 2>/dev/null
+  fi
+  exit 1
 }
 
 # Function to keep sudo warm in the background
 # worst case, will run 2 hours, but should be stopped by this script
-keep_sudo_warm() {
+function keep_sudo_warm() {
   end_time=$((SECONDS + 7200))  # 2 hours in seconds
   while [ $SECONDS -lt $end_time ]; do
     echo "running sudo...."
     sudo -v  # Refresh the sudo timestamp
     sleep 15 # Wait for 15 seconds before refreshing again
   done
+}
+
+function install_command_line_tools() {
+  xcode-select --install
+  echo "🚨Install for macos command-line tools has been requested. Check for a popup under other windows."
+  echo "🚨 Run this script again once it finishes."
 }
 
 declare -a brewlist=(
@@ -55,7 +65,6 @@ declare -a brewlist=(
   "direnv"
   "emacs-plus"
   "eza"
-  "fasd"
   "fd"
   "fpp"
   "fswatch"
@@ -76,10 +85,12 @@ declare -a brewlist=(
   "krew"
   "lf"
   "lsd"
+  "mdv"
   "nmap"
   "nnn"
   "openssh"
   "pgcli"
+  "pipx"
   "pwgen"
   "ranger"
   "ripgrep"
@@ -97,6 +108,7 @@ declare -a brewlist=(
   "vim"
   "saulpw/vd/visidata"
   "watch"
+  "z"
   "zlib"
   "zsh"
   "yqrashawn/goku/goku"
@@ -109,7 +121,7 @@ declare -a brewcasklist=(
   "cursor"
   "docker"
   "firefox"
-  "homebrew/cask-versions/firefox-developer-edition"
+  "firefox@developer-edition"
   "font-anonymous-pro"
   "font-cascadia-mono"
   "font-cascadia-code"
@@ -152,6 +164,7 @@ declare -a brewcasklist=(
   "mark-text"
   "neohtop"
   "ngrok"
+  "notunes"
   "quicklook-csv"
   "quicklook-json"
   "setapp"
@@ -171,12 +184,12 @@ declare -a brewcasklist=(
 trap cleanup SIGINT SIGTERM
 
 # Prompt for sudo access
-echo "Please authorize sudo to enable unattended install..."
-sudo -v
+# XXXXXX echo "Please authorize sudo to enable unattended install..."
+# XXXXXX sudo -v
 
 # keep sudo access warm in the backgrouns
-keep_sudo_warm &
-KEEP_SUDO_WARM_PID=$!
+# XXXXXX keep_sudo_warm &
+# XXXXXX KEEP_SUDO_WARM_PID=$!
 
 ## make some directories
 mkdir_with_ln "$HOME/util" "$HOME/u"
@@ -185,8 +198,7 @@ mkdir_with_ln "$HOME/workspace" "$HOME/w"
 mkdir -p "$HOME/tmp"
 
 ## command line tools
-# TODO need to somehow wait for this install to finish
-xcode-select -p 1>/dev/null || xcode-select --install
+xcode-select -p 1>/dev/null || install_command_line_tools
 
 ## System Prefs
 # disable dashboard
@@ -226,7 +238,7 @@ mkdir -p ~/screenshots
 defaults write com.apple.screencapture location ~/screenshots/
 
 ## Install homebrew
-hash brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+hash brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
 brew tap d12frosted/emacs-plus
 
@@ -246,12 +258,6 @@ done
 #ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
 brew link --overwrite emacs-plus  # maybe not needed if regular emacs isn't present
 
-# fetch personal dotfiles
-if [ ! -d ~/personal/dotfiles ]; then
-  git clone ssh://git@gitlab.dmartinez.net:61222/dmartinez/dotfiles.git ~/personal/dotfiles
-  ( cd ~/personal/dotfiles ; ./deploy.sh )
-fi
-
 ## vim (just in case)
 if [ ! -d ~/.vim_runtime ]; then
  git clone https://github.com/amix/vimrc.git ~/.vim_runtime
@@ -259,32 +265,26 @@ if [ ! -d ~/.vim_runtime ]; then
 fi
 
 ## versions of stuff
-asdf plugin-add ruby
-asdf plugin-add python https://github.com/danhper/asdf-python.git
-asdf plugin-add rust https://github.com/code-lever/asdf-rust.git
-asdf plugin-add golang https://github.com/kennyp/asdf-golang.git
-asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-asdf plugin-add lua https://github.com/Stratus3D/asdf-lua.git
+# check for updates / others - https://github.com/asdf-vm/asdf-plugins/tree/master/plugins
+asdf plugin add lua
+asdf plugin add golang
+asdf plugin add nodejs
+asdf plugin add python
+asdf plugin add ruby
+asdf plugin add rust
 
 # add gpg keys for node packages
 bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
-latest_node=$(asdf list-all nodejs | tail -n 1)
-asdf install nodejs "$latest_node"
-asdf global nodejs "$latest_node"
-npm install -g vmd
+asdf install nodejs latest
+asdf set -u nodejs latest
 
 # install a MRI / C-based ruby
-latest_ruby=$(asdf list-all ruby | grep ^[0-9] | grep -v dev | tail -n 1)
-asdf install ruby "$latest_ruby"
-asdf global ruby "$latest_ruby"
-gem install tmuxinator
+asdf install ruby latest
+asdf set -u ruby latest
 
 # install a newish c-python
-latest_python3=$(asdf list-all python | grep ^3 | grep -v dev | tail -n 1)
-LDFLAGS="-L/usr/local/opt/zlib/lib" CPPFLAGS="-I/usr/local/opt/zlib/include" asdf install python "$latest_python3"
-asdf global python "$latest_python3"
-asdf reshim python
-PIP_REQUIRE_VIRTUALENV='' pip3 install --user mdv pipenv
+asdf install python latest
+asdf set -u python latest
 
 ## Restart some things
 killall Dock
@@ -297,8 +297,13 @@ curl -o \
      https://gist.githubusercontent.com/cheapRoc/9670905/raw/1c1cd2e84daf07c9a4c8de0ff86d1baf75d858c6/EmacsKeyBinding.dict
 
 ## require password ... keep these last
-sudo dscl . -create /Users/$USER UserShell /opt/homebrew/bin/zsh
+if [ -x /opt/homebrew/bin/zsh ]; then
+  sudo dscl . -create /Users/$USER UserShell /opt/homebrew/bin/zsh
+fi
+
 brew install --cask karabiner-elements
 
 # do any cleanup
 cleanup
+
+echo "✅ Finished"
