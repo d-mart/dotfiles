@@ -1,1727 +1,1618 @@
 {
-  "global" : {
-    "check_for_updates_on_startup" : true,
-    "show_in_menu_bar" : true,
-    "show_profile_name_in_menu_bar" : false
-  },
-  "profiles" : [ {
-    "complex_modifications" : {
-      "parameters" : {
-        "basic.simultaneous_threshold_milliseconds" : 20,
-        "basic.to_delayed_action_delay_milliseconds" : 250,
-        "basic.to_if_alone_timeout_milliseconds" : 200,
-        "basic.to_if_held_down_threshold_milliseconds" : 500
-      },
-      "rules" : [ {
-        "description" : "various in-progress/experiments",
-        "manipulators" : [ {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "e"
-            }, {
-              "key_code" : "t"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "insensitive",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "r"
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "mouse-keys-mode",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "v"
-          },
-          "to" : [ {
-            "pointing_button" : "button1"
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "pointing_button" : "button1"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "v"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
+    "profiles": [
+        {
+            "complex_modifications": {
+                "parameters": {
+                    "basic.simultaneous_threshold_milliseconds": 20,
+                    "basic.to_delayed_action_delay_milliseconds": 250,
+                    "basic.to_if_alone_timeout_milliseconds": 200
+                },
+                "rules": [
+                    {
+                        "description": "various in-progress/experiments",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "e" },
+                                        { "key_code": "t" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": false,
+                                        "key_down_order": "insensitive",
+                                        "key_up_order": "insensitive",
+                                        "key_up_when": "any"
+                                    }
+                                },
+                                "to": [{ "key_code": "r" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "mouse-keys-mode",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "v" },
+                                "to": [{ "pointing_button": "button1" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "v" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "pointing_button": "button1" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "b" },
+                                "to": [{ "pointing_button": "button3" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "b" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "pointing_button": "button3" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "n" },
+                                "to": [{ "pointing_button": "button2" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "n" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "pointing_button": "button2" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "h" },
+                                "to": [{ "mouse_key": { "x": -1536 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "h" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "x": -1536 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "j" },
+                                "to": [{ "mouse_key": { "y": 1536 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "j" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "y": 1536 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "k" },
+                                "to": [{ "mouse_key": { "y": -1536 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "k" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "y": -1536 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "l" },
+                                "to": [{ "mouse_key": { "x": 1536 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "l" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "x": 1536 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "a" },
+                                "to": [{ "mouse_key": { "speed_multiplier": 0.5 } }],
+                                "to_after_key_up": [{ "mouse_key": { "speed_multiplier": 1.0 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "a" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "speed_multiplier": 0.5 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "f" },
+                                "to": [{ "mouse_key": { "speed_multiplier": 2.0 } }],
+                                "to_after_key_up": [{ "mouse_key": { "speed_multiplier": 1.0 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "f" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "speed_multiplier": 2.0 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "s" },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-scroll-mode",
+                                            "value": 1
+                                        }
+                                    }
+                                ],
+                                "to_after_key_up": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-scroll-mode",
+                                            "value": 0
+                                        }
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "s" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-scroll-mode",
+                                            "value": 1
+                                        }
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "h" },
+                                "to": [{ "mouse_key": { "horizontal_wheel": -32 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "h" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "horizontal_wheel": -32 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "j" },
+                                "to": [{ "mouse_key": { "vertical_wheel": 32 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "j" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "vertical_wheel": 32 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "k" },
+                                "to": [{ "mouse_key": { "vertical_wheel": -32 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "k" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "vertical_wheel": -32 } }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-keys-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "l" },
+                                "to": [{ "mouse_key": { "horizontal_wheel": 32 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "mouse-scroll-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "d" },
+                                        { "key_code": "l" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "mouse-keys-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "mouse-keys-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "mouse_key": { "horizontal_wheel": 32 } }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Right ⌘ to ⌘ + ⇥",
+                        "manipulators": [
+                            {
+                                "from": { "key_code": "right_command" },
+                                "to": [
+                                    {
+                                        "key_code": "tab",
+                                        "modifiers": ["left_command"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "[ mode",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "open-bracket-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "close_bracket" },
+                                "to": [
+                                    {
+                                        "key_code": "open_bracket",
+                                        "modifiers": ["left_shift"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "open_bracket" },
+                                        { "key_code": "close_bracket" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "open-bracket-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "open-bracket-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    {
+                                        "key_code": "open_bracket",
+                                        "modifiers": ["left_shift"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "] mode",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "close-bracket-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "open_bracket" },
+                                "to": [
+                                    {
+                                        "key_code": "close_bracket",
+                                        "modifiers": ["left_shift"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "close_bracket" },
+                                        { "key_code": "open_bracket" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "close-bracket-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "close-bracket-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    {
+                                        "key_code": "close_bracket",
+                                        "modifiers": ["left_shift"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "app-nav-mode: quick open",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "app-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "f" },
+                                "to": [{ "shell_command": "open \"/Applications/Firefox Developer Edition.app\"" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "backslash" },
+                                        { "key_code": "f" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "app-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "app-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "shell_command": "open \"/Applications/Firefox Developer Edition.app\"" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "app-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "e" },
+                                "to": [{ "shell_command": "open \"/Applications/Emacs.app\"" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "backslash" },
+                                        { "key_code": "e" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "app-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "app-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "shell_command": "open \"/Applications/Emacs.app\"" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "app-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "i" },
+                                "to": [{ "shell_command": "open \"/Applications/iTerm.app\"" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "backslash" },
+                                        { "key_code": "i" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "app-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "app-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "shell_command": "open \"/Applications/iTerm.app\"" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "app-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "s" },
+                                "to": [{ "shell_command": "open \"/Applications/Slack.app\"" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "backslash" },
+                                        { "key_code": "s" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "app-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "app-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "shell_command": "open \"/Applications/Slack.app\"" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "app-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "z" },
+                                "to": [{ "shell_command": "open \"/Applications/zoom.us.app\"" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "backslash" },
+                                        { "key_code": "z" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "app-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "app-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "shell_command": "open \"/Applications/zoom.us.app\"" }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "left shift once -> left_arrow",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "left_shift",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_shift" }],
+                                "to_if_alone": [{ "key_code": "left_arrow" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "right shift once -> right_arrow",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "right_shift",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "right_shift" }],
+                                "to_if_alone": [{ "key_code": "right_arrow" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "caps lock: tap -> escape, hold -> l_ctrl",
+                        "manipulators": [
+                            {
+                                "from": { "key_code": "caps_lock" },
+                                "to": [{ "key_code": "left_control" }],
+                                "to_if_alone": [{ "key_code": "escape" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "space : vim navigation",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "vim-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "h" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "vim-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "vim-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "key_code": "left_arrow" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "vim-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "down_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "j" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "vim-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "vim-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "key_code": "down_arrow" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "vim-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "k",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "up_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "k" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "vim-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "vim-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "key_code": "up_arrow" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "vim-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "l",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "right_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "l" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "vim-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "vim-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "key_code": "right_arrow" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "vim-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "u" },
+                                "to": [{ "key_code": "page_up" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "u" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "vim-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "vim-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "key_code": "page_up" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "vim-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "n" },
+                                "to": [{ "key_code": "page_down" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "n" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "vim-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "vim-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "key_code": "page_down" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "vim-nav-mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": { "key_code": "return_or_enter" },
+                                "to": [
+                                    {
+                                        "key_code": "spacebar",
+                                        "modifiers": ["left_command"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "return_or_enter" }
+                                    ],
+                                    "simultaneous_options": {
+                                        "detect_key_down_uninterruptedly": true,
+                                        "key_down_order": "strict",
+                                        "key_up_order": "strict_inverse",
+                                        "key_up_when": "any",
+                                        "to_after_key_up": [
+                                            {
+                                                "set_variable": {
+                                                    "name": "vim-nav-mode",
+                                                    "value": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "parameters": { "basic.simultaneous_threshold_milliseconds": 250 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "vim-nav-mode",
+                                            "value": 1
+                                        }
+                                    },
+                                    {
+                                        "key_code": "spacebar",
+                                        "modifiers": ["left_command"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "mouse forward and backward buttons DWIM",
+                        "manipulators": [
+                            {
+                                "from": { "pointing_button": "button4" },
+                                "to": [
+                                    {
+                                        "key_code": "open_bracket",
+                                        "modifiers": ["left_command"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": { "pointing_button": "button5" },
+                                "to": [
+                                    {
+                                        "key_code": "close_bracket",
+                                        "modifiers": ["left_command"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "devices": [
+                {
+                    "identifiers": {
+                        "is_pointing_device": true,
+                        "product_id": 49219,
+                        "vendor_id": 1133
+                    },
+                    "ignore": false
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "product_id": 257,
+                        "vendor_id": 1204
+                    },
+                    "manipulate_caps_lock_led": false
+                },
+                {
+                    "identifiers": {
+                        "is_pointing_device": true,
+                        "product_id": 4128,
+                        "vendor_id": 1149
+                    },
+                    "ignore": false
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 257,
+                        "vendor_id": 1204
+                    },
+                    "ignore": false,
+                    "manipulate_caps_lock_led": false
                 }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "b"
-          },
-          "to" : [ {
-            "pointing_button" : "button3"
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "pointing_button" : "button3"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "b"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
+            ],
+            "fn_function_keys": [
+                {
+                    "from": { "key_code": "f3" },
+                    "to": [{ "key_code": "mission_control" }]
+                },
+                {
+                    "from": { "key_code": "f4" },
+                    "to": [{ "key_code": "launchpad" }]
+                },
+                {
+                    "from": { "key_code": "f5" },
+                    "to": [{ "key_code": "illumination_decrement" }]
+                },
+                {
+                    "from": { "key_code": "f6" },
+                    "to": [{ "key_code": "illumination_increment" }]
+                },
+                {
+                    "from": { "key_code": "f9" },
+                    "to": [{ "consumer_key_code": "fastforward" }]
                 }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "n"
-          },
-          "to" : [ {
-            "pointing_button" : "button2"
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "pointing_button" : "button2"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "n"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "h"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "x" : -1536
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_unless"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "x" : -1536
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "h"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "conditions" : [ {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_unless"
-          } ]
-        }, {
-          "from" : {
-            "key_code" : "j"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "y" : 1536
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_unless"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "y" : 1536
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "j"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "conditions" : [ {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_unless"
-          } ]
-        }, {
-          "from" : {
-            "key_code" : "k"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "y" : -1536
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_unless"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "y" : -1536
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "k"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "conditions" : [ {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_unless"
-          } ]
-        }, {
-          "from" : {
-            "key_code" : "l"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "x" : 1536
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_unless"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "x" : 1536
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "l"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "conditions" : [ {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_unless"
-          } ]
-        }, {
-          "to_after_key_up" : [ {
-            "mouse_key" : {
-              "speed_multiplier" : 1.0
-            }
-          } ],
-          "from" : {
-            "key_code" : "a"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "speed_multiplier" : 0.5
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "speed_multiplier" : 0.5
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "a"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "to_after_key_up" : [ {
-            "mouse_key" : {
-              "speed_multiplier" : 1.0
-            }
-          } ],
-          "from" : {
-            "key_code" : "f"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "speed_multiplier" : 2.0
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "speed_multiplier" : 2.0
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "f"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "to_after_key_up" : [ {
-            "set_variable" : {
-              "name" : "mouse-scroll-mode",
-              "value" : 0
-            }
-          } ],
-          "from" : {
-            "key_code" : "s"
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-scroll-mode",
-              "value" : 1
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "set_variable" : {
-              "name" : "mouse-scroll-mode",
-              "value" : 1
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "s"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "h"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "horizontal_wheel" : -32
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "horizontal_wheel" : -32
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "h"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "conditions" : [ {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ]
-        }, {
-          "from" : {
-            "key_code" : "j"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "vertical_wheel" : 32
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "vertical_wheel" : 32
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "j"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "conditions" : [ {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ]
-        }, {
-          "from" : {
-            "key_code" : "k"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "vertical_wheel" : -32
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "vertical_wheel" : -32
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "k"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "conditions" : [ {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ]
-        }, {
-          "from" : {
-            "key_code" : "l"
-          },
-          "to" : [ {
-            "mouse_key" : {
-              "horizontal_wheel" : 32
-            }
-          } ],
-          "conditions" : [ {
-            "name" : "mouse-keys-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse-keys-mode",
-              "value" : 1
-            }
-          }, {
-            "mouse_key" : {
-              "horizontal_wheel" : 32
-            }
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "l"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse-keys-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "conditions" : [ {
-            "name" : "mouse-scroll-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ]
-        } ]
-      }, {
-        "description" : "Right ⌘ to ⌘ + ⇥",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "right_command"
-          },
-          "to" : [ {
-            "key_code" : "tab",
-            "modifiers" : [ "left_command" ]
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "[ mode",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "close_bracket"
-          },
-          "to" : [ {
-            "key_code" : "open_bracket",
-            "modifiers" : [ "left_shift" ]
-          } ],
-          "conditions" : [ {
-            "name" : "open-bracket-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "open-bracket-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "open_bracket",
-            "modifiers" : [ "left_shift" ]
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "open_bracket"
-            }, {
-              "key_code" : "close_bracket"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "open-bracket-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        } ]
-      }, {
-        "description" : "] mode",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "open_bracket"
-          },
-          "to" : [ {
-            "key_code" : "close_bracket",
-            "modifiers" : [ "left_shift" ]
-          } ],
-          "conditions" : [ {
-            "name" : "close-bracket-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "close-bracket-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "close_bracket",
-            "modifiers" : [ "left_shift" ]
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "close_bracket"
-            }, {
-              "key_code" : "open_bracket"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "close-bracket-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        } ]
-      }, {
-        "description" : "app-nav-mode: quick open",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "f"
-          },
-          "to" : [ {
-            "shell_command" : "open \"/Applications/Firefox Developer Edition.app\""
-          } ],
-          "conditions" : [ {
-            "name" : "app-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "app-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "shell_command" : "open \"/Applications/Firefox Developer Edition.app\""
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "backslash"
-            }, {
-              "key_code" : "f"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "app-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "e"
-          },
-          "to" : [ {
-            "shell_command" : "open \"/Applications/Emacs.app\""
-          } ],
-          "conditions" : [ {
-            "name" : "app-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "app-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "shell_command" : "open \"/Applications/Emacs.app\""
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "backslash"
-            }, {
-              "key_code" : "e"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "app-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "i"
-          },
-          "to" : [ {
-            "shell_command" : "open \"/Applications/iTerm.app\""
-          } ],
-          "conditions" : [ {
-            "name" : "app-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "app-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "shell_command" : "open \"/Applications/iTerm.app\""
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "backslash"
-            }, {
-              "key_code" : "i"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "app-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "s"
-          },
-          "to" : [ {
-            "shell_command" : "open \"/Applications/Slack.app\""
-          } ],
-          "conditions" : [ {
-            "name" : "app-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "app-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "shell_command" : "open \"/Applications/Slack.app\""
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "backslash"
-            }, {
-              "key_code" : "s"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "app-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "z"
-          },
-          "to" : [ {
-            "shell_command" : "open \"/Applications/zoom.us.app\""
-          } ],
-          "conditions" : [ {
-            "name" : "app-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "app-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "shell_command" : "open \"/Applications/zoom.us.app\""
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "backslash"
-            }, {
-              "key_code" : "z"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "app-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        } ]
-      }, {
-        "description" : "left shift once -> left_arrow",
-        "manipulators" : [ {
-          "to_if_alone" : [ {
-            "key_code" : "left_arrow"
-          } ],
-          "from" : {
-            "key_code" : "left_shift",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_shift"
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "right shift once -> right_arrow",
-        "manipulators" : [ {
-          "to_if_alone" : [ {
-            "key_code" : "right_arrow"
-          } ],
-          "from" : {
-            "key_code" : "right_shift",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "right_shift"
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "caps lock: tap -> escape, hold -> l_ctrl",
-        "manipulators" : [ {
-          "to_if_alone" : [ {
-            "key_code" : "escape"
-          } ],
-          "from" : {
-            "key_code" : "caps_lock"
-          },
-          "to" : [ {
-            "key_code" : "left_control"
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "space : vim navigation",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "h",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_arrow"
-          } ],
-          "conditions" : [ {
-            "name" : "vim-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "left_arrow"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "h"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "vim-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "j",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "down_arrow"
-          } ],
-          "conditions" : [ {
-            "name" : "vim-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "down_arrow"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "j"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "vim-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "k",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "up_arrow"
-          } ],
-          "conditions" : [ {
-            "name" : "vim-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "up_arrow"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "k"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "vim-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "l",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "right_arrow"
-          } ],
-          "conditions" : [ {
-            "name" : "vim-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "right_arrow"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "l"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "vim-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "u"
-          },
-          "to" : [ {
-            "key_code" : "page_up"
-          } ],
-          "conditions" : [ {
-            "name" : "vim-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "page_up"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "u"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "vim-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "n"
-          },
-          "to" : [ {
-            "key_code" : "page_down"
-          } ],
-          "conditions" : [ {
-            "name" : "vim-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "page_down"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "n"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "vim-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "return_or_enter"
-          },
-          "to" : [ {
-            "key_code" : "spacebar",
-            "modifiers" : [ "left_command" ]
-          } ],
-          "conditions" : [ {
-            "name" : "vim-nav-mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "vim-nav-mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "spacebar",
-            "modifiers" : [ "left_command" ]
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "return_or_enter"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "vim-nav-mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        } ]
-      }, {
-        "description" : "mouse forward and backward buttons DWIM",
-        "manipulators" : [ {
-          "from" : {
-            "pointing_button" : "button4"
-          },
-          "to" : [ {
-            "key_code" : "open_bracket",
-            "modifiers" : [ "left_command" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "pointing_button" : "button5"
-          },
-          "to" : [ {
-            "key_code" : "close_bracket",
-            "modifiers" : [ "left_command" ]
-          } ],
-          "type" : "basic"
-        } ]
-      } ]
-    },
-    "devices" : [ {
-      "disable_built_in_keyboard_if_exists" : false,
-      "fn_function_keys" : [ ],
-      "identifiers" : {
-        "is_keyboard" : false,
-        "is_pointing_device" : true,
-        "product_id" : 49219,
-        "vendor_id" : 1133
-      },
-      "ignore" : false,
-      "manipulate_caps_lock_led" : false,
-      "simple_modifications" : [ ]
-    }, {
-      "disable_built_in_keyboard_if_exists" : false,
-      "fn_function_keys" : [ ],
-      "identifiers" : {
-        "is_keyboard" : true,
-        "is_pointing_device" : false,
-        "product_id" : 34304,
-        "vendor_id" : 1452
-      },
-      "ignore" : false,
-      "manipulate_caps_lock_led" : true,
-      "simple_modifications" : [ ]
-    }, {
-      "disable_built_in_keyboard_if_exists" : false,
-      "fn_function_keys" : [ ],
-      "identifiers" : {
-        "is_keyboard" : true,
-        "is_pointing_device" : false,
-        "product_id" : 361,
-        "vendor_id" : 1241
-      },
-      "ignore" : false,
-      "manipulate_caps_lock_led" : true,
-      "simple_modifications" : [ ]
-    }, {
-      "disable_built_in_keyboard_if_exists" : false,
-      "fn_function_keys" : [ ],
-      "identifiers" : {
-        "is_keyboard" : true,
-        "is_pointing_device" : false,
-        "product_id" : 257,
-        "vendor_id" : 1204
-      },
-      "ignore" : false,
-      "manipulate_caps_lock_led" : false,
-      "simple_modifications" : [ ]
-    }, {
-      "disable_built_in_keyboard_if_exists" : false,
-      "fn_function_keys" : [ ],
-      "identifiers" : {
-        "is_keyboard" : false,
-        "is_pointing_device" : true,
-        "product_id" : 4128,
-        "vendor_id" : 1149
-      },
-      "ignore" : false,
-      "manipulate_caps_lock_led" : false,
-      "simple_modifications" : [ ]
-    }, {
-      "disable_built_in_keyboard_if_exists" : false,
-      "fn_function_keys" : [ ],
-      "identifiers" : {
-        "is_keyboard" : true,
-        "is_pointing_device" : true,
-        "product_id" : 257,
-        "vendor_id" : 1204
-      },
-      "ignore" : false,
-      "manipulate_caps_lock_led" : false,
-      "simple_modifications" : [ ]
-    }, {
-      "disable_built_in_keyboard_if_exists" : false,
-      "fn_function_keys" : [ ],
-      "identifiers" : {
-        "is_keyboard" : true,
-        "is_pointing_device" : false,
-        "product_id" : 610,
-        "vendor_id" : 1452
-      },
-      "ignore" : false,
-      "manipulate_caps_lock_led" : true,
-      "simple_modifications" : [ ]
-    } ],
-    "fn_function_keys" : [ {
-      "from" : {
-        "key_code" : "f1"
-      },
-      "to" : {
-        "consumer_key_code" : "display_brightness_decrement"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f2"
-      },
-      "to" : {
-        "consumer_key_code" : "display_brightness_increment"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f3"
-      },
-      "to" : {
-        "key_code" : "mission_control"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f4"
-      },
-      "to" : {
-        "key_code" : "launchpad"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f5"
-      },
-      "to" : {
-        "key_code" : "illumination_decrement"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f6"
-      },
-      "to" : {
-        "key_code" : "illumination_increment"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f7"
-      },
-      "to" : {
-        "consumer_key_code" : "rewind"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f8"
-      },
-      "to" : {
-        "consumer_key_code" : "play_or_pause"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f9"
-      },
-      "to" : {
-        "consumer_key_code" : "fastforward"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f10"
-      },
-      "to" : {
-        "consumer_key_code" : "mute"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f11"
-      },
-      "to" : {
-        "consumer_key_code" : "volume_decrement"
-      }
-    }, {
-      "from" : {
-        "key_code" : "f12"
-      },
-      "to" : {
-        "consumer_key_code" : "volume_increment"
-      }
-    } ],
-    "name" : "Default",
-    "parameters" : {
-      "delay_milliseconds_before_open_device" : 1000
-    },
-    "selected" : true,
-    "simple_modifications" : [ ],
-    "virtual_hid_keyboard" : {
-      "country_code" : 0,
-      "mouse_key_xy_scale" : 100
-    }
-  } ]
+            ],
+            "name": "Default",
+            "selected": true,
+            "virtual_hid_keyboard": {
+                "country_code": 0,
+                "keyboard_type_v2": "ansi"
+            }
+        }
+    ]
 }
