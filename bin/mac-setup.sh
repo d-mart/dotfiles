@@ -60,9 +60,11 @@ declare -a brewlist=(
   "calc"
   "coreutils"
   "datamash"
+  "dblab"
   "diff-so-fancy"
   "difftastic"
   "direnv"
+  "dockerfmt"
   "emacs-plus"
   "eza"
   "fd"
@@ -245,7 +247,6 @@ defaults write com.apple.screencapture location ~/screenshots/
 ## Install homebrew
 hash brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
-brew tap d12frosted/emacs-plus
 
 # Install each of the homebrew packages in the list
 for package in "${brewlist[@]}"; do
