@@ -55,6 +55,7 @@ declare -a brewlist=(
   "autossh"
   "bash"
   "bat"
+  "bat-extras"
   "broot"
   "btop"
   "calc"
