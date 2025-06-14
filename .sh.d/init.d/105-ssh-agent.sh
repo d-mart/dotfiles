@@ -20,5 +20,5 @@ fi
 function rtmux {
   local remote_host="$1"
 
-  autossh -M 0 -t "$remote_host" "LC_ALL=en_US.UTF-8 tmux att || LC_ALL=en_US.UTF-8 tmux new"
+  autossh -M 0 -qt "$remote_host" "LC_ALL=en_US.UTF-8 tmux att || LC_ALL=en_US.UTF-8 tmux new"
 }
