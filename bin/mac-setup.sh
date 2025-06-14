@@ -181,7 +181,6 @@ declare -a brewcasklist=(
   "utm"
   "vlc"
   "webpquicklook"
-  "whisky"
 )
 
 ##
