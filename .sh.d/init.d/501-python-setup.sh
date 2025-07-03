@@ -7,6 +7,11 @@ syspip() {
     PIP_REQUIRE_VIRTUALENV='' pip "$@"
 }
 
+# Check if python is not in PATH, then alias to python3
+if ! command -v python &> /dev/null; then
+  alias python='python3'
+fi
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 # This is macos-specific
