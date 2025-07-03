@@ -69,6 +69,7 @@ declare -a brewlist=(
   "emacs-plus"
   "eza"
   "fd"
+  "ffmpeg"
   "fpp"
   "fswatch"
   "fzf"
