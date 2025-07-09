@@ -52,7 +52,6 @@ if [ $(get_os) = "mac" ]; then
   alias nl2comma="pbpaste | tr '\n' ',' | pbcopy && echo converted"
 fi
 
-
 # openssl
 alias x5='openssl x509 -noout -text -in'  # x5 foo.crt -> view certificate
 
@@ -129,35 +128,8 @@ ftch() { egrep -rIHn --include="*\.[ch]" --exclude="TAGS" "$@" * ; }
 ftr()  { egrep -rIHn --include="*\.rb" --include="\*.feature" --exclude="TAGS" "$@" * ; }
 ft()   { egrep -Rn "$@" * ; }
 
-# open path/to/file.ext:123 at the line 123
-function ec_with_line_number() {
-  if [[ $1 =~ (.*):([0-9]+)$ ]]; then
-    $EMACSCLIENT -n "+${BASH_REMATCH[2]}" "${BASH_REMATCH[1]}"
-  else
-    $EMACSCLIENT -n "$@"
-  fi
-}
-
-alias ec="ec_with_line_number"
-alias e="ec_with_line_number"
-alias et="$EMACSCLIENT -t"
-alias ecl="$EMACSCLIENT -n -a ''"
-alias eclw="$EMACSCLIENT -n -c -a ''"
-alias eq='$EMACS -q -nw --eval="(setq make-backup-files nil)"'
-
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(en {})+abort'"
-
-# launch emacsclient, or failing that, emacs
-export EDITOR="$EMACSCLIENT"
-export VISUAL="$EMACSCLIENT -a ''"
-export ALTERNATE_EDITOR="$EMACS"
-
-# use emacs for quick su editing (via emacs-fu)
-alias sue="SUDO_EDITOR=\"$EMACSCLIENT -c -a emacs\" sudoedit"
-function E() {
-  "$EMACSCLIENT" -c -a "$EMACS" "sudo:root@localhost:$1"
-}
 
 function pgc() {
   PGPASSWORD="$DB_PASS" psql --username "$DB_USER" --host "$DB_HOST" --port="$DB_PORT" "$DB_NAME"
