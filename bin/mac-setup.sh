@@ -178,6 +178,7 @@ declare -a brewcasklist=(
   "podman-desktop"
   "quicklook-csv"
   "quicklook-json"
+  "rancher"
   "setapp"
   "suspicious-package"
   "syncthing"

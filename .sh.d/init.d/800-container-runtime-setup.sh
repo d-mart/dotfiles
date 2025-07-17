@@ -25,3 +25,5 @@ function dck() { docker compose stop "$1" ; docker compose rm -f "$1" }
 # if needed...
 #export DOCKER_CLIENT_TIMEOUT=120
 #export COMPOSE_HTTP_TIMEOUT=120
+
+export PATH=$PATH:$HOME/.rd/bin
