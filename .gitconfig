@@ -77,8 +77,8 @@
   insteadOf = gist:
 [url "git://github.com/"]
   insteadOf = github:
-[url "git@github.com:roadie-app/"]
-  insteadOf = r:
+[url "git@github.com:incidentiq/"]
+  insteadOf = iiq:
 [url "ssh://git@gitlab.dmartinez.net:61222/"]
   insteadOf = gl:
 #	pushInsteadOf = gitlab:
@@ -102,15 +102,10 @@
   cmd = $EMACSCLIENT --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 
 [merge]
-  #tool = diffmerge
   tool = meld
 
 [mergetool]
   prompt = false
-
-[mergetool "diffmerge"]
-  cmd = "/cygdrive/c/'Program Files'/SourceGear/DiffMerge/DiffMerge.exe" --merge --result=$MERGED $LOCAL $BASE $REMOTE
-  trustExitCode = false
 
 [apply]
   whitespace = nowarn
