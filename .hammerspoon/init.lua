@@ -9,10 +9,13 @@ local mashshift = {"cmd", "alt", "shift"}
 package.path = "/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;"..package.path
 package.cpath = "/usr/local/lib/lua/5.3/?.so;"..package.cpath
 
+require("hs.ipc")
+
 package.path = './?.lua;' .. package.path
 require("utils")
 require("app_focus")
 require("caffeine")
+require("wifi-automation")
 
 -- Load some 3rd party modules
 -- https://github.com/scottwhudson/Lunette

@@ -1,0 +1,7 @@
+# Ignore personal and sensitive configuration files
+private_ssids.lua
+
+# Ignore other common macOS or editor files
+.DS_Store
+*.swp
+.#*
