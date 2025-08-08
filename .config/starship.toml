@@ -7,6 +7,14 @@ format = 'on [$symbol($profile )(\($region\) )]($style)'
 [aws.region_aliases]
 us-west-1 = "west-1"
 
+[azure]
+disabled = false
+format = '[$symbol($subscription)]($style) '
+style = 'blue bold'
+
+[azure.subscription_aliases]
+"Development Environments" = 'DevEnvs'
+
 [directory]
 truncate_to_repo = false
 truncation_length = 20
@@ -32,9 +40,14 @@ threshold = 1
 disabled = false
 
 [time]
-style = "dimmed blue"
-format = "🕙[$time]($style)"
 disabled = false
+#style = "dimmed blue"
+style = "fg:240"
+format = "🕙 [$time]($style)"
+time_format = '%T'
+utc_time_offset = '-4'
+time_range = '00:00:00-23:59:59'
+
 
 [hostname]
 ssh_only = true
@@ -50,8 +63,10 @@ disabled = false
 [kubernetes.context_aliases]
 "docker-desktop" = "local"
 "dev.local.cluster.k8s" = "dev-local"
-"roadie.teleport.sh-roadie-dev-cluster" = "dev"
-"roadie.teleport.sh-roadie-perf-cluster" = "perf"
+"rancher-desktop" = "🤠"
+
+[docker_context]
+disabled=true
 
 [username]
 disabled = true
@@ -69,9 +84,6 @@ diverged = "😵"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
-staged.value = "++"
-staged.style = "green"
-#staged_count.enabled = true
-#staged_count.style = "green"
+staged = '[++\($count\)](green)'
 renamed = "👅"
 deleted = "🗑"
