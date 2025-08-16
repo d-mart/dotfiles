@@ -51,6 +51,7 @@ function install_command_line_tools() {
 
 declare -a brewlist=(
   "ag"
+  "aider"
   "asdf"
   "autossh"
   "bash"
@@ -92,6 +93,7 @@ declare -a brewlist=(
   "lf"
   "lsd"
   "mdv"
+  "ncdu"
   "nmap"
   "nnn"
   "openssh"
