@@ -1,6 +1,8 @@
 export PATH="$PATH:$HOME/.lmstudio/bin"
 export OLLAMA_MODEL="devstral" # gemma3n qwen3:30b qwen3:14b
 
+alias copi='gh copilot'
+
 function bootstrap_llama() {
   local readonly OLLAMA_MODEL="devstral"
 
@@ -10,7 +12,7 @@ function bootstrap_llama() {
 }
 
 # A CLI coding agent powered by a local Ollama model
-codex() {
+asst() {
   # The model to use for the agent
   local model="$OLLAMA_MODEL"
 
