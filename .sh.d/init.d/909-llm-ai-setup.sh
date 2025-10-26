@@ -1,7 +1,10 @@
 export PATH="$PATH:$HOME/.lmstudio/bin"
 export OLLAMA_MODEL="devstral" # gemma3n qwen3:30b qwen3:14b
-
-alias copi='gh copilot'
+export OLLAMA_MODELS="$HOME/.ollama"
+# Put in local file - not putting here by default for laptops that wander
+#export OLLAMA_HOST=0.0.0.0:11434
+# -1==forever other values: 5m, 1h, 0 (unload immediately), etc
+export OLLAMA_KEEP_ALIVE=-1
 
 function bootstrap_llama() {
   local readonly OLLAMA_MODEL="devstral"
