@@ -52,6 +52,7 @@
 	verbose = true
 
 [alias]
+  ahead = '!git log --online ${1:-origin/main}..'
   ap = add -p
   ci = commit
   can = commit --amend --no-edit
