@@ -1,0 +1,38 @@
+---
+name: _template
+project_root: ~/
+enable_pane_titles: false
+
+on_project_start:
+  - echo "Started tmuxinator. Replace me with on-start setup"
+
+windows:
+- 1:
+    panes:
+    - cd $HOME/
+    - cd $HOME/
+
+- 🛠️:
+    panes:
+    - cd $HOME/personal/dotfiles
+- 🚀:
+    panes:
+    - cd $HOME
+- 🤖:
+    panes:
+    - cd $HOME
+
+- setup:
+    panes:
+      - |
+        echo Initializing layout...
+        sleep 7  # Wait for tmuxinator to finish creating all windows
+        tmux move-window -s <%= @name %>:🛠️ -t <%= @name %>:95
+        tmux move-window -s <%= @name %>:🚀 -t <%= @name %>:96
+        tmux move-window -s <%= @name %>:🤖 -t <%= @name %>:97
+        tmux select-window -t <%= @name %>:1
+
+        # Exit the shell, which closes this pane (and thus the window)
+        echo "$(date) Setup complete... exiting in 30s"
+        sleep 30
+        exit
