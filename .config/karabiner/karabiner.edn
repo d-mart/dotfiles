@@ -180,10 +180,22 @@
     [{:pkey :button5} :!Cclose_bracket]
    ]}
 
+
+   {:des "Hold Control + numpad = arrows"
+    :rules [
+      ;; Arrow cluster
+      [:!Tkeypad_8 :up_arrow]      ; Ctrl + Numpad 8 -> Up
+      [:!Tkeypad_2 :down_arrow]    ; Ctrl + Numpad 2 -> Down
+      [:!Tkeypad_4 :left_arrow]    ; Ctrl + Numpad 4 -> Left
+      [:!Tkeypad_6 :right_arrow]   ; Ctrl + Numpad 6 -> Right
+
+      ;; Corners as nav keys (optional)
+      [:!Tkeypad_7 :home]          ; Ctrl + Numpad 7 -> Home
+      [:!Tkeypad_1 :end]           ; Ctrl + Numpad 1 -> End
+      [:!Tkeypad_9 :page_up]       ; Ctrl + Numpad 9 -> Page Up
+      [:!Tkeypad_3 :page_down]     ; Ctrl + Numpad 3 -> Page Down
+   ]}
 ;   {:des "double-tap left alt -> activate control-lock"
-;    :rules [
-;
-;
-;   ]}
-] ;; main list
+;    :rules [   ]}
+ ] ;; main list
 }
