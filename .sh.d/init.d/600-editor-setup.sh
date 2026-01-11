@@ -31,7 +31,7 @@ function E() {
 # access the LAN, as with TRAMP. It will silently just not ask if it's not
 # opened the "right" way. This script assumes `emacs-plus` from brew
 if on_mac; then
-  function emacs() {
+  function xxx_disabled_xxx_emacs() {
     APP_PATH="$(brew --prefix emacs-plus)/Emacs.app"
     SOCKET="$TMPDIR/emacs$(id -u)/server"
 
