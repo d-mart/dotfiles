@@ -1,0 +1,9 @@
+# Host-local tmux overrides. Copy to ~/.tmux.conf.local and uncomment as needed.
+# set -g @status_left_icon "* "
+# set -g @status_left_extra ""
+# set -g @status_bg_color "colour24"
+# set -g @status_fg_color "white"
+# set -g @status_color_1 "colour45"
+# set -g @status_color_2 "colour110"
+# set -g @status_color_3 "colour223"
+# set -g @status_color_4 "colour203"
