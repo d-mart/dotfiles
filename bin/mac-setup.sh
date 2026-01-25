@@ -49,145 +49,10 @@ function install_command_line_tools() {
   echo "🚨 Run this script again once it finishes."
 }
 
-declare -a brewlist=(
-  "ag"
-  "aider"
-  "asdf"
-  "autossh"
-  "bash"
-  "bat"
-  "bat-extras"
-  "broot"
-  "btop"
-  "calc"
-  "coreutils"
-  "datamash"
-  "dblab"
-  "diff-so-fancy"
-  "difftastic"
-  "direnv"
-  "dockerfmt"
-  "emacs-plus"
-  "eza"
-  "fd"
-  "ffmpeg"
-  "fpp"
-  "fswatch"
-  "fzf"
-  "fzy"
-  "gawk"
-  "gh"
-  "git"
-  "gitui"
-  "git-delta"
-  "gnu-sed"
-  "gpg2"
-  "httpie"
-  "hub"
-  "icdiff"
-  "jq"
-  "noahgorstein/tap/jqp"
-  "jump"
-  "k9s"
-  "krew"
-  "lf"
-  "lsd"
-  "mdv"
-  "ncdu"
-  "nmap"
-  "nnn"
-  "openssh"
-  "pgcli"
-  "pipx"
-  "podman"
-  "podman-compose"
-  "podman-tui"
-  "pwgen"
-  "ranger"
-  "ripgrep"
-  "sc-im"
-  "starship"
-  "stern"
-  "superfile"
-  "tealdeer"
-  "teleport"
-  "telnet"
-  "terminal-notifier"
-  "tmux"
-  "tmuxinator"
-  "tree"
-  "vim"
-  "saulpw/vd/visidata"
-  "watch"
-  "z"
-  "zlib"
-  "zsh"
-  "yqrashawn/goku/goku"
-)
-
-declare -a brewcasklist=(
-  "alfred"
-  "betterzip"
-  "brave-browser"
-  "cursor"
-  "firefox"
-  "firefox@developer-edition"
-  "font-anonymous-pro"
-  "font-cascadia-mono"
-  "font-cascadia-code"
-  "font-dejavu-sans-mono-for-powerline"
-  "font-droidsansmono-nerd-font"
-  "font-droid-sans-mono-for-powerline"
-  "font-fira-code"
-  "font-fira-mono"
-  "font-fira-mono-for-powerline"
-  "font-hack"
-  "font-hack-nerd-font"
-  "font-inconsolata"
-  "font-inconsolata-for-powerline"
-  "font-iosevka"
-  "font-iosevka-nerd-font"
-  "font-iosevka-nerd-font-mono"
-  "font-iosevka-slab"
-  "font-liberation-sans"
-  "font-liberationmono-nerd-font"
-  "font-liberation-mono-for-powerline"
-  "font-jetbrains-mono"
-  "font-monaspace"
-  "font-meslo-lg"
-  "font-input"
-  "font-meslo-lg"
-  "font-nixie-one"
-  "font-office-code-pro"
-  "font-pt-mono"
-  "font-raleway"
-  "font-roboto"
-  "font-source-code-pro"
-  "font-source-code-pro-for-powerline"
-  "font-victor-mono"
-  "gimp"
-  "hammerspoon"
-  "insomnia"
-  "iterm2"
-  "keepingyouawake"
-  "librewolf"
-  "lm-studio"
-  "mark-text"
-  "neohtop"
-  "ngrok"
-  "notunes"
-  "opensuperwhisper"
-  "podman-desktop"
-  "quicklook-csv"
-  "quicklook-json"
-  "rancher"
-  "setapp"
-  "suspicious-package"
-  "syncthing"
-  "utm"
-  "vlc"
-  "webpquicklook"
-)
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
+BREWFILE="$DOTFILES_DIR/Brewfile"
 
 ##
 ## Main entry point
@@ -252,17 +117,15 @@ defaults write com.apple.screencapture location ~/screenshots/
 
 ## Install homebrew
 hash brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew tap buo/cask-upgrade # utility to update casks easily/automatically; 'brew cu [CASK]'
 
-# Install each of the homebrew packages in the list
-for package in "${brewlist[@]}"; do
-  brew install "$package"
-done
-
-# Install each of the homebrew casks in the list
-for cask in "${brewcasklist[@]}"; do
-  brew install --cask "$cask"
-done
+# Install packages from Brewfile
+if [ -f "$BREWFILE" ]; then
+  echo_ok "Installing packages from Brewfile..."
+  brew bundle --file="$BREWFILE"
+else
+  echo_error "Brewfile not found at $BREWFILE"
+  exit 1
+fi
 
 # not in brew cask list because of command-line options
 # icon option doesn't work brew tap d12frosted/emacs-plus --with-emacs-icons-project-EmacsIcon4
@@ -312,8 +175,6 @@ curl -o \
 if [ -x /opt/homebrew/bin/zsh ]; then
   sudo dscl . -create /Users/$USER UserShell /opt/homebrew/bin/zsh
 fi
-
-brew install --cask karabiner-elements
 
 # do any cleanup
 cleanup
