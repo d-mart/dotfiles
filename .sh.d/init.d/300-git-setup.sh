@@ -4,14 +4,14 @@
 
 #
 # Will return the current branch name
-# Usage example: git pull origin $(current_branch)
+# Usage example: git pull origin $(dm_current_branch)
 #
-function current_branch() {
+function dm_current_branch() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || return
   echo ${ref#refs/heads/}
 }
-alias cb="current_branch"
+alias cb="dm_current_branch"
 
 function g() {
   if [ $# -eq 0 ]; then
@@ -33,10 +33,10 @@ alias glp="git log --patch"
 alias glh="git lg | head -n 15" # relies on 'gl' from .gitconfig
 alias gsu="git submodule update"
 alias gg="git grep"
-alias grb="git rebase origin/$(current_branch)"
+alias grb="git rebase origin/$(dm_current_branch)"
 alias grbm="git rebase origin/master"
 alias grbi="git rebase --interactive"
-alias gpfb="git push --force-with-lease origin $(current_branch)"
+alias gpfb="git push --force-with-lease origin $(dm_current_branch)"
 alias gs="git stash"
 alias gsp="git stash pop"
 alias gcan="git commit --amend --no-edit"
