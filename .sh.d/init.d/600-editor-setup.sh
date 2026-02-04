@@ -62,3 +62,8 @@ if on_mac; then
     fi
   }
 fi
+
+# If antigravity is installed, add to PATH
+if [ -d "$HOME/.antigravity/antigravity" ]; then
+  export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+fi
