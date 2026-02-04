@@ -111,6 +111,10 @@ defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 # dark mode UI
 defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
+# turn off dictation
+defaults write com.apple.assistant.support "Dictation Enabled" -bool false
+# turn off auto turn-on of dictation
+defaults write com.apple.speech.recognition.AppleSpeechRecognition.prefs DictationHasBeenAutomaticallyEnabled -bool false
 
 mkdir -p ~/screenshots
 defaults write com.apple.screencapture location ~/screenshots/
