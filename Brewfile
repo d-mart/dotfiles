@@ -82,6 +82,7 @@ brew "yqrashawn/goku/goku"
 
 # Casks
 cask "alfred"
+cask "antigravity"
 cask "betterzip"
 cask "brave-browser"
 cask "cursor"
