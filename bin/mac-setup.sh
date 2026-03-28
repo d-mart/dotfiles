@@ -152,8 +152,6 @@ asdf plugin add python
 asdf plugin add ruby
 asdf plugin add rust
 
-# add gpg keys for node packages
-bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
 asdf install nodejs latest
 asdf set -u nodejs latest
 
