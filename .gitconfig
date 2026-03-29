@@ -60,7 +60,7 @@
   puf = push -f
   st = status
   undo = reset --soft HEAD^
-  up = pull origin master
+  up = pull --rebase --autostash
   co = checkout
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%cr)' --abbrev-commit --date=relative
   lgt = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %C(bold blue)<%an>%Creset %s %Cgreen(%ci)' --abbrev-commit
@@ -117,10 +117,15 @@
 [push]
   default = current
 
+[init]
+  defaultBranch = main
+
+[pull]
+  rebase = true
+  autoStash = true
+
 [color "diff-highlight"]
   oldNormal = red bold
   oldHighlight = red bold 52
   newNormal = green bold
   newHighlight = green bold 22
-[init]
-	defaultBranch = main
