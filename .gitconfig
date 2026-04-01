@@ -9,9 +9,6 @@
 [includeIf "gitdir:~/personal/"]
   path = ~/personal/.gitconfig
 
-[includeIf "gitdir:~/roadie/"]
-  path = ~/roadie/.gitconfig
-
 [color]
   diff = auto
   status = auto
@@ -74,6 +71,8 @@
   theirs   = "!__f() { git checkout --theirs $@ && git add $@; }; __f"
   merge-log = "!f() { git log --stat \"$1^..$1\"; }; f"
 
+[url "git@github.com:"]
+  insteadOf = https://github.com/
 [url "git://gist.github.com/"]
   insteadOf = gist:
 [url "git://github.com/"]
@@ -129,3 +128,6 @@
   oldHighlight = red bold 52
   newNormal = green bold
   newHighlight = green bold 22
+
+[init]
+  defaultBranch = main
