@@ -6,5 +6,6 @@ TAGS
 .powrc
 .projectile
 ._sync_*
-.tool-versions
 .envrc
+.tmp.drivedownload
+.tmp.driveupload
