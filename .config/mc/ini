@@ -85,6 +85,7 @@ mcview_eof=
 skin=default
 
 shadows=true
+shell_directory_timeout=900
 
 [Layout]
 message_visible=true
@@ -96,7 +97,7 @@ menubar_visible=true
 free_space=true
 horizontal_split=false
 vertical_equal=true
-left_panel_size=89
+left_panel_size=79
 horizontal_equal=true
 top_panel_size=1
 
