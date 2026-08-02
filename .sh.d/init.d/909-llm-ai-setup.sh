@@ -5,7 +5,8 @@ export OLLAMA_MODELS="$HOME/.ollama"
 #export OLLAMA_HOST=0.0.0.0:11434
 # -1==forever other values: 5m, 1h, 0 (unload immediately), etc
 
-alias cc="claude --enable-auto-mode --chrome"
+alias cc="claude --permission-mode auto"
+alias claude="claude --permission-mode auto"
 
 # Add LM Studio CLI to PATH if it exists
 if [ -x "$HOME/.lmstudio/bin" ]; then

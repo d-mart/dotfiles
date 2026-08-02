@@ -3,6 +3,11 @@
 ##
 
 #
+# reload the current shell (picks up alias/function changes without PATH bloat)
+#
+alias reload='exec $SHELL -l'
+
+#
 # make a directory and change to it
 #
 function mkcd() {
