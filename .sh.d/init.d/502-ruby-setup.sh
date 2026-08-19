@@ -49,9 +49,36 @@ function serve {
   ruby -run -e httpd . -p $port
 }
 
+## share a single file over HTTP on the LAN: woof report.zip [port]
+## runs until interrupted; see bin/woof.py for the original woof, which
+## hands the file out a fixed number of times and then exits on its own
 function woof {
-  filename="${1}"
-  ruby -run -e httpd . -p 8000 -o 0.0.0.0 -f some-file-to-share.zip
+  local target="${1:?usage: woof FILE [PORT]}"
+  local port="${2:-8000}"
+
+  if [ ! -f "$target" ]; then
+    echo "woof: not a readable file: $target" >&2
+    return 1
+  fi
+
+  local name dir docroot
+  name=$(basename -- "$target")
+  dir=$(cd -- "$(dirname -- "$target")" && pwd) || return 1
+
+  # WEBrick can only serve a directory, so link the one file into a throwaway
+  # docroot -- using the file's own directory would expose every sibling too
+  docroot=$(mktemp -d "${TMPDIR:-/tmp}/woof.XXXXXX") || return 1
+  if ! ln -s "$dir/$name" "$docroot/$name"; then
+    rm -rf "$docroot"
+    return 1
+  fi
+
+  echo "woof: http://$(lan_ip):${port}/${name}"
+  # subshell so the trap cleans up on ctrl-c without touching the parent shell
+  (
+    trap 'rm -rf "$docroot"' EXIT HUP INT TERM
+    ruby -run -e httpd "$docroot" -p "$port" -b 0.0.0.0
+  )
 }
 
 ## Ruby Version Manager - source first from ~, then if
