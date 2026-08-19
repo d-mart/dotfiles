@@ -60,9 +60,11 @@ alias today="date +%Y-%m-%d"
 alias time="date +%H-%M-%S"
 alias timestamp="date +%Y%m%d-%H%M%S"
 
-# override in aliases.local if necessary (osx)
-export EMACS="emacs"
-export EMACSCLIENT="emacsclient"
+# 600-editor-setup.sh resolves these to a real path before this file loads;
+# only fill them in if it found nothing. Still overridable in aliases.local.
+: "${EMACS:=emacs}"
+: "${EMACSCLIENT:=emacsclient}"
+export EMACS EMACSCLIENT
 
 # find newest files in or below current dir (need 'gstat' on OSX)
 alias newest="find . -type f -exec stat --format '%Y :%y %n' {} \; | sort -nr | cut -d: -f2- | head"

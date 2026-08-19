@@ -134,8 +134,19 @@ fi
 # not in brew cask list because of command-line options
 # icon option doesn't work brew tap d12frosted/emacs-plus --with-emacs-icons-project-EmacsIcon4
 # so grab icon from here https://github.com/emacsfodder/emacs-icons-project/
-#ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
-brew link --overwrite emacs-plus  # maybe not needed if regular emacs isn't present
+# link whichever emacs-plus@NN the Brewfile installed, and symlink its .app into
+# /Applications -- Karabiner opens that path, and macOS only prompts for LAN
+# access (TRAMP) when Emacs is launched as a bundle rather than a bare binary.
+__emacs_keg=$(find "$(brew --prefix)/opt" -maxdepth 1 -name 'emacs-plus@*' 2>/dev/null \
+                | sort -t@ -k2 -rn | head -1)
+if [ -n "$__emacs_keg" ]; then
+  brew link --overwrite "$(basename "$__emacs_keg")"
+  for __app in "Emacs.app" "Emacs Client.app"; do
+    [ -d "${__emacs_keg}/${__app}" ] && ln -sfn "${__emacs_keg}/${__app}" "/Applications/${__app}"
+  done
+else
+  echo_error "no emacs-plus@NN found under $(brew --prefix)/opt"
+fi
 
 ## vim (just in case)
 if [ ! -d ~/.vim_runtime ]; then
