@@ -31,3 +31,27 @@ else
     echo "unknown operation system"
   }
 fi
+
+#
+# the address other machines on the LAN can reach this box on
+#
+if [ "$OS" = "mac" ]; then
+  function lan_ip() {
+    local iface addr
+    iface=$(route -n get default 2>/dev/null | awk '/interface:/ {print $2}')
+    addr=$(ipconfig getifaddr "${iface:-en0}" 2>/dev/null)
+    echo "${addr:-$(hostname)}"
+  }
+elif [ "$OS" = "linux" ]; then
+  function lan_ip() {
+    local addr
+    # ask the kernel which source address it would use to reach the outside
+    addr=$(ip -4 route get 1.1.1.1 2>/dev/null | sed -n 's/.*src \([0-9.]*\).*/\1/p')
+    [ -z "$addr" ] && addr=$(hostname -I 2>/dev/null | awk '{print $1}')
+    echo "${addr:-$(hostname)}"
+  }
+else
+  function lan_ip() {
+    hostname
+  }
+fi
