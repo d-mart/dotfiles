@@ -71,8 +71,8 @@
   theirs   = "!__f() { git checkout --theirs $@ && git add $@; }; __f"
   merge-log = "!f() { git log --stat \"$1^..$1\"; }; f"
 
-[url "git@github.com:"]
-  insteadOf = https://github.com/
+#[url "git@github.com:"]
+#  insteadOf = https://github.com/
 [url "git://gist.github.com/"]
   insteadOf = gist:
 [url "git://github.com/"]
