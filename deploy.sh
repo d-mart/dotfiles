@@ -143,3 +143,8 @@ if [ ! -e "$local_aliases_file" ]; then
 # alias foo=bar
 EOF
 fi
+
+##############################
+# Per-host starship theme (see README.md to regenerate later)
+##############################
+"${srcDir}/bin/gen-starship-theme.sh"

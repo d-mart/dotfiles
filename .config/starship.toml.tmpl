@@ -51,8 +51,10 @@ time_range = '00:00:00-23:59:59'
 
 [hostname]
 ssh_only = true
-style = "dimmed underline fg:yellow"
-format = "⟪[$hostname]($style)⟫"
+# style/emoji below are per-machine placeholders, filled in by
+# bin/gen-starship-theme.sh (see README.md) so each host looks distinct over SSH.
+style = "__HOST_STYLE__"
+format = "⟪__HOST_EMOJI__ [$hostname]($style)⟫"
 disabled = false
 
 [kubernetes]
