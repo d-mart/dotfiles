@@ -1,4 +1,3 @@
-export PATH="$PATH:$HOME/.lmstudio/bin"
 export OLLAMA_MODEL="devstral" # gemma3n qwen3:30b qwen3:14b
 export OLLAMA_MODELS="$HOME/.ollama"
 # Put in local file - not putting here by default for laptops that wander
