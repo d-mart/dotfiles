@@ -59,6 +59,3 @@ if [ -x "$(command -v starship)" ]; then
 fi
 
 export PATH="/usr/local/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/dmartinez/.antigravity/antigravity/bin:$PATH"

@@ -121,7 +121,37 @@ if on_mac; then
   }
 fi
 
-# If antigravity is installed, add to PATH
-if [ -d "$HOME/.antigravity/antigravity" ]; then
-  export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-fi
+# Antigravity (agy) and Antigravity IDE (agy-ide).
+#
+# There is no single install prefix, so probe. Already covered elsewhere:
+#   - Homebrew casks (antigravity-cli) -> $(brew --prefix)/bin, on PATH already
+#   - ~/.local/bin -> appended by 100-env-setup.sh
+#   - Linux deb/rpm -> symlink in /usr/bin, on PATH already
+# What's left is the self-contained installs below. Their installers also append
+# hardcoded /Users/<me>/... lines to ~/.zshrc, which don't travel between hosts -
+# hence doing it $HOME-relative here.
+#
+# Test for a *working binary*, not just the directory: an upgraded/renamed .app
+# leaves the old bin dir full of dangling symlinks, and adding that to the front
+# of PATH would shadow a good copy further down ([ -x ] is false on a dead link).
+for agy_bin in \
+  "$HOME/.antigravity/antigravity/bin" \
+  "$HOME/.antigravity-ide/antigravity-ide/bin" \
+  "/opt/antigravity/bin" \
+  "/usr/share/antigravity/bin"; do
+
+  agy_found=""
+  for agy_exe in agy antigravity agy-ide antigravity-ide; do
+    if [ -x "${agy_bin}/${agy_exe}" ]; then
+      agy_found=1
+      break
+    fi
+  done
+  [ -n "$agy_found" ] || continue
+
+  case ":${PATH}:" in
+    *":${agy_bin}:"*) ;; # already there - don't re-prepend in nested shells
+    *) export PATH="${agy_bin}:$PATH" ;;
+  esac
+done
+unset agy_bin agy_exe agy_found

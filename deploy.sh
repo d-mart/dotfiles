@@ -17,9 +17,13 @@ dirList=".gdb .mlocate .sh.d .hammerspoon bin"
 declare -A repos=(
   # assoc arrays don't work in order - for now doing this one explicitly ["${HOME}/.oh-my-zsh"]="https://github.com/ohmyzsh/ohmyzsh"
   ["${HOME}/.bash-it"]="https://github.com/revans/bash-it"
-  ["${HOME}/.oh-my-zsh/plugins/zaw"]="https://github.com/yqrashawn/zaw"
-  ["${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting"
-  ["${HOME}/.oh-my-zsh/plugins/autoswitch_virtualenv"]="https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git"
+  # NOTE: zsh-syntax-highlighting is NOT cloned here - Oh-My-Zsh vendors it as a
+  # first-party plugin now, and a hand-checked-out copy at plugins/ makes
+  # `omz update` bomb out on "untracked working tree files would be overwritten".
+  # Third-party plugins live under custom/plugins (gitignored by OMZ) so upstream
+  # can never collide with them.
+  ["${HOME}/.oh-my-zsh/custom/plugins/zaw"]="https://github.com/yqrashawn/zaw"
+  ["${HOME}/.oh-my-zsh/custom/plugins/autoswitch_virtualenv"]="https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git"
   ["${HOME}/.tmux/plugins/tpm"]="https://github.com/tmux-plugins/tpm"
   ["${HOME}/.tmux/plugins/tmux-yank"]="https://github.com/tmux-plugins/tmux-yank"
   ["${HOME}/.tmux/plugins/tmux-open"]="https://github.com/tmux-plugins/tmux-open"
@@ -95,14 +99,44 @@ done
 ##############################
 [ -d "$HOME/.oh-my-zsh" ] || git clone --recursive "https://github.com/ohmyzsh/ohmyzsh" "$HOME/.oh-my-zsh"
 
+# Un-do plugins this repo used to check out by hand into $ZSH/plugins.
+# Oh-My-Zsh vendors zsh-syntax-highlighting itself; leftover clones there block
+# `omz update`. Third-party plugins get relocated to custom/plugins.
+omz_plugins="$HOME/.oh-my-zsh/plugins"
+omz_custom_plugins="$HOME/.oh-my-zsh/custom/plugins"
+
+if [ -d "${omz_plugins}/zsh-syntax-highlighting/.git" ]; then
+  origin=$(git -C "${omz_plugins}/zsh-syntax-highlighting" config --get remote.origin.url)
+  if [[ "$origin" == *"zsh-users/zsh-syntax-highlighting"* ]]; then
+    echo "Removing hand-checked-out zsh-syntax-highlighting - Oh-My-Zsh ships it now"
+    rm -rf "${omz_plugins}/zsh-syntax-highlighting"
+  else
+    echo "WARNING: ${omz_plugins}/zsh-syntax-highlighting has unexpected origin ${origin} - leaving it alone"
+  fi
+fi
+
+# Restore Oh-My-Zsh's own copy if we just deleted over it
+if git -C "$HOME/.oh-my-zsh" cat-file -e HEAD:plugins/zsh-syntax-highlighting 2> /dev/null \
+  && [ ! -d "${omz_plugins}/zsh-syntax-highlighting" ]; then
+  git -C "$HOME/.oh-my-zsh" checkout -- plugins/zsh-syntax-highlighting
+fi
+
+mkdir -p "$omz_custom_plugins"
+for plugin in zaw autoswitch_virtualenv; do
+  if [ -d "${omz_plugins}/${plugin}" ] && [ ! -d "${omz_custom_plugins}/${plugin}" ]; then
+    echo "Relocating ${plugin} to custom/plugins so Oh-My-Zsh updates stay clean"
+    mv "${omz_plugins}/${plugin}" "${omz_custom_plugins}/${plugin}"
+  fi
+done
+
 for target_dir in "${!repos[@]}"; do
   repo=${repos["$target_dir"]}
 
-  if [ -d "$target_dir" ]; then
+  if [ -d "${target_dir}/.git" ]; then
     echo "Refreshing $repo - at $target_dir"
-    pushd "$target_dir" > /dev/null
-    git pull
-    popd > /dev/null
+    git -C "$target_dir" pull
+  elif [ -d "$target_dir" ]; then
+    echo "Skipping $target_dir - directory exists but is not a git checkout"
   else
     echo "cloning ${repo} to ${target_dir}"
     git clone --recursive "${repo}" "${target_dir}"
