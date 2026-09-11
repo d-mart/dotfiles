@@ -16,11 +16,6 @@ function gpg-has-keys() {
   gpg --list-secret-keys --keyid-format LONG 2>/dev/null | grep -q sec
 }
 
-# Optional: warn on shell start if no keys exist (remove if annoying)
-if [[ -t 1 ]] && ! gpg-has-keys; then
-  echo "[gpg] No secret keys found. Run 'gpg --full-generate-key' to create one."
-fi
-
 # create gpg-agent config if it doesn't exist
 if [[ ! -f ~/.gnupg/gpg-agent.conf ]]; then
   mkdir -p ~/.gnupg
