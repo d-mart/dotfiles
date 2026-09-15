@@ -1,4 +1,7 @@
 # Host-local tmux overrides. Copy to ~/.tmux.conf.local and uncomment as needed.
+#
+# Normally you don't hand-edit this: bin/gen-tmux-theme.sh writes ~/.tmux.conf.local
+# for you (per-host by default, or --random / --next / --theme <name>).
 # set -g @status_left_icon "* "
 # set -g @status_left_extra ""
 # set -g @status_bg_color "colour24"
@@ -7,3 +10,8 @@
 # set -g @status_color_2 "colour110"
 # set -g @status_color_3 "colour223"
 # set -g @status_color_4 "colour203"
+# set -g @pane_border_fg "white"
+# set -g @pane_border_bg "black"
+# set -g @pane_active_border_fg "green"
+# set -g @message_fg "yellow"
+# set -g @message_bg "#001050"

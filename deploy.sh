@@ -147,11 +147,8 @@ done
 # Some stubs for local files
 ##############################
 
-tmux_local_template="${srcDir}/.tmux.conf.local.example"
-tmux_local_file="${HOME}/.tmux.conf.local"
-if [ ! -e "$tmux_local_file" ] && [ -f "$tmux_local_template" ]; then
-  cp "$tmux_local_template" "$tmux_local_file"
-fi
+# Seeds ~/.tmux.conf.local with a per-host color scheme; no-op if it exists.
+"${srcDir}/bin/gen-tmux-theme.sh" --if-needed --no-reload
 
 local_init_file="${srcDir}/.sh.d/shell-init.local.sh"
 if [ ! -e "$local_init_file" ]; then
