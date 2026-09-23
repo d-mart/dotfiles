@@ -10,6 +10,7 @@
 # set -g @status_color_2 "colour110"
 # set -g @status_color_3 "colour223"
 # set -g @status_color_4 "colour203"
+# set -g @status_host_color "cyan"
 # set -g @pane_border_fg "white"
 # set -g @pane_border_bg "black"
 # set -g @pane_active_border_fg "green"

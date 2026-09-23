@@ -32,7 +32,7 @@ keep_marker="# ---- local additions below are preserved across regeneration ----
 ##############################
 # Palettes
 #
-# name|bg|fg|accent1|accent2|accent3|accent4|border|active-border
+# name|bg|fg|accent1|accent2|accent3|accent4|border|active-border|hostname
 #
 # Hand-picked from established terminal themes rather than generated, so the
 # four accents are known to be legible against the background and against each
@@ -40,32 +40,32 @@ keep_marker="# ---- local additions below are preserved across regeneration ----
 # accent4 = load average.
 ##############################
 themes=(
-  "nord|#2e3440|#d8dee9|#a3be8c|#ebcb8b|#88c0d0|#bf616a|#4c566a|#88c0d0"
-  "gruvbox|#282828|#ebdbb2|#b8bb26|#fabd2f|#83a598|#fb4934|#504945|#b8bb26"
-  "dracula|#282a36|#f8f8f2|#50fa7b|#f1fa8c|#8be9fd|#ff5555|#44475a|#bd93f9"
-  "tokyonight|#1a1b26|#c0caf5|#9ece6a|#e0af68|#7dcfff|#f7768e|#3b4261|#7aa2f7"
-  "catppuccin|#1e1e2e|#cdd6f4|#a6e3a1|#f9e2af|#89dceb|#f38ba8|#45475a|#cba6f7"
-  "solarized|#002b36|#93a1a1|#859900|#b58900|#2aa198|#dc322f|#073642|#268bd2"
-  "everforest|#2d353b|#d3c6aa|#a7c080|#dbbc7f|#83c092|#e67e80|#475258|#a7c080"
-  "rosepine|#191724|#e0def4|#9ccfd8|#f6c177|#c4a7e7|#eb6f92|#403d52|#ebbcba"
-  "kanagawa|#1f1f28|#dcd7ba|#98bb6c|#e6c384|#7fb4ca|#e46876|#54546d|#7e9cd8"
-  "onedark|#282c34|#abb2bf|#98c379|#e5c07b|#56b6c2|#e06c75|#3e4452|#61afef"
-  "ayu|#1f2430|#cbccc6|#bae67e|#ffd580|#5ccfe6|#ff3333|#33415e|#ffcc66"
-  "monokai|#2d2a2e|#fcfcfa|#a9dc76|#ffd866|#78dce8|#ff6188|#5b595c|#ab9df2"
-  "nightfox|#192330|#cdcecf|#81b29a|#dbc074|#63cdcf|#c94f6d|#39506d|#719cd6"
-  "material|#263238|#eeffff|#c3e88d|#ffcb6b|#89ddff|#f07178|#37474f|#82aaff"
-  "synthwave|#241b2f|#f2f2f2|#72f1b8|#fede5d|#36f9f6|#fe4450|#495495|#ff7edb"
-  "oxocarbon|#161616|#dde1e6|#42be65|#ffe97b|#3ddbd9|#ee5396|#393939|#78a9ff"
-  "gruvbox-material|#282828|#d4be98|#a9b665|#d8a657|#7daea3|#ea6962|#45403d|#89b482"
-  "melange|#292522|#ece1d7|#85b695|#ebc06d|#89b3b6|#d47766|#403a36|#a3a9ce"
-  "iceberg|#161821|#c6c8d1|#b4be82|#e2a478|#89b8c2|#e27878|#3d425b|#84a0c6"
-  "nightowl|#011627|#d6deeb|#22da6e|#ecc48d|#7fdbca|#ef5350|#1d3b53|#82aaff"
-  "tomorrow|#2d2d2d|#cccccc|#99cc99|#ffcc66|#66cccc|#f2777a|#515151|#6699cc"
-  "sonokai|#2b2d3a|#e1e3e4|#9ed072|#e7c664|#76cce0|#fb617e|#414550|#b39df3"
-  "zenburn|#3f3f3f|#dcdccc|#7f9f7f|#f0dfaf|#8cd0d3|#cc9393|#5f5f5f|#dfaf8f"
-  "poimandres|#1b1e28|#a6accd|#5de4c7|#fffac2|#89ddff|#d0679d|#303340|#add7ff"
-  "flexoki|#1c1b1a|#cecdc3|#879a39|#d0a215|#3aa99f|#d14d41|#282726|#4385be"
-  "eldritch|#212337|#ebfafa|#37f499|#f1fc79|#04d1f9|#f16c75|#323449|#a48cf2"
+  "nord|#2e3440|#d8dee9|#a3be8c|#ebcb8b|#88c0d0|#bf616a|#4c566a|#88c0d0|#b48ead"
+  "gruvbox|#282828|#ebdbb2|#b8bb26|#fabd2f|#83a598|#fb4934|#504945|#b8bb26|#d3869b"
+  "dracula|#282a36|#f8f8f2|#50fa7b|#f1fa8c|#8be9fd|#ff5555|#44475a|#bd93f9|#bd93f9"
+  "tokyonight|#1a1b26|#c0caf5|#9ece6a|#e0af68|#7dcfff|#f7768e|#3b4261|#7aa2f7|#bb9af7"
+  "catppuccin|#1e1e2e|#cdd6f4|#a6e3a1|#f9e2af|#89dceb|#f38ba8|#45475a|#cba6f7|#cba6f7"
+  "solarized|#002b36|#93a1a1|#859900|#b58900|#2aa198|#dc322f|#073642|#268bd2|#d33682"
+  "everforest|#2d353b|#d3c6aa|#a7c080|#dbbc7f|#83c092|#e67e80|#475258|#a7c080|#d699b6"
+  "rosepine|#191724|#e0def4|#9ccfd8|#f6c177|#c4a7e7|#eb6f92|#403d52|#ebbcba|#ebbcba"
+  "kanagawa|#1f1f28|#dcd7ba|#98bb6c|#e6c384|#7fb4ca|#e46876|#54546d|#7e9cd8|#957fb8"
+  "onedark|#282c34|#abb2bf|#98c379|#e5c07b|#56b6c2|#e06c75|#3e4452|#61afef|#c678dd"
+  "ayu|#1f2430|#cbccc6|#bae67e|#ffd580|#5ccfe6|#ff3333|#33415e|#ffcc66|#d4bfff"
+  "monokai|#2d2a2e|#fcfcfa|#a9dc76|#ffd866|#78dce8|#ff6188|#5b595c|#ab9df2|#ab9df2"
+  "nightfox|#192330|#cdcecf|#81b29a|#dbc074|#63cdcf|#c94f6d|#39506d|#719cd6|#9d79d6"
+  "material|#263238|#eeffff|#c3e88d|#ffcb6b|#89ddff|#f07178|#37474f|#82aaff|#c792ea"
+  "synthwave|#241b2f|#f2f2f2|#72f1b8|#fede5d|#36f9f6|#fe4450|#495495|#ff7edb|#ff7edb"
+  "oxocarbon|#161616|#dde1e6|#42be65|#ffe97b|#3ddbd9|#ee5396|#393939|#78a9ff|#be95ff"
+  "gruvbox-material|#282828|#d4be98|#a9b665|#d8a657|#7daea3|#ea6962|#45403d|#89b482|#d3869b"
+  "melange|#292522|#ece1d7|#85b695|#ebc06d|#89b3b6|#d47766|#403a36|#a3a9ce|#bd8183"
+  "iceberg|#161821|#c6c8d1|#b4be82|#e2a478|#89b8c2|#e27878|#3d425b|#84a0c6|#a093c7"
+  "nightowl|#011627|#d6deeb|#22da6e|#ecc48d|#7fdbca|#ef5350|#1d3b53|#82aaff|#c792ea"
+  "tomorrow|#2d2d2d|#cccccc|#99cc99|#ffcc66|#66cccc|#f2777a|#515151|#6699cc|#cc99cc"
+  "sonokai|#2b2d3a|#e1e3e4|#9ed072|#e7c664|#76cce0|#fb617e|#414550|#b39df3|#b39df3"
+  "zenburn|#3f3f3f|#dcdccc|#7f9f7f|#f0dfaf|#8cd0d3|#cc9393|#5f5f5f|#dfaf8f|#dc8cc3"
+  "poimandres|#1b1e28|#a6accd|#5de4c7|#fffac2|#89ddff|#d0679d|#303340|#add7ff|#fcc5e9"
+  "flexoki|#1c1b1a|#cecdc3|#879a39|#d0a215|#3aa99f|#d14d41|#282726|#4385be|#8b7ec8"
+  "eldritch|#212337|#ebfafa|#37f499|#f1fc79|#04d1f9|#f16c75|#323449|#a48cf2|#a48cf2"
 )
 
 icons=(
@@ -138,10 +138,11 @@ pad() { [ "$1" -gt 0 ] && printf '%*s' "$1" ''; }
 # slot doubles as the theme label.
 render_bar() {
   local t="$1" cols="$2"
-  local name bg fg c1 c2 c3 c4 border
-  name=$(field "$t" 1); bg=$(field "$t" 2); fg=$(field "$t" 3)
-  c1=$(field "$t" 4);   c2=$(field "$t" 5); c3=$(field "$t" 6)
-  c4=$(field "$t" 7);   border=$(field "$t" 8)
+  local name bg fg c1 c2 c3 c4 border hostc
+  name=$(field "$t" 1);  bg=$(field "$t" 2); fg=$(field "$t" 3)
+  c1=$(field "$t" 4);    c2=$(field "$t" 5); c3=$(field "$t" 6)
+  c4=$(field "$t" 7);    border=$(field "$t" 8)
+  hostc=$(field "$t" 10)
 
   # Widths are tracked by hand: escape sequences occupy no columns, and the
   # icon is a double-width emoji plus its trailing space.
@@ -170,9 +171,8 @@ render_bar() {
   bg_esc "$bg"; fg_esc "$c3"; printf ' 3:logs '
   pad "$gap_r"
 
-  # status-right. The hostname is hardcoded to tmux's "cyan" in .tmux.conf
-  # rather than a theme color, so it is drawn that way here too.
-  printf '\033[36mweb01 '
+  # status-right
+  fg_esc "$hostc"; printf 'web01 '
   fg_esc "$c3"; printf '12%% '
   fg_esc "$c4"; printf '0.84 '
   fg_esc "$c2"; printf '15 Sep '
@@ -260,7 +260,7 @@ if [ "$mode" = "list" ]; then
     mark=" "; [ "$name" = "$cur" ] && mark="*"
     printf '%s %-16s ' "$mark" "$name"
     swatch "$(field "$t" 2)" "  "
-    for f in 3 4 5 6 7 9; do swatch "$(field "$t" "$f")" "  "; done
+    for f in 3 4 5 6 7 9 10; do swatch "$(field "$t" "$f")" "  "; done
     [ "$name" = "$(field "${themes[$host_idx]}" 1)" ] && printf ' (this host)'
     printf '\n'
   done
@@ -337,6 +337,7 @@ c3=$(field "$theme" 6)
 c4=$(field "$theme" 7)
 border=$(field "$theme" 8)
 active=$(field "$theme" 9)
+hostc=$(field "$theme" 10)
 icon="${icon_override:-$host_icon}"
 
 ##############################
@@ -372,6 +373,7 @@ set -g @status_color_1 "${c1}"
 set -g @status_color_2 "${c2}"
 set -g @status_color_3 "${c3}"
 set -g @status_color_4 "${c4}"
+set -g @status_host_color "${hostc}"
 
 set -g @pane_border_fg "${border}"
 set -g @pane_border_bg "default"

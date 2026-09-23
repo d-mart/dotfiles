@@ -96,8 +96,9 @@ on every deploy.
 
 Same idea as the starship theme, for the tmux status line. `.tmux.conf` sets
 default values for a handful of user options — `@status_bg_color`,
-`@status_fg_color`, `@status_color_1`..`_4`, `@status_left_icon`,
-`@pane_border_fg`, `@pane_active_border_fg`, `@message_fg`/`@message_bg` — and
+`@status_fg_color`, `@status_color_1`..`_4`, `@status_host_color`,
+`@status_left_icon`, `@pane_border_fg`, `@pane_active_border_fg`,
+`@message_fg`/`@message_bg` — and
 *then* sources `~/.tmux.conf.local`. Every color in the status bar, window
 list, pane borders and message line is referenced through one of those
 options, so overriding them re-themes the whole thing.
