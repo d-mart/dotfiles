@@ -95,6 +95,33 @@ for config_dir in $(find "$srcDir/.config" -depth 1 -type d); do
 done
 
 ##############################
+# Claude Code status line
+##############################
+# ~/.claude/settings.json is per-machine and rewritten by Claude Code, so it is
+# not symlinked; just make sure it runs ccstatusline (config in .config/) and
+# re-renders often enough for bin/claude-last-reply.py's idle counter to tick.
+# Leaves an existing statusLine command or refreshInterval alone.
+mkdir -p "$HOME/.claude"
+python3 - "$HOME/.claude/settings.json" <<'EOF'
+import json, os, sys
+
+path = sys.argv[1]
+data = json.load(open(path)) if os.path.exists(path) else {}
+before = json.dumps(data, sort_keys=True)
+
+status = data.setdefault("statusLine", {"type": "command",
+                                        "command": "npx -y ccstatusline@latest",
+                                        "padding": 0})
+status.setdefault("refreshInterval", 30)
+
+if json.dumps(data, sort_keys=True) != before:
+    with open(path, "w") as fh:
+        json.dump(data, fh, indent=2)
+        fh.write("\n")
+    print("Updated statusLine in " + path + " - restart Claude Code to pick it up")
+EOF
+
+##############################
 # git repos
 ##############################
 [ -d "$HOME/.oh-my-zsh" ] || git clone --recursive "https://github.com/ohmyzsh/ohmyzsh" "$HOME/.oh-my-zsh"

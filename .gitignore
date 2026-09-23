@@ -3,3 +3,4 @@ shell-vars.local.sh
 shell-init.local.sh
 .config/pgcli/history
 .config/pgcli/log
+.config/ccstatusline/*.bak
