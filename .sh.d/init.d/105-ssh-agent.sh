@@ -22,8 +22,4 @@ else
   #echo "using existing ssh agent"
 fi
 
-function rtmux {
-  local remote_host="$1"
-
-  autossh -M 0 -qt "$remote_host" "LC_ALL=en_US.UTF-8 tmux att || LC_ALL=en_US.UTF-8 tmux new"
-}
+# (rtmux/autotmux now live in 200-tmux.sh)
