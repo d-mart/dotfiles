@@ -16,3 +16,4 @@
 # set -g @pane_active_border_fg "green"
 # set -g @message_fg "yellow"
 # set -g @message_bg "#001050"
+# set -g @status_label_color "colour240"
