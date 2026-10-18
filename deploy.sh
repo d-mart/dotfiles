@@ -83,7 +83,7 @@ done
 # directories in ~/.config
 ##############################
 mkdir -p ~/.config
-for config_dir in $(find "$srcDir/.config" -depth 1 -type d); do
+for config_dir in $(find "$srcDir/.config" -mindepth 1 -maxdepth 1 -type d); do
   base_config_dir=$(basename "$config_dir")
   tgt_path="${targetDir}/.config/${base_config_dir}"
 
