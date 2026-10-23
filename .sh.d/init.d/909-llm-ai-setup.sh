@@ -47,7 +47,7 @@ llmq() {
   local provider="$1"
 
   if [ -z "$provider" ]; then
-    echo "usage: llmq {claude|gemini|copilot} <prompt>" >&2
+    echo "usage: llmq {claude|gemini} <prompt>" >&2
     return 2
   fi
 
@@ -56,7 +56,7 @@ llmq() {
   local prompt="$*"
   if [ -z "$prompt" ]; then
     echo "error: prompt is required" >&2
-    echo "usage: llmq {claude|gemini|copilot} <prompt>" >&2
+    echo "usage: llmq {claude|gemini} <prompt>" >&2
     return 2
   fi
 
@@ -75,15 +75,8 @@ llmq() {
       fi
       gemini --prompt "$prompt"
       ;;
-    copilot)
-      if ! command -v copilot > /dev/null 2>&1; then
-        echo "error: copilot is not installed or not in PATH" >&2
-        return 127
-      fi
-      copilot -p "$prompt" -s
-      ;;
     *)
-      echo "usage: llmq {claude|gemini|copilot} <prompt>" >&2
+      echo "usage: llmq {claude|gemini} <prompt>" >&2
       return 2
       ;;
   esac
@@ -91,4 +84,3 @@ llmq() {
 
 alias haiku='llmq claude'
 alias gemq='llmq gemini'
-alias copq='llmq copilot'
