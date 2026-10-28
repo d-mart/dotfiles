@@ -1,3 +1,17 @@
+format = "$hostname $directory$git_branch$git_status$all$line_break$jobs$character"
+right_format = "$cmd_duration$kubernetes$aws$azure$battery$time"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+
+[cmd_duration]
+min_time = 2000
+format = "[took $duration]($style) "
+
+[status]
+disabled = false
+format = "[✘ $status]($style) "
 
 [aws]
 style = "#FFA500"
