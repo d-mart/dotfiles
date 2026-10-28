@@ -12,20 +12,77 @@
 #   bin/gen-starship-theme.sh --force    # regenerate (e.g. after editing the .tmpl,
 #                                         # or to migrate a machine still on a plain
 #                                         # symlinked starship.toml from before this existed)
+#   bin/gen-starship-theme.sh --emoji 🦊       # use this emoji instead of the hash-picked one
+#   bin/gen-starship-theme.sh --from-tmux      # copy @status_left_icon from ~/.tmux.conf.local
+#
+# --emoji and --from-tmux are explicit requests, so they imply --force.
 
 set -euo pipefail
 
 srcDir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 tmpl="${srcDir}/.config/starship.toml.tmpl"
 target="${HOME}/.config/starship.toml"
+tmuxLocal="${HOME}/.tmux.conf.local"
 force=0
+emoji_override=""
+from_tmux=0
 
-for arg in "$@"; do
-  case "$arg" in
+usage() {
+  cat <<'USAGE'
+Usage: gen-starship-theme.sh [options]
+
+Render .config/starship.toml.tmpl into ~/.config/starship.toml, filling in a
+per-machine color + emoji for the [hostname] module so SSH sessions into
+different boxes are visually distinguishable at a glance. The color/emoji are
+derived deterministically from a stable per-machine ID, so re-running on the
+same machine produces the same theme.
+
+Options:
+  -f, --force        Regenerate even if starship.toml was already generated.
+      --emoji <e>    Use this emoji instead of the hash-picked one (implies --force).
+      --from-tmux    Copy @status_left_icon from ~/.tmux.conf.local (implies --force).
+                     Mutually exclusive with --emoji.
+  -h, --help         Show this help and exit.
+USAGE
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --help|-h) usage; exit 0 ;;
     --force|-f) force=1 ;;
-    *) echo "Unknown argument: $arg" >&2; exit 1 ;;
+    --emoji)
+      if [ $# -lt 2 ] || [ -z "$2" ]; then
+        echo "--emoji requires a value" >&2; exit 1
+      fi
+      emoji_override="$2"; shift ;;
+    --emoji=*) emoji_override="${1#--emoji=}" ;;
+    --from-tmux) from_tmux=1 ;;
+    *) echo "Unknown argument: $1" >&2; exit 1 ;;
   esac
+  shift
 done
+
+if [ -n "$emoji_override" ] && [ "$from_tmux" -eq 1 ]; then
+  echo "--emoji and --from-tmux are mutually exclusive" >&2
+  exit 1
+fi
+
+if [ "$from_tmux" -eq 1 ]; then
+  if [ ! -f "$tmuxLocal" ]; then
+    echo "tmux local config not found: $tmuxLocal" >&2
+    exit 1
+  fi
+  # Last uncommented `set -g @status_left_icon "<icon>"` wins, like tmux would.
+  emoji_override=$(sed -n -E 's/^[[:space:]]*set(-option)?[[:space:]]+-g[[:space:]]+@status_left_icon[[:space:]]+["'"'"']([^"'"'"']*)["'"'"'].*/\2/p' "$tmuxLocal" | tail -n1)
+  # Drop surrounding whitespace (icons are often padded for tmux spacing).
+  emoji_override=$(printf '%s' "$emoji_override" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')
+  if [ -z "$emoji_override" ]; then
+    echo "No @status_left_icon found in $tmuxLocal" >&2
+    exit 1
+  fi
+fi
+
+[ -n "$emoji_override" ] && force=1
 
 if [ ! -f "$tmpl" ]; then
   echo "Template not found: $tmpl" >&2
@@ -92,15 +149,17 @@ emoji=(
 color_idx=$(( 16#${hash:0:8} % ${#colors[@]} ))
 emoji_idx=$(( 16#${hash:8:8} % ${#emoji[@]} ))
 host_style="${colors[$color_idx]}"
-host_emoji="${emoji[$emoji_idx]}"
+host_emoji="${emoji_override:-${emoji[$emoji_idx]}}"
 
 ##############################
 # Render
 ##############################
 mkdir -p "$(dirname "$target")"
 tmp=$(mktemp)
+# Escape sed replacement metacharacters in user-supplied emoji.
+host_emoji_esc=$(printf '%s' "$host_emoji" | sed -e 's/[\\&|]/\\&/g')
 sed -e "s|__HOST_STYLE__|${host_style}|" \
-    -e "s|__HOST_EMOJI__|${host_emoji}|" \
+    -e "s|__HOST_EMOJI__|${host_emoji_esc}|" \
     "$tmpl" > "$tmp"
 
 # target may be a stale symlink from before this script existed; remove it so
