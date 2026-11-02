@@ -4,3 +4,4 @@ shell-init.local.sh
 .config/pgcli/history
 .config/pgcli/log
 .config/ccstatusline/*.bak
+.config/wezterm/local.lua
