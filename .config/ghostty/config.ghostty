@@ -1,0 +1,60 @@
+# Ghostty config. Reload with ctrl+shift+, (most options apply live;
+# some only affect new windows).
+# Docs:      https://ghostty.org/docs/config
+# Defaults:  ghostty +show-config --default --docs
+# Themes:    ghostty +list-themes   (interactive preview)
+# Keys:      ghostty +list-keybinds --default
+#
+# Kept in step with .config/wezterm/wezterm.lua: tmux (prefix C-a) owns
+# panes/windows/sessions, so nothing here binds C-a.
+
+# --- Appearance -----------------------------------------------------------
+theme = Catppuccin Mocha
+# Blacker than Mocha's #1e1e2e base: Catppuccin's darkest shade ("crust").
+# Use #000000 for pure black.
+background = #11111b
+
+# JetBrains Mono and Nerd Font symbols are embedded in Ghostty, so this works
+# without the font installed.
+font-family = JetBrains Mono
+font-size = 12
+# Uncomment to disable ligatures (e.g. -> != ===):
+# font-feature = -calt
+# font-feature = -liga
+
+# Just a touch of transparency (1 = opaque), with blur behind it (KDE supports it).
+background-opacity = 0.94
+background-blur = true
+
+window-padding-x = 6
+window-padding-y = 4
+window-padding-balance = true
+window-width = 160
+window-height = 45
+
+cursor-style = bar
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+# --- Behaviour ------------------------------------------------------------
+confirm-close-surface = false
+# Selecting text copies to both the clipboard and primary selection.
+copy-on-select = clipboard
+
+# Over ssh, advertise TERM=xterm-256color so hosts without Ghostty's terminfo
+# (xterm-ghostty) behave. Swap for ssh-terminfo to install it on remotes instead.
+shell-integration-features = ssh-env
+
+# --- Keys -----------------------------------------------------------------
+# Defaults worth knowing (Linux):
+#   ctrl+shift+v      paste (what Handy speech-to-text sends)
+#   ctrl+shift+,      reload config
+#   ctrl+shift+t / n  new tab / window
+#   ctrl+shift+j      dump scrollback to a file and paste its path
+# Shift+Insert pastes the clipboard, like GUI apps (default is primary selection;
+# middle-click still pastes that).
+keybind = shift+insert=paste_from_clipboard
+
+# --- Per-machine overrides ------------------------------------------------
+# Optional, gitignored. "?" means don't complain if it doesn't exist.
+config-file = ?local.ghostty
