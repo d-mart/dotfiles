@@ -16,6 +16,9 @@ local is_mac = wezterm.target_triple:find('darwin') ~= nil
 ---------------------------------------------------------------------------
 -- Built-in scheme names: https://wezterm.org/colorschemes/index.html
 config.color_scheme = 'Catppuccin Mocha'
+-- Blacker than Mocha's #1e1e2e base: Catppuccin's darkest shade ("crust").
+-- Use '#000000' for pure black.
+config.colors = { background = '#11111b' }
 
 -- JetBrains Mono ships inside WezTerm, so this works on every machine even
 -- without the font installed. Nerd Font icons are also bundled as a fallback.
