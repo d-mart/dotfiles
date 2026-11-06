@@ -1,0 +1,58 @@
+# ripgrep config - loaded via RIPGREP_CONFIG_PATH (.sh.d/init.d/125-search-setup.sh)
+# One flag per line; override any of these on the command line.
+
+##
+## What to search
+##
+
+# Search hidden files and directories
+--hidden
+
+# .gitignore / .ignore / .rgignore are honored, so build output, deps, target/
+# and node_modules stay out. To include ignored files for a one-off: rg -u
+# (-uuu also searches binary files).
+
+# Follow symbolic links to directories and files
+--follow
+
+# Exclude internal Git object databases (prevents scanning binary blob objects)
+--glob=!.git/**
+--glob=!*.Xpsql
+
+##
+## How to match
+##
+
+# Case-insensitive matching unless an uppercase character is present
+--smart-case
+
+# Custom file types: rg -tweb / rg -trsp
+--type-add=web:*.{html,css,js}*
+--type-add=rsp:*_spec.rb
+
+##
+## Output
+##
+
+# Limit output width, but show a preview of over-long lines
+--max-columns=150
+--max-columns-preview
+
+# Put filename on same line as match
+--no-heading
+
+# Colors
+--colors=path:fg:green
+--colors=path:style:bold
+--colors=path:style:underline
+
+--colors=line:fg:yellow
+--colors=line:style:bold
+
+--colors=column:fg:magenta
+--colors=column:style:nobold
+
+--colors=match:none
+--colors=match:bg:0x33,0x66,0xFF
+--colors=match:fg:white
+--colors=match:style:bold
