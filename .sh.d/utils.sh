@@ -269,3 +269,50 @@ function __signal_pids() {
     echo kill "-${__pid_signal}" "${__pid}"
   done
 }
+
+###########
+# Interactive chain guards
+# Both return 0 to let an `&&` chain continue, non-zero to stop it.
+###########
+
+# helper: read a single keypress (any key, Enter included) into $1.
+# zsh's read -k needs the terminal; bash's read -rsn1 works anywhere.
+function __read_key() {
+  if [ -n "$ZSH_VERSION" ]; then
+    read -sk "$1"
+  else
+    IFS= read -rsn1 "$1"
+  fi
+}
+
+# Wait for a keypress, then continue the chain. e.g.
+#    ./thing-one.sh && pause "press a key to continue" && ./thing-two.sh
+function pause() {
+  local msg key st
+  msg="${1:-Press any key to continue...}"
+  printf '%s ' "$msg" >&2
+  __read_key key
+  st=$?
+  printf '\n' >&2
+  return "$st"
+}
+
+# Ask for confirmation; only y or Y continues the chain. Anything else
+# (n, Enter, ^C, ^D) fails and stops everything after the `&&`. e.g.
+#    ./thing-one.sh && confirm "Proceed?" && ./thing-two.sh
+function confirm() {
+  local msg key st
+  msg="${1:-Continue?}"
+  printf '%s [y/N] ' "$msg" >&2
+  __read_key key
+  st=$?
+  if [ "$st" -ne 0 ]; then
+    printf '\n' >&2
+    return "$st"
+  fi
+  printf '%s\n' "$key" >&2
+  case "$key" in
+    [yY]) return 0 ;;
+    *)    return 1 ;;
+  esac
+}

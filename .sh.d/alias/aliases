@@ -110,7 +110,7 @@ alias dumpfunc="declare -f"
 # note: collides with /usr/bin/cal - display calendar
 alias cal="${HOME}/bin/solve.sh"
 
-pause() { read -p "Press Enter to continue..." ; }
+# pause() moved to ~/.sh.d/utils.sh (single keypress, works in zsh, chain-friendly)
 
 # one-liner lookup on wikiepedia, e.g. 'wp ostrich'
 wp() { dig +short txt $1.wp.dg.cx ; }
