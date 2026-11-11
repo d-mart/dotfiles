@@ -94,6 +94,10 @@ for config_dir in $(find "$srcDir/.config" -mindepth 1 -maxdepth 1 -type d); do
   fi
 done
 
+# ripgrep config moved to ~/.config/ripgrep/config; drop the old deploy symlink
+# so RIPGREP_CONFIG_PATH=~/.ripgreprc leftovers don't point at a missing file.
+rm -f "${targetDir}/.ripgreprc"
+
 ##############################
 # Claude Code status line
 ##############################
