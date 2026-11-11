@@ -1,0 +1,40 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+  "mouse": true,
+  "animations": true,
+  "theme": {
+    "mode": "dark"
+  },
+  "session": {
+    "tps": true,
+    "thinking": "hide"
+  },
+  "cursor": {
+    "style": "default"
+  },
+  "keybinds": {
+    "command.palette.show": "<leader>p",
+    "prompt.history.previous": "up,ctrl+p",
+    "prompt.history.next": "down,ctrl+n"
+  },
+  "debug": {
+    "devtools": true,
+    "turn_tokens": "verbose"
+  },
+  "terminal": {
+    "title": true
+  },
+  "attention": {
+    "notifications": true
+  },
+  "prompt": {
+    "paste": "compact"
+  },
+  "plugins": [
+    "@streetturtle/opencode-session-tokens",
+    "@streetturtle/opencode-open-in",
+    "@streetturtle/opencode-context-progress",
+    "@streetturtle/opencode-recap",
+    "@streetturtle/opencode-current-prompt"
+  ]
+}
