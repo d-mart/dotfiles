@@ -126,6 +126,37 @@ if json.dumps(data, sort_keys=True) != before:
 EOF
 
 ##############################
+# Antigravity CLI (agy) settings & status line
+##############################
+# ~/.gemini/antigravity-cli/settings.json is per-machine and updated by agy,
+# so it is not symlinked; idempotently ensure statusLine, terminal sandbox,
+# and auto mode are configured while preserving all other settings.
+mkdir -p "$HOME/.gemini/antigravity-cli"
+python3 - "$HOME/.gemini/antigravity-cli/settings.json" <<'EOF'
+import json, os, sys
+
+path = sys.argv[1]
+data = json.load(open(path)) if os.path.exists(path) else {}
+before = json.dumps(data, sort_keys=True)
+
+status = data.get("statusLine")
+if not isinstance(status, dict):
+    status = {}
+status["type"] = "command"
+status["command"] = "~/bin/agy-statusline.js"
+data["statusLine"] = status
+
+data["enableTerminalSandbox"] = True
+data["agentMode"] = "auto"
+
+if json.dumps(data, sort_keys=True) != before:
+    with open(path, "w") as fh:
+        json.dump(data, fh, indent=2)
+        fh.write("\n")
+    print("Updated agy settings in " + path)
+EOF
+
+##############################
 # git repos
 ##############################
 [ -d "$HOME/.oh-my-zsh" ] || git clone --recursive "https://github.com/ohmyzsh/ohmyzsh" "$HOME/.oh-my-zsh"
