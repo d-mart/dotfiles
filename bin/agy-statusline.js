@@ -101,13 +101,16 @@ function shortenPath(dirPath, maxLen = 38) {
   return candidate.length <= maxLen ? candidate : `…/${tail}`;
 }
 
-function progressBar(pct, width = 10) {
+function progressBar(pct, width = 10, invertColors = false) {
   const clamped = Math.max(0, Math.min(100, Number(pct) || 0));
   const filled = Math.round((clamped / 100) * width);
   const empty = width - filled;
-  let barColor = FG.brightGreen;
-  if (clamped >= 80) barColor = FG.red;
-  else if (clamped >= 55) barColor = FG.brightYellow;
+  let barColor;
+  if (invertColors) {
+    barColor = clamped <= 20 ? FG.red : clamped <= 45 ? FG.brightYellow : FG.cyan;
+  } else {
+    barColor = clamped >= 80 ? FG.red : clamped >= 55 ? FG.brightYellow : FG.brightGreen;
+  }
 
   return (
     c(FG.gray, '[') +
@@ -115,6 +118,121 @@ function progressBar(pct, width = 10) {
     c(FG.gray, '░'.repeat(empty)) +
     c(FG.gray, ']')
   );
+}
+
+function getModeBadge(mode) {
+  if (!mode || typeof mode !== 'string') return null;
+  const m = mode.trim().toLowerCase();
+  if (!m) return null;
+  if (m === 'auto') return c(FG.brightGreen, '⇄ auto');
+  if (m === 'accept-edits' || m === 'acceptedits') return c(FG.brightCyan, '✎ accept-edits');
+  if (m === 'plan') return c(FG.brightMagenta, '☰ plan');
+  return c(FG.gray, `• ${m}`);
+}
+
+function extractQuotaEntry(obj) {
+  if (!obj || typeof obj !== 'object' || obj.disabled) return null;
+  const remPct =
+    typeof obj.remaining_fraction === 'number'
+      ? obj.remaining_fraction * 100
+      : obj.remaining_percentage ??
+        obj.remaining_percent ??
+        (typeof obj.used_percentage === 'number' ? 100 - obj.used_percentage : null);
+  const resetStr = parseResetTime(
+    obj.reset_in_seconds ??
+      obj.reset_time ??
+      obj.reset_at ??
+      obj.resets_at ??
+      obj.reset_in ??
+      obj.resets_in_seconds
+  );
+  if (typeof remPct !== 'number' && !resetStr) return null;
+  return { remPct, resetStr };
+}
+
+function formatQuotaSection(data, compact) {
+  const raw = data.rate_limits || data.quota || data.usage || data.rate_limit || null;
+  if (!raw || typeof raw !== 'object') return null;
+
+  const entries = [];
+  const direct = extractQuotaEntry(raw);
+  if (direct) {
+    entries.push({ label: '', ...direct });
+  } else {
+    const modelStr =
+      (data.model && (data.model.id || data.model.display_name)) ||
+      (typeof data.model === 'string' ? data.model : '');
+    const isGemini = !modelStr || /^gemini/i.test(modelStr);
+    const ignoreTokens = new Set(['gemini', 'low', 'medium', 'high', 'xhigh', 'max', 'pro', 'flash']);
+    const modelTokens = modelStr
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((t) => t.length >= 3 && !ignoreTokens.has(t));
+
+    // Find any quota keys specific to the active model (e.g. gemini-argon-wtu-weekly)
+    const modelSpecificKeys = Object.keys(raw).filter((k) => {
+      const kl = k.toLowerCase();
+      return modelTokens.some((tok) => kl.includes(tok));
+    });
+
+    const preferredKeys = isGemini
+      ? ['gemini-5h', ...modelSpecificKeys, 'gemini-weekly', 'five_hour', 'seven_day', '5h', 'weekly']
+      : ['3p-5h', ...modelSpecificKeys, '3p-weekly', 'five_hour', 'seven_day', '5h', 'weekly'];
+    const windowLabels = {
+      'gemini-5h': '5h',
+      'gemini-weekly': '7d',
+      'gemini-argon-wtu-weekly': 'argon-7d',
+      '3p-5h': '5h',
+      '3p-weekly': '7d',
+      five_hour: '5h',
+      seven_day: '7d',
+      '5h': '5h',
+      weekly: '7d',
+    };
+
+    const seen = new Set();
+    for (const key of preferredKeys) {
+      if (seen.has(key) || !raw[key]) continue;
+      const parsed = extractQuotaEntry(raw[key]);
+      if (parsed) {
+        const label =
+          windowLabels[key] ||
+          key.replace(/^(gemini|3p)-/i, '').replace(/-weekly$/i, '-7d');
+        entries.push({ label, ...parsed });
+        seen.add(key);
+      }
+    }
+    if (!entries.length) {
+      for (const [key, val] of Object.entries(raw)) {
+        if (seen.has(key)) continue;
+        const parsed = extractQuotaEntry(val);
+        if (parsed) {
+          entries.push({ label: windowLabels[key] || key, ...parsed });
+        }
+      }
+    }
+  }
+
+  if (!entries.length) return null;
+
+  return entries
+    .slice(0, 2)
+    .map(({ label, remPct, resetStr }) => {
+      const parts = [];
+      if (typeof remPct === 'number') {
+        const rounded = Math.round(remPct);
+        const qColor = rounded <= 20 ? FG.red : rounded <= 45 ? FG.brightYellow : FG.cyan;
+        const bar = compact ? '' : progressBar(rounded, 8, true) + ' ';
+        const prefix = label ? `${label}: ` : '⚡';
+        parts.push(`${bar}${c(qColor, `${prefix}${rounded}%`)}`);
+      }
+      if (resetStr) {
+        parts.push(c(FG.gray, `↻ ${resetStr}`));
+      }
+      return parts.join(' ');
+    })
+    .filter(Boolean)
+    .join(c(FG.gray, ' '));
 }
 
 function getStateBadge(state) {
@@ -176,19 +294,33 @@ function render(data) {
   // --- Line 1: State | Model | Context | Cost/Usage/Quota | Agents/Tasks ---
   const line1 = [];
 
-  // 1. Agent state
+  // 1. Agent state, mode & sandbox (if provided in payload)
   line1.push(getStateBadge(data.agent_state));
+  const modeBadge = getModeBadge(data.cycle_mode || data.agent_mode || data.mode || data.agentMode);
+  if (modeBadge) {
+    line1.push(modeBadge);
+  }
+  if (data.sandbox && typeof data.sandbox.enabled === 'boolean') {
+    line1.push(
+      data.sandbox.enabled
+        ? c(FG.green, '🔒 sandbox')
+        : c(FG.yellow, '🔓 no-sandbox')
+    );
+  }
 
-  // 2. Model & effort
+  // 2. Model & effort (skip effort suffix if already in display_name)
   const modelName =
     (data.model && (data.model.display_name || data.model.id)) ||
     (typeof data.model === 'string' ? data.model : null);
   if (modelName) {
-    const effort = data.model && data.model.effort ? ` (${data.model.effort})` : '';
+    const rawEffort = data.model && data.model.effort ? String(data.model.effort) : '';
+    const hasEffortInName =
+      rawEffort && modelName.toLowerCase().includes(`(${rawEffort.toLowerCase()})`);
+    const effort = rawEffort && !hasEffortInName ? ` (${rawEffort})` : '';
     line1.push(c(FG.brightBlue + BOLD, modelName) + c(FG.gray, effort));
   }
 
-  // 3. Context window
+  // 3. Context window, >200k warning & prompt cache hit ratio
   const cw = data.context_window || {};
   if (typeof cw.used_percentage === 'number') {
     const pct = Math.round(cw.used_percentage);
@@ -200,34 +332,27 @@ function render(data) {
       const usedTok = Math.round((pct / 100) * maxTok);
       tokInfo = c(FG.gray, ` (${formatTokens(usedTok)}/${formatTokens(maxTok)})`);
     }
-    line1.push(`${bar}${c(pctColor, `${pct}%`)}${tokInfo}`);
+    const over200k = data.exceeds_200k_tokens ? ' ' + c(FG.yellow, '⚠ >200k') : '';
+    let cacheInfo = '';
+    const cu = cw.current_usage;
+    if (cu && !compact) {
+      const cacheRead = Number(cu.cache_read_input_tokens) || 0;
+      const freshIn = Number(cu.input_tokens) || 0;
+      const totalIn = cacheRead + freshIn;
+      if (totalIn > 0) {
+        const cachePct = Math.round((cacheRead / totalIn) * 100);
+        const cacheColor = cachePct < 50 ? FG.yellow : FG.gray;
+        cacheInfo = ' ' + c(cacheColor, `${cachePct}% cached`);
+      }
+    }
+    line1.push(`${bar}${c(pctColor, `${pct}%`)}${tokInfo}${over200k}${cacheInfo}`);
   }
 
-  // 4. Cost / Usage / Quota / Reset timer (supports multiple possible schema shapes)
+  // 4. Cost (if provided)
   const costVal =
     data.cost && (data.cost.estimated ?? data.cost.total_cost_usd ?? data.cost.session);
   if (typeof costVal === 'number') {
     line1.push(c(FG.yellow, `$${costVal.toFixed(costVal < 0.01 ? 4 : 2)}`));
-  }
-
-  const quota = data.quota || data.usage || data.rate_limit || null;
-  if (quota && typeof quota === 'object') {
-    const remPct =
-      quota.remaining_percentage ??
-      quota.remaining_percent ??
-      (typeof quota.used_percentage === 'number' ? 100 - quota.used_percentage : null);
-    const resetStr = parseResetTime(
-      quota.reset_at ?? quota.resets_at ?? quota.reset_in ?? quota.resets_in_seconds
-    );
-    const qParts = [];
-    if (typeof remPct === 'number') {
-      const qColor = remPct <= 20 ? FG.red : remPct <= 45 ? FG.brightYellow : FG.cyan;
-      qParts.push(c(qColor, `⚡${Math.round(remPct)}% left`));
-    }
-    if (resetStr) {
-      qParts.push(c(FG.gray, `↻ ${resetStr}`));
-    }
-    if (qParts.length) line1.push(qParts.join(' '));
   }
 
   // 5. Open tasks / active agents (from payload if provided)
@@ -267,6 +392,11 @@ function render(data) {
   const gsdHint = !compact ? getGsdHint(projectDir) : null;
   if (gsdHint) {
     line2.push(c(FG.cyan, `📋 ${gsdHint}`));
+  }
+
+  const quotaSection = formatQuotaSection(data, compact);
+  if (quotaSection) {
+    line2.push(quotaSection);
   }
 
   const now = new Date();
