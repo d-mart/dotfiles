@@ -75,6 +75,39 @@ function tm() {
   ssh -t $@ 'tmux attach || tmux new'
 }
 
+## paste a screenshot from the local clipboard to a remote host over ssh
+# uses pngpaste on macOS and wl-paste (wayland) on linux
+# usage:
+#    paste-ss my-server
+function paste-ss() {
+  local __host="$1"
+  if [[ -z "$__host" ]]; then
+    echo "usage: paste-ss <host>" >&2
+    return 1
+  fi
+
+  local __remote_cmd='mkdir -p ~/screenshots && f=~/screenshots/$(date +%Y%m%d-%H%M%S).png && cat > $f && ln -sf $f ~/screenshots/latest.png && echo $f'
+  local __paste
+  if on_mac; then
+    if ! command -v pngpaste &> /dev/null; then
+      echo "paste-ss: 'pngpaste' not found on macOS (try: brew install pngpaste)" >&2
+      return 1
+    fi
+    __paste=(pngpaste -)
+  else
+    if ! command -v wl-paste &> /dev/null; then
+      echo "paste-ss: 'wl-paste' not found on linux (try: install wl-clipboard)" >&2
+      return 1
+    fi
+    __paste=(wl-paste -t image/png)
+  fi
+
+  # pipefail so a failed paste (e.g. empty clipboard) fails the whole call
+  ( set -o pipefail
+    "${__paste[@]}" | ssh "$__host" "$__remote_cmd"
+  )
+}
+
 # display and possibly add a dir to the path
 function path() {
   # Add any args to the path
