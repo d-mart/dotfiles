@@ -25,7 +25,6 @@
           "--browser",
           "chromium"
         ],
-        "cwd": "/home/dmartinez/workspace/3-rfs-hub",
         "environment": {
           "ASDF_NODEJS_VERSION": "20.19.5"
         },
