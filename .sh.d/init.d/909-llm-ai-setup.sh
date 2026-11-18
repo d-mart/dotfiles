@@ -12,6 +12,11 @@ if [ -x "$HOME/.lmstudio/bin" ]; then
   export PATH="$PATH:$HOME/.lmstudio/bin"
 fi
 
+# OpenCode's curl installer (Linux) puts its binary here; on macOS it comes from brew.
+if [ -d "$HOME/.opencode/bin" ]; then
+  export PATH="$HOME/.opencode/bin:$PATH"
+fi
+
 export OLLAMA_KEEP_ALIVE=-1
 
 function bootstrap_llama() {
