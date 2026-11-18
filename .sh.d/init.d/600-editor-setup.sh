@@ -18,14 +18,34 @@ function __resolve_emacs() {
   command -v "${EMACSCLIENT:-}" >/dev/null 2>&1 || EMACSCLIENT=""
   [ -d "${EMACS_APP:-}" ] || EMACS_APP=""
 
-  for __prefix in "${HOMEBREW_PREFIX:-}" /opt/homebrew /usr/local \
-                  /home/linuxbrew/.linuxbrew "${HOME}/.linuxbrew"; do
-    [ -n "${__prefix}" ] && [ -d "${__prefix}/opt" ] || continue
-    # sort on the numeric field after '@' so @31 beats @30
-    __keg=$(find "${__prefix}/opt" -maxdepth 1 -name 'emacs-plus@*' 2>/dev/null \
-              | sort -t@ -k2 -rn | head -1)
-    [ -n "${__keg}" ] && break
-  done
+  if [ -n "$ZSH_NAME" ]; then
+    # zsh: glob the keg directly -- pure builtin, no find/sort/head processes.
+    # (Nn) = null glob + numeric sort, so emacs-plus@31 beats emacs-plus@9 and
+    # ${__kegs[-1]} is the newest keg in the first prefix that has one.
+    # (eval'd so bash can still parse this file; bash-setup.sh sources init.d)
+    eval '
+      local __kegs
+      for __prefix in "${HOMEBREW_PREFIX:-}" /opt/homebrew /usr/local \
+                      /home/linuxbrew/.linuxbrew "${HOME}/.linuxbrew"; do
+        [ -n "${__prefix}" ] && [ -d "${__prefix}/opt" ] || continue
+        __kegs=("${__prefix}"/opt/emacs-plus@*(Nn))
+        if [ ${#__kegs[@]} -gt 0 ]; then
+          __keg="${__kegs[-1]}"
+          break
+        fi
+      done
+    '
+  else
+    # bash fallback: same discovery via find/sort
+    for __prefix in "${HOMEBREW_PREFIX:-}" /opt/homebrew /usr/local \
+                    /home/linuxbrew/.linuxbrew "${HOME}/.linuxbrew"; do
+      [ -n "${__prefix}" ] && [ -d "${__prefix}/opt" ] || continue
+      # sort on the numeric field after '@' so @31 beats @30
+      __keg=$(find "${__prefix}/opt" -maxdepth 1 -name 'emacs-plus@*' 2>/dev/null \
+                | sort -t@ -k2 -rn | head -1)
+      [ -n "${__keg}" ] && break
+    done
+  fi
 
   if [ -n "${__keg}" ] && [ -x "${__keg}/bin/emacs" ]; then
     : "${EMACS:=${__keg}/bin/emacs}"

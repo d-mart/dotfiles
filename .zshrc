@@ -16,10 +16,8 @@ if [[ -z "${CLAUDECODE}" ]]; then
     eza
     fzf
     git
-    kubectl
     ruby
     z
-    zaw
     zsh-syntax-highlighting
     autoswitch_virtualenv
   )

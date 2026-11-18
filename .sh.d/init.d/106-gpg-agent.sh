@@ -4,11 +4,14 @@ if ! command -v gpg &>/dev/null; then
 fi
 
 # Required for GPG to know which terminal to use for passphrase prompts
-export GPG_TTY=$(tty)
+# ($TTY is a zsh builtin; fall back to the tty command in bash)
+export GPG_TTY="${TTY:-$(tty)}"
 
-# Start gpg-agent if not already running
-if command -v gpg-agent &>/dev/null; then
-  gpg-agent --daemon &>/dev/null 2>&1 || true
+# Start gpg-agent if not already running -- in a detached background subshell
+# so a cold agent never blocks the prompt (gpg also auto-spawns it on first use).
+# Skip entirely when its socket already exists (agent running).
+if command -v gpg-agent &>/dev/null && [ ! -S "$HOME/.gnupg/S.gpg-agent" ]; then
+  ( gpg-agent --daemon >/dev/null 2>&1 & )
 fi
 
 # Optional: helper to check if you have any secret keys

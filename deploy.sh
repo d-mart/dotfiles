@@ -22,7 +22,6 @@ declare -A repos=(
   # `omz update` bomb out on "untracked working tree files would be overwritten".
   # Third-party plugins live under custom/plugins (gitignored by OMZ) so upstream
   # can never collide with them.
-  ["${HOME}/.oh-my-zsh/custom/plugins/zaw"]="https://github.com/yqrashawn/zaw"
   ["${HOME}/.oh-my-zsh/custom/plugins/autoswitch_virtualenv"]="https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv.git"
   ["${HOME}/.tmux/plugins/tpm"]="https://github.com/tmux-plugins/tpm"
   ["${HOME}/.tmux/plugins/tmux-yank"]="https://github.com/tmux-plugins/tmux-yank"
@@ -184,7 +183,7 @@ if git -C "$HOME/.oh-my-zsh" cat-file -e HEAD:plugins/zsh-syntax-highlighting 2>
 fi
 
 mkdir -p "$omz_custom_plugins"
-for plugin in zaw autoswitch_virtualenv; do
+for plugin in autoswitch_virtualenv; do
   if [ -d "${omz_plugins}/${plugin}" ] && [ ! -d "${omz_custom_plugins}/${plugin}" ]; then
     echo "Relocating ${plugin} to custom/plugins so Oh-My-Zsh updates stay clean"
     mv "${omz_plugins}/${plugin}" "${omz_custom_plugins}/${plugin}"
