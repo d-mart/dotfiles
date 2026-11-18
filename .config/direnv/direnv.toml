@@ -1,0 +1,3 @@
+[global]
+# Also load plain .env files (not just .envrc); they still need `direnv allow`.
+load_dotenv = true
