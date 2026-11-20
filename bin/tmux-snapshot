@@ -1,0 +1,394 @@
+#!/usr/bin/env bash
+#
+# tmux-snapshot: save the running tmux layout to a JSON file, and rebuild it
+# later (e.g. after a reboot).
+#
+# Saved: every session, its windows (index, name, layout, zoom, active pane,
+# automatic-rename, @note) and its panes (index, working directory).
+#
+# Restored panes start a normal shell in the saved directory. A pane that was
+# running Claude Code gets `claude --resume <session-id> [flags]` typed at its
+# prompt, *not* run, so you can press Enter in the ones you want. Any other
+# non-shell program (btop, vim, ...) gets its command line typed the same way.
+# The typing is done by a hook at the end of .zshrc that reads
+# $TMUX_SNAPSHOT_PRETYPE.
+#
+# Claude panes are matched to sessions through ~/.claude/sessions/<pid>.json,
+# which Claude Code keeps up to date with the session each process is in (it
+# follows /clear and /resume).
+#
+# usage:
+#   tmux-snapshot save [file]              # default: $dir/snapshot-<time>.json, and latest.json
+#   tmux-snapshot show [file]              # summarize a snapshot (default: latest)
+#   tmux-snapshot restore [--no-attach] [file]
+#   tmux-snapshot autosave start [minutes] # opt-in: save every N minutes (default 15)
+#   tmux-snapshot autosave stop|status
+#
+#   -L <socket> before the command targets another tmux server (testing).
+#
+# Snapshots live in ${XDG_STATE_HOME:-~/.local/state}/tmux-snapshot.
+#
+# Autosave is a background loop, off unless started. It writes auto-<time>.json
+# (keeping the newest $AUTOSAVE_KEEP), moves latest.json along, and exits when
+# the tmux server does. It does not come back by itself after a reboot, so it
+# can't overwrite the snapshot you're about to restore: start it again after
+# restoring.
+
+set -euo pipefail
+
+SNAP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/tmux-snapshot"
+CLAUDE_SESSIONS="$HOME/.claude/sessions"
+CLAUDE_PROJECTS="$HOME/.claude/projects"
+TMUX_CMD=(tmux)
+SOCKET_ARGS=()
+SELF=$(realpath "$0")
+SEP=$'\x1f'
+AUTOSAVE_PID="$SNAP_DIR/autosave.pid"
+AUTOSAVE_LOG="$SNAP_DIR/autosave.log"
+AUTOSAVE_KEEP=${TMUX_SNAPSHOT_KEEP:-96} # a day's worth at 15 minutes
+
+die() { echo "tmux-snapshot: $*" >&2; exit 1; }
+warn() { echo "tmux-snapshot: $*" >&2; }
+
+command -v jq >/dev/null || die "jq is required"
+
+# ---------------------------------------------------------------- save helpers
+
+# Print the pid of the Claude Code process in this process tree (the root
+# itself or a descendant), shallowest first; nothing if there isn't one.
+find_claude_pid() {
+  local queue=("$1") p
+  while ((${#queue[@]})); do
+    p=${queue[0]}
+    queue=("${queue[@]:1}")
+    if [[ -f "$CLAUDE_SESSIONS/$p.json" && -r /proc/$p/cmdline ]]; then
+      echo "$p"
+      return
+    fi
+    # pgrep exits 1 when there are no children
+    mapfile -t -O "${#queue[@]}" queue < <(pgrep -P "$p" || true)
+  done
+}
+
+# The command to type into a restored Claude pane: resume the session, keeping
+# the flags that shape how the session runs. Prompts, --continue, --fork-session
+# and the like are dropped: --resume <id> replaces them.
+claude_resume_cmd() {
+  local pid=$1 sid=$2
+  local args=() out=(claude --resume "$sid") i=1 a
+  mapfile -d '' args < "/proc/$pid/cmdline"
+  while ((i < ${#args[@]})); do
+    a=${args[i]}
+    case "$a" in
+      --permission-mode | --model)
+        ((i + 1 < ${#args[@]})) && out+=("$a" "${args[i + 1]}")
+        ((i += 2)); continue ;;
+      --permission-mode=* | --model=* | --dangerously-skip-permissions | --allow-dangerously-skip-permissions)
+        out+=("$a") ;;
+    esac
+    ((i += 1))
+  done
+  local q=() w
+  for w in "${out[@]}"; do q+=("$(printf '%q' "$w")"); done
+  echo "${q[*]}"
+}
+
+# The foreground command line of a pane that isn't sitting at a shell prompt.
+foreground_cmd() {
+  local tty=$1 pane_pid=$2
+  ps -o pid=,stat=,args= -t "${tty#/dev/}" 2>/dev/null |
+    awk -v shell="$pane_pid" '$2 ~ /\+/ && $1 != shell { $1 = ""; $2 = ""; sub(/^ +/, ""); print; exit }'
+}
+
+is_shell() {
+  case "$1" in zsh | bash | sh | dash | fish | -zsh | -bash) return 0 ;; esac
+  return 1
+}
+
+# ---------------------------------------------------------------------- save
+
+cmd_save() {
+  local file=${1:-}
+  umask 077
+  mkdir -p "$SNAP_DIR"
+  [[ -n $file ]] || file="$SNAP_DIR/snapshot-$(date +%Y%m%d-%H%M%S).json"
+
+  local fmt
+  fmt=$(printf "%s$SEP" \
+    '#{session_name}' '#{window_index}' '#{window_name}' '#{window_active}' \
+    '#{window_layout}' '#{window_zoomed_flag}' '#{automatic-rename}' '#{@note}' \
+    '#{window_width}' '#{window_height}' '#{pane_index}' '#{pane_active}' \
+    '#{pane_pid}' '#{pane_tty}' '#{pane_current_command}' '#{pane_current_path}')
+
+  local records=() sess widx wname wactive layout zoomed autoren note ww wh \
+    pidx pactive ppid ptty pcmd pcwd _rest cpid sid cname cmd kind
+  local n_claude=0
+
+  while IFS="$SEP" read -r sess widx wname wactive layout zoomed autoren note \
+    ww wh pidx pactive ppid ptty pcmd pcwd _rest; do
+    cmd="" sid="" cname="" kind=""
+    cpid=$(find_claude_pid "$ppid")
+    if [[ -n $cpid ]]; then
+      sid=$(jq -r '.sessionId // empty' "$CLAUDE_SESSIONS/$cpid.json")
+      cname=$(jq -r '.name // empty' "$CLAUDE_SESSIONS/$cpid.json")
+      if [[ -n $sid ]] && compgen -G "$CLAUDE_PROJECTS/*/$sid.jsonl" >/dev/null; then
+        cmd=$(claude_resume_cmd "$cpid" "$sid")
+        kind=claude
+        n_claude=$((n_claude + 1))
+      else
+        warn "$sess:$widx.$pidx: Claude session ${sid:-?} has no transcript yet; will type plain 'claude'"
+        cmd=claude kind=claude-new
+      fi
+    elif ! is_shell "$pcmd"; then
+      cmd=$(foreground_cmd "$ptty" "$ppid")
+      [[ -n $cmd ]] && kind=program
+    fi
+
+    records+=("$(jq -nc \
+      --arg session "$sess" --argjson window "$widx" --arg name "$wname" \
+      --argjson window_active "$wactive" --arg layout "$layout" \
+      --argjson zoomed "$zoomed" --arg auto_rename "$autoren" --arg note "$note" \
+      --argjson width "$ww" --argjson height "$wh" \
+      --argjson pane "$pidx" --argjson pane_active "$pactive" --arg cwd "$pcwd" \
+      --arg cmd "$cmd" --arg kind "$kind" --arg claude_session "$sid" --arg claude_name "$cname" \
+      '$ARGS.named')")
+  done < <("${TMUX_CMD[@]}" list-panes -a -F "$fmt")
+
+  ((${#records[@]})) || die "no tmux panes found (is tmux running?)"
+
+  printf '%s\n' "${records[@]}" | jq -s \
+    --arg saved_at "$(date -Iseconds)" --arg host "$(hostname)" '
+    {version: 1, saved_at: $saved_at, host: $host,
+     sessions: (group_by(.session) | map({
+       name: .[0].session,
+       width: .[0].width, height: .[0].height,
+       active_window: (map(select(.window_active == 1)) | .[0].window),
+       windows: (group_by(.window) | map({
+         index: .[0].window, name: .[0].name, layout: .[0].layout,
+         zoomed: (.[0].zoomed == 1), auto_rename: (.[0].auto_rename == "1"),
+         note: .[0].note,
+         active_pane: (map(select(.pane_active == 1)) | .[0].pane),
+         panes: (sort_by(.pane) | map({index: .pane, cwd, cmd, kind, claude_session, claude_name}))
+       }))
+     }))}' > "$file.tmp"
+  mv "$file.tmp" "$file"
+  ln -sfn "$(realpath "$file")" "$SNAP_DIR/latest.json"
+
+  echo "saved ${#records[@]} panes ($n_claude Claude sessions) to $file"
+}
+
+# ---------------------------------------------------------------------- show
+
+resolve_file() {
+  local file=${1:-$SNAP_DIR/latest.json}
+  [[ -f $file ]] || die "no snapshot at $file"
+  echo "$file"
+}
+
+cmd_show() {
+  local file
+  file=$(resolve_file "${1:-}")
+  jq -r '"snapshot of \(.host) at \(.saved_at)",
+    (.sessions[] | "session \(.name)",
+      (.windows[] | "  \(.index): \(.name)\(if .zoomed then " (zoomed)" else "" end)",
+        (.panes[] | "      .\(.index)  \(.cwd)" +
+          (if .cmd != "" then "\n          > \(.cmd)\(if .claude_name != "" then "   # \(.claude_name)" else "" end)" else "" end))))' "$file"
+}
+
+# ------------------------------------------------------------------- restore
+
+cmd_restore() {
+  local attach=1 file=""
+  while (($#)); do
+    case "$1" in
+      --no-attach) attach=0 ;;
+      -*) die "unknown restore option $1" ;;
+      *) file=$1 ;;
+    esac
+    shift
+  done
+  file=$(resolve_file "$file")
+
+  local first_session="" nsess s
+  nsess=$(jq '.sessions | length' "$file")
+  for ((s = 0; s < nsess; s++)); do
+    local name width height
+    name=$(jq -r ".sessions[$s].name" "$file")
+    width=$(jq -r ".sessions[$s].width" "$file")
+    height=$(jq -r ".sessions[$s].height" "$file")
+
+    local target=$name
+    if "${TMUX_CMD[@]}" has-session -t "=$target" 2>/dev/null; then
+      target="$name-restored"
+      local k=2
+      while "${TMUX_CMD[@]}" has-session -t "=$target" 2>/dev/null; do
+        target="$name-restored$k"; k=$((k + 1))
+      done
+      warn "session '$name' already exists; restoring as '$target'"
+    fi
+    [[ -n $first_session ]] || first_session=$target
+
+    # A placeholder window holds the session open while the real windows are
+    # created at their saved indices (new-session can't pick an index, and its
+    # -e would set the variable for the whole session rather than one pane).
+    local placeholder maxidx
+    maxidx=$(jq ".sessions[$s].windows | map(.index) | max" "$file")
+    placeholder=$("${TMUX_CMD[@]}" new-session -d -P -F '#{window_id}' \
+      -s "$target" -x "$width" -y "$height")
+    "${TMUX_CMD[@]}" move-window -s "$placeholder" -t "$target:$((maxidx + 1))"
+
+    local nwin w
+    nwin=$(jq ".sessions[$s].windows | length" "$file")
+    for ((w = 0; w < nwin; w++)); do
+      local wj="sessions[$s].windows[$w]"
+      local widx wname layout zoomed autoren note active_pane npanes
+      widx=$(jq -r ".$wj.index" "$file")
+      wname=$(jq -r ".$wj.name" "$file")
+      layout=$(jq -r ".$wj.layout" "$file")
+      zoomed=$(jq -r ".$wj.zoomed" "$file")
+      autoren=$(jq -r ".$wj.auto_rename" "$file")
+      note=$(jq -r ".$wj.note" "$file")
+      active_pane=$(jq -r ".$wj.active_pane" "$file")
+      npanes=$(jq ".$wj.panes | length" "$file")
+
+      local p last="" wid="" active_id="" cwd cmd env_args
+      for ((p = 0; p < npanes; p++)); do
+        cwd=$(jq -r ".$wj.panes[$p].cwd" "$file")
+        cmd=$(jq -r ".$wj.panes[$p].cmd" "$file")
+        [[ -d $cwd ]] || { warn "$target:$widx: $cwd is gone; using \$HOME"; cwd=$HOME; }
+        env_args=()
+        [[ -n $cmd ]] && env_args=(-e "TMUX_SNAPSHOT_PRETYPE=$cmd")
+        if ((p == 0)); then
+          read -r wid last < <("${TMUX_CMD[@]}" new-window -d -P -F '#{window_id} #{pane_id}' \
+            -t "$target:$widx" -n "$wname" -c "$cwd" "${env_args[@]}")
+        else
+          # keep room for the next split; the saved layout is applied after
+          "${TMUX_CMD[@]}" select-layout -t "$wid" tiled
+          last=$("${TMUX_CMD[@]}" split-window -d -P -F '#{pane_id}' \
+            -t "$last" -c "$cwd" "${env_args[@]}")
+        fi
+        [[ $(jq -r ".$wj.panes[$p].index" "$file") == "$active_pane" ]] && active_id=$last
+      done
+
+      "${TMUX_CMD[@]}" select-layout -t "$wid" "$layout" ||
+        warn "$target:$widx: couldn't apply saved layout; panes are tiled"
+      [[ -n $active_id ]] && "${TMUX_CMD[@]}" select-pane -t "$active_id"
+      [[ $zoomed == true ]] && "${TMUX_CMD[@]}" resize-pane -Z -t "$active_id"
+      [[ $autoren == true ]] && "${TMUX_CMD[@]}" set-option -w -t "$wid" automatic-rename on
+      [[ -n $note ]] && "${TMUX_CMD[@]}" set-option -w -t "$wid" @note "$note"
+    done
+
+    "${TMUX_CMD[@]}" kill-window -t "$placeholder"
+    local active_window
+    active_window=$(jq -r ".sessions[$s].active_window" "$file")
+    "${TMUX_CMD[@]}" select-window -t "$target:$active_window"
+    echo "restored session '$target' ($nwin windows)"
+  done
+
+  ((attach)) || return 0
+  if [[ -n ${TMUX:-} ]]; then
+    "${TMUX_CMD[@]}" switch-client -t "$first_session"
+  elif [[ -t 0 && -t 1 ]]; then
+    exec "${TMUX_CMD[@]}" attach -t "$first_session"
+  fi
+}
+
+# ------------------------------------------------------------------ autosave
+
+# Autosave files, oldest first (their timestamped names sort by time).
+auto_snapshots() {
+  local f
+  for f in "$SNAP_DIR"/auto-*.json; do
+    [[ -e $f ]] && echo "$f"
+  done
+  return 0
+}
+
+# The running autosave loop's pid, if there is one.
+autosave_running_pid() {
+  local pid
+  [[ -f $AUTOSAVE_PID ]] || return 1
+  pid=$(<"$AUTOSAVE_PID")
+  [[ $pid =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null &&
+    tr '\0' ' ' <"/proc/$pid/cmdline" | grep -q 'tmux-snapshot.* autosave-loop' || return 1
+  echo "$pid"
+}
+
+cmd_autosave() {
+  local action=${1:-status} minutes=${2:-15} pid
+  case "$action" in
+    start)
+      [[ $minutes =~ ^[1-9][0-9]*$ ]] || die "autosave interval must be whole minutes, got '$minutes'"
+      if pid=$(autosave_running_pid); then
+        die "autosave is already running (pid $pid); stop it first to change the interval"
+      fi
+      "${TMUX_CMD[@]}" has-session 2>/dev/null || die "no tmux server running"
+      mkdir -p "$SNAP_DIR"
+      setsid nohup "$SELF" "${SOCKET_ARGS[@]}" autosave-loop "$minutes" \
+        >>"$AUTOSAVE_LOG" 2>&1 </dev/null &
+      # the loop writes its own pidfile; wait for it so status is right at once
+      local i
+      for ((i = 0; i < 50; i++)); do
+        pid=$(autosave_running_pid) && break
+        sleep 0.1
+      done
+      [[ -n ${pid:-} ]] || die "autosave didn't start; see $AUTOSAVE_LOG"
+      echo "autosave started: every $minutes min (pid $pid, log $AUTOSAVE_LOG)"
+      ;;
+    stop)
+      pid=$(autosave_running_pid) || { echo "autosave is not running"; return 0; }
+      kill "$pid"
+      rm -f "$AUTOSAVE_PID"
+      echo "autosave stopped (pid $pid)"
+      ;;
+    status)
+      if pid=$(autosave_running_pid); then
+        echo "autosave running (pid $pid): $(tr '\0' ' ' <"/proc/$pid/cmdline" | awk '{print $NF}') min interval"
+      else
+        echo "autosave not running"
+      fi
+      local last
+      last=$(auto_snapshots | tail -1)
+      [[ -n $last ]] && echo "last autosave: $last"
+      [[ -e $SNAP_DIR/latest.json ]] && echo "latest.json -> $(readlink "$SNAP_DIR/latest.json")"
+      return 0
+      ;;
+    *) die "usage: tmux-snapshot autosave start [minutes] | stop | status" ;;
+  esac
+}
+
+cmd_autosave_loop() {
+  local minutes=$1
+  echo $$ >"$AUTOSAVE_PID"
+  # only remove the pidfile if it's still ours (a later start may own it)
+  trap '[[ $(cat "$AUTOSAVE_PID" 2>/dev/null) == $$ ]] && rm -f "$AUTOSAVE_PID"' EXIT
+  trap 'kill $! 2>/dev/null; exit 0' TERM INT
+  echo "$(date -Iseconds) autosave every $minutes min (pid $$)"
+  while "${TMUX_CMD[@]}" has-session 2>/dev/null; do
+    # a separate process, so a failed save is logged and the loop carries on
+    "$SELF" "${SOCKET_ARGS[@]}" save "$SNAP_DIR/auto-$(date +%Y%m%d-%H%M%S).json" ||
+      echo "$(date -Iseconds) save failed"
+    auto_snapshots | head -n -"$AUTOSAVE_KEEP" | xargs -r -d '\n' rm -f --
+    sleep $((minutes * 60)) &
+    wait $! || true
+  done
+  echo "$(date -Iseconds) tmux server is gone; autosave exiting"
+}
+
+# ---------------------------------------------------------------------- main
+
+if [[ ${1:-} == -L ]]; then
+  [[ -n ${2:-} ]] || die "-L needs a socket name"
+  TMUX_CMD=(tmux -L "$2")
+  SOCKET_ARGS=(-L "$2")
+  shift 2
+fi
+
+case "${1:-}" in
+  save) shift; cmd_save "$@" ;;
+  show) shift; cmd_show "$@" ;;
+  restore) shift; cmd_restore "$@" ;;
+  autosave) shift; cmd_autosave "$@" ;;
+  autosave-loop) shift; cmd_autosave_loop "$@" ;;
+  *) sed -n '2,/^$/{s/^# \{0,1\}//;p}' "$0"; exit 1 ;;
+esac

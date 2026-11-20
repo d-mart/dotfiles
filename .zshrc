@@ -57,3 +57,10 @@ if [ -x "$(command -v starship)" ]; then
 fi
 
 export PATH="/usr/local/bin:$PATH"
+
+# bin/tmux-snapshot restore: put the pane's saved command (e.g. a
+# `claude --resume <id>`) at the first prompt, ready for Enter, without running it
+if [[ -n "${TMUX_SNAPSHOT_PRETYPE:-}" ]]; then
+  print -z -- "$TMUX_SNAPSHOT_PRETYPE"
+  unset TMUX_SNAPSHOT_PRETYPE
+fi
