@@ -77,21 +77,32 @@ The status line command re-runs every 30s per open session, plus on every
 update. Whenever the status JSON carries `transcript_path`, ccstatusline reads
 and JSON-decodes the **whole** transcript on every run, whatever widgets are
 configured. Long-lived sessions grow transcripts of hundreds of MB: on a 626MB
-one each refresh cost ~14 CPU-seconds (~9s for the scan itself, ~5s more for
-the speed widgets, which also read every subagent transcript). A handful of
+one each refresh cost ~12 CPU-seconds for the scan, ~17 with the speed widgets
+(which also read every subagent transcript the session mentions). A handful of
 such sessions kept several cores busy permanently.
 
 `bin/ccstatusline-fast` copies the last 1MB of the transcript (from the first
-whole line) to `$XDG_RUNTIME_DIR/ccstatusline-fast/` (or `~/.cache/…`), one
-file per transcript, replaced atomically each refresh and pruned after a day
-unused, and points `transcript_path` at the copy. That refresh went to ~1s.
+whole line) into `$XDG_RUNTIME_DIR/ccstatusline-fast/<hash>/` (or
+`~/.cache/…`), under the transcript's own file name, and points
+`transcript_path` at the copy. That refresh went to ~1s.
+
+- The copy sits next to symlinks to the transcript's `subagents/` directories,
+  because ccstatusline looks for subagent transcripts relative to
+  `transcript_path`. It reads only the ones the tail mentions (+~0.2s on the
+  626MB session, whose subagents directory holds 94 files).
+- If the last 1MB holds no assistant record (one huge tool result or pasted
+  image can fill it), the window doubles until it does, up to 8MB.
+- The copy carries the transcript's mtime, so an idle session's transcript
+  isn't copied again on every refresh. Cache entries unused for a day are
+  pruned.
+
 Everything that only needs recent records keeps working: ccstatusline's idle
 check (which re-fetches rate-limit usage when a session hasn't replied for a
 few minutes, so `session-usage`/`reset-timer` don't go stale), the context and
 effort fallbacks, `session-name` (Claude Code keeps re-appending the title
 records; in the largest transcripts the last one was within 20KB of the end),
-`output-speed` (now over recent requests rather than the whole session), and
-`claude-last-reply.py`.
+`output-speed` (now over recent requests, subagents included, rather than the
+whole session), and `claude-last-reply.py`.
 
 What doesn't survive is anything that sums the whole session, so the layout
 drops those:
@@ -166,6 +177,9 @@ python3 -c "import json,sys;print(json.dumps({'transcript_path':sys.argv[1],'cwd
   | ~/bin/ccstatusline-fast
 # should take about a second however big $T is; tens of seconds means
 # ccstatusline is reading the whole transcript (not going through the wrapper)
+
+# 3. the wrapper's and deploy.sh's own checks (tail copy, fail-safe, migration)
+python3 -m unittest discover -s tests
 ```
 
 ## Troubleshooting

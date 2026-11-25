@@ -8,11 +8,18 @@
 # cost ~10-15 CPU-seconds and a handful of sessions pinned the machine.
 #
 # This copies the last TAIL_BYTES of the transcript (from the first whole line)
-# to a per-transcript cache file and points transcript_path at that. Everything
-# in ccstatusline that wants recent records -- idle detection for stale
-# rate-limit data, context and effort fallbacks, session name, output speed --
-# still finds them; only whole-session sums (token totals) become tail sums,
-# which is why the layout doesn't show those.
+# into a per-transcript cache directory and points transcript_path at that.
+# Everything in ccstatusline that wants recent records -- idle detection for
+# stale rate-limit data, context and effort fallbacks, session name, output
+# speed -- still finds them; only whole-session sums (token totals) become
+# tail sums, which is why the layout doesn't show those.
+#
+# The copy keeps the transcript's file name and sits next to symlinks to its
+# subagents/ directories, because ccstatusline finds subagent transcripts
+# relative to transcript_path; it reads only the ones the tail mentions. If the
+# tail holds no assistant record (one huge tool result or image can fill it),
+# the window doubles, up to MAX_TAIL_BYTES. An unchanged transcript is not
+# copied again: the copy carries the transcript's mtime.
 #
 # ccstatusline is looked up as: $CCSTATUSLINE_BIN, else a global npm install
 # under the newest asdf Node (run with that Node, so a project pinning another
@@ -32,7 +39,9 @@ import tempfile
 import time
 
 TAIL_BYTES = 1048576
+MAX_TAIL_BYTES = 8 * TAIL_BYTES
 CACHE_TTL_SECONDS = 24 * 3600
+ASSISTANT_RECORD = b'"type":"assistant"'
 
 
 def cache_dir():
@@ -43,31 +52,75 @@ def cache_dir():
 
 
 def prune(directory):
+    """Drop cache entries nobody has used for CACHE_TTL_SECONDS."""
     cutoff = time.time() - CACHE_TTL_SECONDS
     for entry in os.scandir(directory):
         try:
-            if entry.stat().st_mtime < cutoff:
+            if entry.stat(follow_symlinks=False).st_mtime >= cutoff:
+                continue
+            if entry.is_dir(follow_symlinks=False):
+                shutil.rmtree(entry.path)  # unlinks the subagents symlinks, never follows them
+            else:
                 os.unlink(entry.path)
         except OSError:
             pass
 
 
+def read_tail(path, size):
+    """The whole lines in the last TAIL_BYTES of path's first `size` bytes,
+    widened (up to MAX_TAIL_BYTES) until they include an assistant record."""
+    window = TAIL_BYTES
+    while True:
+        with open(path, "rb") as fh:
+            if size > window:
+                fh.seek(size - window - 1)
+                fh.readline()  # skip to the first whole line (the -1 keeps one that starts exactly at the cut)
+            data = fh.read(max(size - fh.tell(), 0))
+        if ASSISTANT_RECORD in data or window >= MAX_TAIL_BYTES or size <= window:
+            return data
+        window *= 2
+
+
+def link_subagents(source, entry):
+    """Symlink the transcript's subagents/ dirs where ccstatusline looks for them."""
+    src_dir = os.path.dirname(source)
+    stem = os.path.splitext(os.path.basename(source))[0]
+    for rel in ("subagents", os.path.join(stem, "subagents")):
+        real, link = os.path.join(src_dir, rel), os.path.join(entry, rel)
+        if os.path.isdir(real) and not os.path.lexists(link):
+            os.makedirs(os.path.dirname(link), exist_ok=True)
+            try:
+                os.symlink(real, link)
+            except FileExistsError:
+                pass  # a concurrent refresh got there first
+
+
 def tail_copy(path):
     """Return a path holding the transcript's tail (or the path itself if small)."""
-    size = os.path.getsize(path)
-    if size <= TAIL_BYTES:
+    st = os.stat(path)
+    if st.st_size <= TAIL_BYTES:
         return path
-    with open(path, "rb") as fh:
-        fh.seek(size - TAIL_BYTES - 1)
-        fh.readline()  # skip to the first whole line (the -1 keeps one that starts exactly at the cut)
-        data = fh.read()
     directory = cache_dir()
     prune(directory)
-    target = os.path.join(directory, hashlib.sha256(path.encode()).hexdigest()[:32] + ".jsonl")
-    fd, tmp = tempfile.mkstemp(dir=directory, suffix=".tmp")
+    entry = os.path.join(directory, hashlib.sha256(path.encode()).hexdigest()[:32])
+    os.makedirs(entry, mode=0o700, exist_ok=True)
+    os.utime(entry)  # in use: keep prune away
+    link_subagents(path, entry)
+    target = os.path.join(entry, os.path.basename(path))
+    try:
+        if os.stat(target).st_mtime_ns == st.st_mtime_ns:
+            return target  # transcript unchanged since the last copy
+    except FileNotFoundError:
+        pass
+    data = read_tail(path, st.st_size)
+    fd, tmp = tempfile.mkstemp(dir=entry, suffix=".tmp")
     try:
         with os.fdopen(fd, "wb") as out:
             out.write(data)
+        # Stamp the copy with the mtime of the transcript it was cut from; if
+        # the transcript grew meanwhile, its mtime moves on and the next
+        # refresh copies again.
+        os.utime(tmp, ns=(st.st_atime_ns, st.st_mtime_ns))
         os.replace(tmp, target)  # atomic: concurrent refreshes never see a partial file
     except BaseException:
         os.unlink(tmp)
