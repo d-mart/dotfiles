@@ -25,6 +25,21 @@
 #   tmux-snapshot autosave stop|status
 #
 #   -L <socket> before the command targets another tmux server (testing).
+#   Start that server yourself first, with -f /dev/null, so that neither you
+#   nor restore (which starts one if none is running) brings it up on
+#   ~/.tmux.conf:
+#
+#     tmux -L snaptest -f /dev/null new-session -d
+#     tmux-snapshot -L snaptest restore --no-attach
+#     tmux -L snaptest kill-server
+#
+#   Without it the test server loads ~/.tmux.conf, which runs TPM in the
+#   background. If the server exits while TPM is still going, TPM's own tmux
+#   calls start a fresh server on the same socket, which runs TPM again: a
+#   loop that outlives the test. One ran for five days at ~2,600 processes a
+#   second. To break one, put a directory where the socket was (so no server
+#   can bind), kill every process whose environment has
+#   TMUX=/tmp/tmux-$UID/<socket>, then remove the directory.
 #
 # Snapshots live in ${XDG_STATE_HOME:-~/.local/state}/tmux-snapshot.
 #

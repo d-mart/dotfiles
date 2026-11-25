@@ -49,7 +49,9 @@ def humanize(seconds):
 
 def main():
     try:
-        path = json.load(sys.stdin).get("transcript_path")
+        data = json.load(sys.stdin)
+        # ccstatusline-fast renames transcript_path so ccstatusline won't scan it.
+        path = data.get("cc_transcript_path") or data.get("transcript_path")
         when = last_assistant_time(path) if path and os.path.exists(path) else None
     except Exception:
         when = None

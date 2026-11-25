@@ -101,9 +101,11 @@ rm -f "${targetDir}/.ripgreprc"
 # Claude Code status line
 ##############################
 # ~/.claude/settings.json is per-machine and rewritten by Claude Code, so it is
-# not symlinked; just make sure it runs ccstatusline (config in .config/) and
-# re-renders often enough for bin/claude-last-reply.py's idle counter to tick.
-# Leaves an existing statusLine command or refreshInterval alone.
+# not symlinked; just make sure it runs ccstatusline (config in .config/)
+# through bin/ccstatusline-fast and re-renders often enough for
+# bin/claude-last-reply.py's idle counter to tick. Moves the old default
+# command (plain npx, which scans the whole transcript on every refresh) to
+# the wrapper; leaves any other statusLine command or refreshInterval alone.
 mkdir -p "$HOME/.claude"
 python3 - "$HOME/.claude/settings.json" <<'EOF'
 import json, os, sys
@@ -112,9 +114,12 @@ path = sys.argv[1]
 data = json.load(open(path)) if os.path.exists(path) else {}
 before = json.dumps(data, sort_keys=True)
 
+command = "$HOME/bin/ccstatusline-fast"
 status = data.setdefault("statusLine", {"type": "command",
-                                        "command": "npx -y ccstatusline@latest",
+                                        "command": command,
                                         "padding": 0})
+if status.get("command") == "npx -y ccstatusline@latest":
+    status["command"] = command
 status.setdefault("refreshInterval", 30)
 
 if json.dumps(data, sort_keys=True) != before:

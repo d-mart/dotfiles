@@ -1,0 +1,37 @@
+#!/bin/sh
+# Claude Code status line: runs ccstatusline without letting it read the
+# session transcript.
+#
+# Whenever the status JSON carries transcript_path, ccstatusline parses the
+# whole transcript (every line, JSON-decoded) on every refresh, whatever
+# widgets are configured. Long sessions grow transcripts of hundreds of MB, so
+# each refresh cost ~10-15 CPU-seconds and a handful of sessions pinned the
+# machine. Renaming the key to cc_transcript_path skips that scan; every
+# widget still in use reads Claude Code's own status JSON instead, and the
+# custom-command scripts in ~/bin read cc_transcript_path, touching only the
+# tail of the file.
+
+#
+# ccstatusline is looked up as: $CCSTATUSLINE_BIN, else a global npm install
+# under the newest asdf Node (by path, so a project pinning another Node
+# version doesn't hide it), else ccstatusline on $PATH, else npx (works, but
+# pays npm's startup and registry check on every refresh).
+
+ccsl=${CCSTATUSLINE_BIN:-$(ls -d "$HOME"/.asdf/installs/nodejs/*/bin/ccstatusline 2>/dev/null | sort -V | tail -n 1)}
+[ -n "$ccsl" ] || ccsl=$(command -v ccstatusline 2>/dev/null)
+
+run_ccsl() {
+  if [ -n "$ccsl" ]; then
+    "$ccsl" "$@"
+  else
+    npx -y ccstatusline@latest "$@"
+  fi
+}
+
+if command -v jq >/dev/null 2>&1; then
+  jq -c 'if has("transcript_path") then .cc_transcript_path = .transcript_path | del(.transcript_path) else . end' |
+    run_ccsl "$@"
+else
+  # No jq: fall back to the slow path rather than an empty status line.
+  run_ccsl "$@"
+fi
