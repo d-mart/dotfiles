@@ -103,23 +103,32 @@ rm -f "${targetDir}/.ripgreprc"
 # ~/.claude/settings.json is per-machine and rewritten by Claude Code, so it is
 # not symlinked; just make sure it runs ccstatusline (config in .config/)
 # through bin/ccstatusline-fast and re-renders often enough for
-# bin/claude-last-reply.py's idle counter to tick. Moves the old default
-# command (plain npx, which scans the whole transcript on every refresh) to
-# the wrapper; leaves any other statusLine command or refreshInterval alone.
+# bin/claude-last-reply.py's idle counter to tick. Moves any direct ccstatusline
+# command (npx/bunx/global/absolute path, keeping a --config argument), which
+# scans the whole transcript on every refresh, to the wrapper; leaves any other
+# statusLine command or refreshInterval alone.
 mkdir -p "$HOME/.claude"
-python3 - "$HOME/.claude/settings.json" <<'EOF'
-import json, os, sys
+python3 - "$HOME/.claude/settings.json" "$srcDir" <<'EOF'
+import json, os, re, sys
 
-path = sys.argv[1]
+path, src_dir = sys.argv[1], sys.argv[2]
 data = json.load(open(path)) if os.path.exists(path) else {}
 before = json.dumps(data, sort_keys=True)
 
-command = "$HOME/bin/ccstatusline-fast"
+# $HOME/bin is the repo's bin/ unless deploy found a real ~/bin and skipped the
+# link; then point straight into the repo rather than at a missing file.
+wrapper = os.path.join(src_dir, "bin", "ccstatusline-fast")
+home_wrapper = os.path.expanduser("~/bin/ccstatusline-fast")
+command = "$HOME/bin/ccstatusline-fast" if os.path.exists(home_wrapper) else wrapper
+
+direct = re.compile(r"^(?:(?:npx|bunx)\s+(?:-y\s+)?ccstatusline(?:@\S+)?|(?:\S*/)?ccstatusline)"
+                    r"(?P<args>\s+--config\s+\S+)?\s*$")
 status = data.setdefault("statusLine", {"type": "command",
                                         "command": command,
                                         "padding": 0})
-if status.get("command") == "npx -y ccstatusline@latest":
-    status["command"] = command
+match = direct.match(status.get("command") or "")
+if match:
+    status["command"] = command + (match.group("args") or "")
 status.setdefault("refreshInterval", 30)
 
 if json.dumps(data, sort_keys=True) != before:

@@ -1,37 +1,127 @@
-#!/bin/sh
-# Claude Code status line: runs ccstatusline without letting it read the
-# session transcript.
+#!/usr/bin/env python3
+# Claude Code status line: runs ccstatusline on the tail of the session
+# transcript instead of the whole thing.
 #
-# Whenever the status JSON carries transcript_path, ccstatusline parses the
-# whole transcript (every line, JSON-decoded) on every refresh, whatever
-# widgets are configured. Long sessions grow transcripts of hundreds of MB, so
-# each refresh cost ~10-15 CPU-seconds and a handful of sessions pinned the
-# machine. Renaming the key to cc_transcript_path skips that scan; every
-# widget still in use reads Claude Code's own status JSON instead, and the
-# custom-command scripts in ~/bin read cc_transcript_path, touching only the
-# tail of the file.
-
+# Whenever the status JSON carries transcript_path, ccstatusline reads and
+# JSON-decodes the whole transcript on every refresh, whatever widgets are
+# configured. Long sessions grow transcripts of hundreds of MB, so each refresh
+# cost ~10-15 CPU-seconds and a handful of sessions pinned the machine.
+#
+# This copies the last TAIL_BYTES of the transcript (from the first whole line)
+# to a per-transcript cache file and points transcript_path at that. Everything
+# in ccstatusline that wants recent records -- idle detection for stale
+# rate-limit data, context and effort fallbacks, session name, output speed --
+# still finds them; only whole-session sums (token totals) become tail sums,
+# which is why the layout doesn't show those.
 #
 # ccstatusline is looked up as: $CCSTATUSLINE_BIN, else a global npm install
-# under the newest asdf Node (by path, so a project pinning another Node
-# version doesn't hide it), else ccstatusline on $PATH, else npx (works, but
-# pays npm's startup and registry check on every refresh).
+# under the newest asdf Node (run with that Node, so a project pinning another
+# version neither hides nor breaks it), else ccstatusline on $PATH, else npx
+# (works, but pays npm's startup and registry check on every refresh).
+#
+# Any failure in the copy falls back to dropping transcript_path, never to
+# handing ccstatusline the full transcript.
 
-ccsl=${CCSTATUSLINE_BIN:-$(ls -d "$HOME"/.asdf/installs/nodejs/*/bin/ccstatusline 2>/dev/null | sort -V | tail -n 1)}
-[ -n "$ccsl" ] || ccsl=$(command -v ccstatusline 2>/dev/null)
+import glob
+import hashlib
+import json
+import os
+import shutil
+import sys
+import tempfile
+import time
 
-run_ccsl() {
-  if [ -n "$ccsl" ]; then
-    "$ccsl" "$@"
-  else
-    npx -y ccstatusline@latest "$@"
-  fi
-}
+TAIL_BYTES = 1048576
+CACHE_TTL_SECONDS = 24 * 3600
 
-if command -v jq >/dev/null 2>&1; then
-  jq -c 'if has("transcript_path") then .cc_transcript_path = .transcript_path | del(.transcript_path) else . end' |
-    run_ccsl "$@"
-else
-  # No jq: fall back to the slow path rather than an empty status line.
-  run_ccsl "$@"
-fi
+
+def cache_dir():
+    base = os.environ.get("XDG_RUNTIME_DIR") or os.path.expanduser("~/.cache")
+    path = os.path.join(base, "ccstatusline-fast")
+    os.makedirs(path, mode=0o700, exist_ok=True)
+    return path
+
+
+def prune(directory):
+    cutoff = time.time() - CACHE_TTL_SECONDS
+    for entry in os.scandir(directory):
+        try:
+            if entry.stat().st_mtime < cutoff:
+                os.unlink(entry.path)
+        except OSError:
+            pass
+
+
+def tail_copy(path):
+    """Return a path holding the transcript's tail (or the path itself if small)."""
+    size = os.path.getsize(path)
+    if size <= TAIL_BYTES:
+        return path
+    with open(path, "rb") as fh:
+        fh.seek(size - TAIL_BYTES - 1)
+        fh.readline()  # skip to the first whole line (the -1 keeps one that starts exactly at the cut)
+        data = fh.read()
+    directory = cache_dir()
+    prune(directory)
+    target = os.path.join(directory, hashlib.sha256(path.encode()).hexdigest()[:32] + ".jsonl")
+    fd, tmp = tempfile.mkstemp(dir=directory, suffix=".tmp")
+    try:
+        with os.fdopen(fd, "wb") as out:
+            out.write(data)
+        os.replace(tmp, target)  # atomic: concurrent refreshes never see a partial file
+    except BaseException:
+        os.unlink(tmp)
+        raise
+    return target
+
+
+def version_key(path):
+    version = path.split(os.sep)[-3]  # .../installs/nodejs/<version>/bin/ccstatusline
+    return [int(p) if p.isdigit() else 0 for p in version.split(".")]
+
+
+def ccstatusline_command():
+    override = os.environ.get("CCSTATUSLINE_BIN")
+    if override:
+        return [override]
+    installs = glob.glob(os.path.expanduser("~/.asdf/installs/nodejs/*/bin/ccstatusline"))
+    if installs:
+        script = max(installs, key=version_key)
+        node = os.path.join(os.path.dirname(script), "node")
+        return [node, script] if os.access(node, os.X_OK) else [script]
+    found = shutil.which("ccstatusline")
+    if found:
+        return [found]
+    return ["npx", "-y", "ccstatusline@latest"]
+
+
+def rewrite(raw):
+    try:
+        data = json.loads(raw)
+    except ValueError:
+        return raw  # not ours to fix; let ccstatusline report it
+    if not isinstance(data, dict) or not data.get("transcript_path"):
+        return raw
+    try:
+        data["transcript_path"] = tail_copy(data["transcript_path"])
+    except Exception:
+        del data["transcript_path"]
+    return json.dumps(data).encode()
+
+
+def main():
+    payload = rewrite(sys.stdin.buffer.read())
+    # Hand the payload over as stdin and exec, so no Python lingers while
+    # ccstatusline runs. An unlinked temp file rather than a pipe: no buffer
+    # size to deadlock on, whatever the payload's size.
+    stdin = tempfile.TemporaryFile()
+    stdin.write(payload)
+    stdin.flush()
+    os.lseek(stdin.fileno(), 0, os.SEEK_SET)
+    os.dup2(stdin.fileno(), 0)
+    command = ccstatusline_command() + sys.argv[1:]
+    os.execvp(command[0], command)
+
+
+if __name__ == "__main__":
+    main()

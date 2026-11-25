@@ -116,10 +116,8 @@
         "type": "separator"
       },
       {
-        "id": "cbbfcb79-f137-463e-a344-c1f258b067b8",
-        "type": "custom-command",
-        "commandPath": "$HOME/bin/claude-output-speed.py",
-        "timeout": 2000,
+        "id": "b197584b-7b7e-4017-bc65-473379510f28",
+        "type": "output-speed",
         "color": "brightYellow"
       },
       {
@@ -144,10 +142,8 @@
         "type": "separator"
       },
       {
-        "id": "cbfcd17e-7755-43a4-9f01-677b0362caa0",
-        "type": "custom-command",
-        "commandPath": "$HOME/bin/claude-session-name.py",
-        "timeout": 2000,
+        "id": "291bbcb8-a487-41ac-8ec5-5586696b8400",
+        "type": "session-name",
         "color": "brightBlue"
       },
       {
