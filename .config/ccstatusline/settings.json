@@ -116,15 +116,6 @@
         "type": "separator"
       },
       {
-        "id": "26d60713-5c6b-4fcc-877b-7c3b4a270026",
-        "type": "input-speed",
-        "color": "yellow"
-      },
-      {
-        "id": "92ea1054-e828-499b-8bb3-63b5caba8ea9",
-        "type": "separator"
-      },
-      {
         "id": "b197584b-7b7e-4017-bc65-473379510f28",
         "type": "output-speed",
         "color": "brightYellow"
@@ -134,43 +125,15 @@
         "type": "separator"
       },
       {
-        "id": "8778ca2b-ba92-4f7e-87ad-e4a396f4e66d",
-        "type": "custom-text",
-        "customText": "in:",
-        "color": "brightBlack",
-        "merge": "no-padding"
-      },
-      {
-        "id": "0de39c52-3808-45f4-a19b-c5027dc3c248",
-        "type": "tokens-input",
-        "color": "cyan",
-        "rawValue": true,
-        "merge": "no-padding"
-      },
-      {
         "id": "ab65f276-1ea1-405a-87dd-df68a3a9de67",
         "type": "custom-text",
-        "customText": " cch:",
+        "customText": "cch:",
         "color": "brightBlack",
         "merge": "no-padding"
       },
       {
         "id": "2e98b0ef-bec1-4925-8f42-64c7ea215cec",
-        "type": "tokens-cached",
-        "color": "cyan",
-        "rawValue": true,
-        "merge": "no-padding"
-      },
-      {
-        "id": "f746b631-2ba6-40f8-9d3f-e7e2fa8439d6",
-        "type": "custom-text",
-        "customText": " out:",
-        "color": "brightBlack",
-        "merge": "no-padding"
-      },
-      {
-        "id": "8ec2e791-76d2-4020-bb40-fccc0102d22d",
-        "type": "tokens-output",
+        "type": "cache-hit-rate",
         "color": "cyan",
         "rawValue": true
       },

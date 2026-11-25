@@ -46,8 +46,8 @@ error-looking message on every single turn. There is no quiet variant.
 | Need | Why | Check |
 |---|---|---|
 | Claude Code >= 2.1.97 | `statusLine.refreshInterval` support | `claude --version` |
-| ccstatusline (recent v2.2.x, config `version: 4`) | provides the `custom-command` widget | run via `npx`, nothing to install |
-| `python3` on `$PATH` | the widget script and `deploy.sh`'s settings patch | `python3 -V` |
+| ccstatusline (recent v2.2.x, config `version: 4`) | provides the `custom-command` widget | `npm i -g ccstatusline` (without it the wrapper falls back to `npx`, which works but is slower) |
+| `python3` on `$PATH` | `bin/ccstatusline-fast`, the widget script and `deploy.sh`'s settings patch | `python3 -V` |
 
 ## Setup
 
@@ -55,22 +55,68 @@ Run `./deploy.sh`, then restart Claude Code. That covers all three pieces:
 
 | Piece | Lives at | How it gets there |
 |---|---|---|
-| widget script | `bin/claude-last-reply.py` → `~/bin/` | `bin/` symlinked by `deploy.sh` |
-| ccstatusline layout, including the widget | `.config/ccstatusline/settings.json` → `~/.config/ccstatusline/` | every dir in `.config/` symlinked by `deploy.sh` |
-| `statusLine` + `refreshInterval: 30` | `~/.claude/settings.json` | patched in place by `deploy.sh` |
+| wrapper and widget script | `bin/ccstatusline-fast`, `bin/claude-last-reply.py` → `~/bin/` | `bin/` symlinked by `deploy.sh` |
+| ccstatusline layout, including the widgets | `.config/ccstatusline/settings.json` → `~/.config/ccstatusline/` | every dir in `.config/` symlinked by `deploy.sh` |
+| `statusLine` (`$HOME/bin/ccstatusline-fast`) + `refreshInterval: 30` | `~/.claude/settings.json` | patched in place by `deploy.sh` |
 
 `~/.claude/settings.json` is deliberately not symlinked: Claude Code rewrites it
-and it holds per-machine plugins and permissions. `deploy.sh` only adds a
-`statusLine` block if there is none and a `refreshInterval` if it is unset, and
-leaves existing values alone.
+and it holds per-machine plugins and permissions. `deploy.sh` adds a
+`statusLine` block if there is none and a `refreshInterval` if it is unset,
+moves any command that runs ccstatusline directly (`npx`/`bunx`, a global or
+absolute-path install, keeping a `--config` argument) to the wrapper, and
+leaves any other existing values alone. If `~/bin` is a real directory rather
+than the repo symlink, the command points into the repo's `bin/` instead.
 
 The restart is for `refreshInterval`. Without it the segment only re-renders
 when something happens in the session, which freezes the age at whatever it
 said when the turn ended (the absolute time stays correct).
 
-Cost: this re-runs the whole status line command every 30s per open session,
-and `npx -y ccstatusline@latest` is ~0.5s of that. Fine for a handful of
-sessions; raise the interval if you keep a lot of them open.
+## Keeping it cheap: `ccstatusline-fast`
+
+The status line command re-runs every 30s per open session, plus on every
+update. Whenever the status JSON carries `transcript_path`, ccstatusline reads
+and JSON-decodes the **whole** transcript on every run, whatever widgets are
+configured. Long-lived sessions grow transcripts of hundreds of MB: on a 626MB
+one each refresh cost ~12 CPU-seconds for the scan, ~17 with the speed widgets
+(which also read every subagent transcript the session mentions). A handful of
+such sessions kept several cores busy permanently.
+
+`bin/ccstatusline-fast` copies the last 1MB of the transcript (from the first
+whole line) into `$XDG_RUNTIME_DIR/ccstatusline-fast/<hash>/` (or
+`~/.cache/…`), under the transcript's own file name, and points
+`transcript_path` at the copy. That refresh went to ~1s.
+
+- The copy sits next to symlinks to the transcript's `subagents/` directories,
+  because ccstatusline looks for subagent transcripts relative to
+  `transcript_path`. It reads only the ones the tail mentions (+~0.2s on the
+  626MB session, whose subagents directory holds 94 files).
+- If the last 1MB holds no assistant record (one huge tool result or pasted
+  image can fill it), the window doubles until it does, up to 8MB.
+- The copy carries the transcript's mtime, so an idle session's transcript
+  isn't copied again on every refresh. Cache entries unused for a day are
+  pruned.
+
+Everything that only needs recent records keeps working: ccstatusline's idle
+check (which re-fetches rate-limit usage when a session hasn't replied for a
+few minutes, so `session-usage`/`reset-timer` don't go stale), the context and
+effort fallbacks, `session-name` (Claude Code keeps re-appending the title
+records; in the largest transcripts the last one was within 20KB of the end),
+`output-speed` (now over recent requests, subagents included, rather than the
+whole session), and `claude-last-reply.py`.
+
+What doesn't survive is anything that sums the whole session, so the layout
+drops those:
+
+| Was | Now | Why |
+|---|---|---|
+| `tokens-input`, `tokens-output`, `tokens-cached` | `cache-hit-rate` | they'd be sums over the last 1MB; the status JSON's `total_*_tokens` only cover the current turn, so no cheap session total exists. `session-cost` covers spend, `context-bar` covers size, and the per-turn cache hit rate comes from the status JSON |
+| `input-speed` | dropped | input t/s is not a useful number |
+
+Don't add a session-total widget back expecting whole-session numbers.
+
+If the copy fails for any reason the wrapper drops `transcript_path` rather
+than hand ccstatusline the full transcript: the line still renders, minus the
+transcript-derived segments.
 
 ### Machine that already has its own `~/.config/ccstatusline`
 
@@ -86,15 +132,18 @@ ln -s ~/p/dotfiles/.config/ccstatusline ~/.config/ccstatusline
 ## Changing the layout
 
 ```sh
-npx -y ccstatusline@latest
+ccstatusline
 ```
 
 Because the whole directory is symlinked, the TUI saves straight into the repo
-and the change shows up in `git status` like any other dotfile. The widget's
-settings, if you ever need to re-add it: **Custom Command**, `e` command
-`$HOME/bin/claude-last-reply.py`, `t` timeout `2000`, `w` max width `22`. Leave
-`p` (preserve colors) **off** — the script emits plain text and lets
-ccstatusline color it.
+and the change shows up in `git status` like any other dotfile. The TUI won't
+recognize `ccstatusline-fast` as its own status line command; don't use its
+install option, which would put back a command that scans the transcript.
+
+The widget's settings, if you ever need to re-add it: **Custom Command**, `e`
+command `$HOME/bin/claude-last-reply.py`, `t` timeout `2000`, `w` max width
+`22`. Leave `p` (preserve colors) **off** — the script emits plain text and
+lets ccstatusline color it.
 
 `commandPath` is run through `/bin/sh -c`, which is why `$HOME` expands and the
 path works regardless of where the dotfiles repo is checked out.
@@ -107,7 +156,9 @@ assistant message yet) prints nothing and exits 0, so ccstatusline renders an
 empty segment rather than `[Error]` or `[Exit: 1]`.
 
 It only reads the last 256KB of the transcript, so it stays fast (~30ms) no
-matter how long the session has been running.
+matter how long the session has been running. Under `ccstatusline-fast` its
+`transcript_path` is the 1MB tail copy, which holds the last reply just the
+same.
 
 ## Verify
 
@@ -123,7 +174,12 @@ python3 -c "import json,sys;print(json.dumps({'transcript_path':sys.argv[1]}))" 
 
 # 2. end to end, exactly what Claude Code renders
 python3 -c "import json,sys;print(json.dumps({'transcript_path':sys.argv[1],'cwd':sys.argv[2],'model':{'id':'claude-opus-5','display_name':'Opus 5'}}))" "$T" "$(pwd)" \
-  | npx -y ccstatusline@latest
+  | ~/bin/ccstatusline-fast
+# should take about a second however big $T is; tens of seconds means
+# ccstatusline is reading the whole transcript (not going through the wrapper)
+
+# 3. the wrapper's and deploy.sh's own checks (tail copy, fail-safe, migration)
+python3 -m unittest discover -s tests
 ```
 
 ## Troubleshooting
@@ -137,4 +193,5 @@ python3 -c "import json,sys;print(json.dumps({'transcript_path':sys.argv[1],'cwd
 | `[Timeout]` | `python3` cold-starting on a slow/networked FS. Raise `timeout` on the widget. |
 | `[Exit: N]` | the script itself failed — should be impossible, everything is caught. Run verification step 1 for the real error. |
 | time correct, age never changes | `refreshInterval` unset, or Claude Code not restarted since. |
+| high load, many `ccstatusline` processes at ~100% CPU | the status line is scanning whole transcripts: `statusLine.command` isn't `$HOME/bin/ccstatusline-fast` (re-run `deploy.sh`, which migrates direct ccstatusline commands). |
 | hour renders `02:39pm` not `2:39pm` | `strftime("%-I")` is a glibc/BSD extension. Fine on macOS and glibc Linux; on musl (Alpine) use `%I`. |

@@ -101,20 +101,41 @@ rm -f "${targetDir}/.ripgreprc"
 # Claude Code status line
 ##############################
 # ~/.claude/settings.json is per-machine and rewritten by Claude Code, so it is
-# not symlinked; just make sure it runs ccstatusline (config in .config/) and
-# re-renders often enough for bin/claude-last-reply.py's idle counter to tick.
-# Leaves an existing statusLine command or refreshInterval alone.
+# not symlinked; just make sure it runs ccstatusline (config in .config/)
+# through bin/ccstatusline-fast and re-renders often enough for
+# bin/claude-last-reply.py's idle counter to tick. Moves any direct ccstatusline
+# command (npx/bunx/global/absolute path, keeping a --config argument), which
+# scans the whole transcript on every refresh, to the wrapper; leaves any other
+# statusLine command or refreshInterval alone.
 mkdir -p "$HOME/.claude"
-python3 - "$HOME/.claude/settings.json" <<'EOF'
-import json, os, sys
+python3 - "$HOME/.claude/settings.json" "$srcDir" <<'EOF'
+import json, os, re, shlex, sys
 
-path = sys.argv[1]
+path, src_dir = sys.argv[1], sys.argv[2]
 data = json.load(open(path)) if os.path.exists(path) else {}
 before = json.dumps(data, sort_keys=True)
 
+# $HOME/bin is the repo's bin/ unless deploy found a real ~/bin and skipped the
+# link; then point straight into the repo rather than at a missing file. The
+# command runs through a shell, hence the quoting.
+wrapper = os.path.join(src_dir, "bin", "ccstatusline-fast")
+home_wrapper = os.path.expanduser("~/bin/ccstatusline-fast")
+command = "$HOME/bin/ccstatusline-fast" if os.path.exists(home_wrapper) else shlex.quote(wrapper)
+
+direct = re.compile(r"""^(?:(?:npx|bunx)\s+(?:(?:-y|--yes)\s+)?ccstatusline(?:@\S+)?|(?:\S*/)?ccstatusline)"""
+                    r"""(?P<args>\s+--config\s+(?:'[^']*'|"[^"]*"|\S+))?\s*$""")
 status = data.setdefault("statusLine", {"type": "command",
-                                        "command": "npx -y ccstatusline@latest",
+                                        "command": command,
                                         "padding": 0})
+current = status.get("command") or ""
+match = direct.match(current)
+if match:
+    status["command"] = command + (match.group("args") or "")
+elif re.search(r"(?<![\w-])ccstatusline(?![\w-])", current):
+    print("WARNING: statusLine.command in " + path + " looks like it runs ccstatusline"
+          " directly, which reads the whole transcript on every refresh, but isn't a"
+          " form deploy.sh can migrate: " + current + "\n  Point it at " + command
+          + " (keeping any --config argument) by hand.", file=sys.stderr)
 status.setdefault("refreshInterval", 30)
 
 if json.dumps(data, sort_keys=True) != before:
